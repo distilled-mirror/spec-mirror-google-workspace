@@ -1,43 +1,668 @@
 {
+  "kind": "discovery#restDescription",
+  "fullyEncodeReservedExpansion": true,
+  "basePath": "",
+  "revision": "20260907",
   "icons": {
     "x16": "http://www.google.com/images/icons/product/search-16.gif",
     "x32": "http://www.google.com/images/icons/product/search-32.gif"
   },
-  "baseUrl": "https://reseller.googleapis.com/",
-  "schemas": {
-    "Seats": {
-      "description": "JSON template for subscription seats.",
-      "properties": {
-        "licensedNumberOfSeats": {
-          "description": "Read-only field containing the current number of users that are assigned a license for the product defined in `skuId`. This field's value is equivalent to the numerical count of users returned by the Enterprise License Manager API method: [`listForProductAndSku`](https://developers.google.com/workspace/admin/licensing/v1/reference/licenseAssignments/listForProductAndSku).",
-          "type": "integer",
-          "format": "int32"
-        },
-        "maximumNumberOfSeats": {
-          "type": "integer",
-          "format": "int32",
-          "description": "This is a required property and is exclusive to subscriptions with `FLEXIBLE` or `TRIAL` plans. This property sets the maximum number of licensed users allowed on a subscription. This quantity can be increased up to the maximum limit defined in the reseller's contract. The minimum quantity is the current number of users in the customer account. *Note: *G Suite subscriptions automatically assign a license to every user."
-        },
-        "numberOfSeats": {
-          "type": "integer",
-          "format": "int32",
-          "description": "This is a required property and is exclusive to subscriptions with `ANNUAL_MONTHLY_PAY` and `ANNUAL_YEARLY_PAY` plans. This property sets the maximum number of licenses assignable to users on a subscription. The reseller can add more licenses, but once set, the `numberOfSeats` cannot be reduced until renewal. The reseller is invoiced based on the `numberOfSeats` value regardless of how many of these user licenses are assigned. *Note: *Google Workspace subscriptions automatically assign a license to every user."
-        },
-        "kind": {
-          "default": "subscriptions#seats",
-          "description": "Identifies the resource as a subscription seat setting. Value: `subscriptions#seats`",
-          "type": "string"
-        }
-      },
-      "type": "object",
-      "id": "Seats"
+  "documentationLink": "https://developers.google.com/google-apps/reseller/",
+  "id": "reseller:v1",
+  "rootUrl": "https://reseller.googleapis.com/",
+  "description": "Perform common functions that are available on the Channel Services console at scale, like placing orders and viewing customer information",
+  "name": "reseller",
+  "parameters": {
+    "oauth_token": {
+      "location": "query",
+      "description": "OAuth 2.0 token for the current user.",
+      "type": "string"
     },
+    "upload_protocol": {
+      "type": "string",
+      "location": "query",
+      "description": "Upload protocol for media (e.g. \"raw\", \"multipart\")."
+    },
+    "$.xgafv": {
+      "type": "string",
+      "description": "V1 error format.",
+      "location": "query",
+      "enum": [
+        "1",
+        "2"
+      ],
+      "enumDescriptions": [
+        "v1 error format",
+        "v2 error format"
+      ]
+    },
+    "key": {
+      "description": "API key. Your API key identifies your project and provides you with API access, quota, and reports. Required unless you provide an OAuth 2.0 token.",
+      "type": "string",
+      "location": "query"
+    },
+    "fields": {
+      "type": "string",
+      "description": "Selector specifying which fields to include in a partial response.",
+      "location": "query"
+    },
+    "alt": {
+      "location": "query",
+      "description": "Data format for response.",
+      "default": "json",
+      "type": "string",
+      "enumDescriptions": [
+        "Responses with Content-Type of application/json",
+        "Media download with context-dependent Content-Type",
+        "Responses with Content-Type of application/x-protobuf"
+      ],
+      "enum": [
+        "json",
+        "media",
+        "proto"
+      ]
+    },
+    "quotaUser": {
+      "location": "query",
+      "description": "Available to use for quota purposes for server-side applications. Can be any arbitrary string assigned to a user, but should not exceed 40 characters.",
+      "type": "string"
+    },
+    "prettyPrint": {
+      "description": "Returns response with indentations and line breaks.",
+      "type": "boolean",
+      "default": "true",
+      "location": "query"
+    },
+    "callback": {
+      "type": "string",
+      "description": "JSONP",
+      "location": "query"
+    },
+    "uploadType": {
+      "type": "string",
+      "description": "Legacy upload protocol for media (e.g. \"media\", \"multipart\").",
+      "location": "query"
+    },
+    "access_token": {
+      "description": "OAuth access token.",
+      "type": "string",
+      "location": "query"
+    }
+  },
+  "servicePath": "",
+  "batchPath": "batch",
+  "resources": {
+    "customers": {
+      "methods": {
+        "patch": {
+          "description": "Updates a customer account's settings. This method supports patch semantics. You cannot update `customerType` via the Reseller API, but a `\"team\"` customer can verify their domain and become `customerType = \"domain\"`. For more information, see [Verify your domain to unlock Essentials features](https://support.google.com/a/answer/9122284).",
+          "path": "apps/reseller/v1/customers/{customerId}",
+          "request": {
+            "$ref": "Customer"
+          },
+          "response": {
+            "$ref": "Customer"
+          },
+          "id": "reseller.customers.patch",
+          "parameterOrder": [
+            "customerId"
+          ],
+          "flatPath": "apps/reseller/v1/customers/{customerId}",
+          "httpMethod": "PATCH",
+          "parameters": {
+            "customerId": {
+              "description": "This can be either the customer's primary domain name or the customer's unique identifier. If the domain name for a customer changes, the old domain name cannot be used to access the customer, but the customer's unique identifier (as returned by the API) can always be used. We recommend storing the unique identifier in your systems where applicable.",
+              "location": "path",
+              "type": "string",
+              "required": true
+            }
+          },
+          "scopes": [
+            "https://www.googleapis.com/auth/apps.order"
+          ]
+        },
+        "update": {
+          "parameterOrder": [
+            "customerId"
+          ],
+          "flatPath": "apps/reseller/v1/customers/{customerId}",
+          "id": "reseller.customers.update",
+          "request": {
+            "$ref": "Customer"
+          },
+          "parameters": {
+            "customerId": {
+              "type": "string",
+              "location": "path",
+              "description": "This can be either the customer's primary domain name or the customer's unique identifier. If the domain name for a customer changes, the old domain name cannot be used to access the customer, but the customer's unique identifier (as returned by the API) can always be used. We recommend storing the unique identifier in your systems where applicable.",
+              "required": true
+            }
+          },
+          "httpMethod": "PUT",
+          "response": {
+            "$ref": "Customer"
+          },
+          "description": "Updates a customer account's settings. You cannot update `customerType` via the Reseller API, but a `\"team\"` customer can verify their domain and become `customerType = \"domain\"`. For more information, see [update a customer's settings](https://developers.google.com/workspace/admin/reseller/v1/how-tos/manage_customers#update_customer).",
+          "scopes": [
+            "https://www.googleapis.com/auth/apps.order"
+          ],
+          "path": "apps/reseller/v1/customers/{customerId}"
+        },
+        "insert": {
+          "description": "Orders a new customer's account. Before ordering a new customer account, establish whether the customer account already exists using the [`customers.get`](https://developers.google.com/workspace/admin/reseller/v1/reference/customers/get) If the customer account exists as a direct Google account or as a resold customer account from another reseller, use the `customerAuthToken\\` as described in [order a resold account for an existing customer](https://developers.google.com/workspace/admin/reseller/v1/how-tos/manage_customers#create_existing_customer). For more information about ordering a new customer account, see [order a new customer account](https://developers.google.com/workspace/admin/reseller/v1/how-tos/manage_customers#create_customer). After creating a new customer account, you must provision a user as an administrator. The customer's administrator is required to sign in to the Admin console and sign the G Suite via Reseller agreement to activate the account. Resellers are prohibited from signing the G Suite via Reseller agreement on the customer's behalf. For more information, see [order a new customer account](https://developers.google.com/workspace/admin/reseller/v1/how-tos/manage_customers#tos).",
+          "id": "reseller.customers.insert",
+          "response": {
+            "$ref": "Customer"
+          },
+          "scopes": [
+            "https://www.googleapis.com/auth/apps.order"
+          ],
+          "httpMethod": "POST",
+          "parameters": {
+            "customerAuthToken": {
+              "description": "The `customerAuthToken` query string is required when creating a resold account that transfers a direct customer's subscription or transfers another reseller customer's subscription to your reseller management. This is a hexadecimal authentication token needed to complete the subscription transfer. For more information, see the administrator help center.",
+              "location": "query",
+              "type": "string"
+            }
+          },
+          "flatPath": "apps/reseller/v1/customers",
+          "parameterOrder": [],
+          "request": {
+            "$ref": "Customer"
+          },
+          "path": "apps/reseller/v1/customers"
+        },
+        "get": {
+          "flatPath": "apps/reseller/v1/customers/{customerId}",
+          "scopes": [
+            "https://www.googleapis.com/auth/apps.order",
+            "https://www.googleapis.com/auth/apps.order.readonly"
+          ],
+          "parameterOrder": [
+            "customerId"
+          ],
+          "path": "apps/reseller/v1/customers/{customerId}",
+          "response": {
+            "$ref": "Customer"
+          },
+          "parameters": {
+            "customerId": {
+              "type": "string",
+              "description": "This can be either the customer's primary domain name or the customer's unique identifier. If the domain name for a customer changes, the old domain name cannot be used to access the customer, but the customer's unique identifier (as returned by the API) can always be used. We recommend storing the unique identifier in your systems where applicable.",
+              "location": "path",
+              "required": true
+            }
+          },
+          "description": "Gets a customer account. Use this operation to see a customer account already in your reseller management, or to see the minimal account information for an existing customer that you do not manage. For more information about the API response for existing customers, see [retrieving a customer account](https://developers.google.com/workspace/admin/reseller/v1/how-tos/manage_customers#get_customer).",
+          "id": "reseller.customers.get",
+          "httpMethod": "GET"
+        }
+      }
+    },
+    "subscriptions": {
+      "methods": {
+        "changeSeats": {
+          "httpMethod": "POST",
+          "flatPath": "apps/reseller/v1/customers/{customerId}/subscriptions/{subscriptionId}/changeSeats",
+          "id": "reseller.subscriptions.changeSeats",
+          "parameters": {
+            "customerId": {
+              "description": "This can be either the customer's primary domain name or the customer's unique identifier. If the domain name for a customer changes, the old domain name cannot be used to access the customer, but the customer's unique identifier (as returned by the API) can always be used. We recommend storing the unique identifier in your systems where applicable.",
+              "required": true,
+              "type": "string",
+              "location": "path"
+            },
+            "subscriptionId": {
+              "type": "string",
+              "description": "This is a required property. The `subscriptionId` is the subscription identifier and is unique for each customer. Since a `subscriptionId` changes when a subscription is updated, we recommend to not use this ID as a key for persistent data. And the `subscriptionId` can be found using the retrieve all reseller subscriptions method.",
+              "required": true,
+              "location": "path"
+            }
+          },
+          "response": {
+            "$ref": "Subscription"
+          },
+          "path": "apps/reseller/v1/customers/{customerId}/subscriptions/{subscriptionId}/changeSeats",
+          "request": {
+            "$ref": "Seats"
+          },
+          "scopes": [
+            "https://www.googleapis.com/auth/apps.order"
+          ],
+          "parameterOrder": [
+            "customerId",
+            "subscriptionId"
+          ],
+          "description": "Updates a subscription's user license settings. For more information about updating an annual commitment plan or a flexible plan subscription’s licenses, see [Manage Subscriptions](https://developers.google.com/workspace/admin/reseller/v1/how-tos/manage_subscriptions#update_subscription_seat)."
+        },
+        "delete": {
+          "path": "apps/reseller/v1/customers/{customerId}/subscriptions/{subscriptionId}",
+          "description": "Cancels, suspends, or transfers a subscription to direct.",
+          "parameterOrder": [
+            "customerId",
+            "subscriptionId",
+            "deletionType"
+          ],
+          "parameters": {
+            "deletionType": {
+              "type": "string",
+              "location": "query",
+              "description": "The `deletionType` query string enables the cancellation, downgrade, or suspension of a subscription.",
+              "enum": [
+                "deletion_type_undefined",
+                "cancel",
+                "transfer_to_direct"
+              ],
+              "required": true,
+              "enumDescriptions": [
+                "",
+                "Cancels the subscription immediately. This does not apply to a G Suite subscription.",
+                "Transfers a subscription directly to Google. The customer is immediately transferred to a direct billing relationship with Google and is given a short amount of time with no service interruption. The customer can then choose to set up billing directly with Google by using a credit card, or they can transfer to another reseller."
+              ]
+            },
+            "subscriptionId": {
+              "location": "path",
+              "type": "string",
+              "description": "This is a required property. The `subscriptionId` is the subscription identifier and is unique for each customer. Since a `subscriptionId` changes when a subscription is updated, we recommend to not use this ID as a key for persistent data. And the `subscriptionId` can be found using the retrieve all reseller subscriptions method.",
+              "required": true
+            },
+            "customerId": {
+              "type": "string",
+              "description": "This can be either the customer's primary domain name or the customer's unique identifier. If the domain name for a customer changes, the old domain name cannot be used to access the customer, but the customer's unique identifier (as returned by the API) can always be used. We recommend storing the unique identifier in your systems where applicable.",
+              "required": true,
+              "location": "path"
+            }
+          },
+          "scopes": [
+            "https://www.googleapis.com/auth/apps.order"
+          ],
+          "flatPath": "apps/reseller/v1/customers/{customerId}/subscriptions/{subscriptionId}",
+          "id": "reseller.subscriptions.delete",
+          "httpMethod": "DELETE"
+        },
+        "activate": {
+          "scopes": [
+            "https://www.googleapis.com/auth/apps.order"
+          ],
+          "id": "reseller.subscriptions.activate",
+          "description": "Activates a subscription previously suspended by the reseller. If you did not suspend the customer subscription and it is suspended for any other reason, such as for abuse or a pending ToS acceptance, this call will not reactivate the customer subscription.",
+          "response": {
+            "$ref": "Subscription"
+          },
+          "parameterOrder": [
+            "customerId",
+            "subscriptionId"
+          ],
+          "parameters": {
+            "subscriptionId": {
+              "location": "path",
+              "description": "This is a required property. The `subscriptionId` is the subscription identifier and is unique for each customer. Since a `subscriptionId` changes when a subscription is updated, we recommend to not use this ID as a key for persistent data. And the `subscriptionId` can be found using the retrieve all reseller subscriptions method.",
+              "type": "string",
+              "required": true
+            },
+            "customerId": {
+              "required": true,
+              "type": "string",
+              "location": "path",
+              "description": "This can be either the customer's primary domain name or the customer's unique identifier. If the domain name for a customer changes, the old domain name cannot be used to access the customer, but the customer's unique identifier (as returned by the API) can always be used. We recommend storing the unique identifier in your systems where applicable."
+            }
+          },
+          "flatPath": "apps/reseller/v1/customers/{customerId}/subscriptions/{subscriptionId}/activate",
+          "path": "apps/reseller/v1/customers/{customerId}/subscriptions/{subscriptionId}/activate",
+          "httpMethod": "POST"
+        },
+        "list": {
+          "scopes": [
+            "https://www.googleapis.com/auth/apps.order",
+            "https://www.googleapis.com/auth/apps.order.readonly"
+          ],
+          "response": {
+            "$ref": "Subscriptions"
+          },
+          "httpMethod": "GET",
+          "description": "Lists of subscriptions managed by the reseller. The list can be all subscriptions, all of a customer's subscriptions, or all of a customer's transferable subscriptions. Optionally, this method can filter the response by a `customerNamePrefix`. For more information, see [manage subscriptions](https://developers.google.com/workspace/admin/reseller/v1/how-tos/manage_subscriptions).",
+          "parameters": {
+            "customerId": {
+              "location": "query",
+              "type": "string",
+              "description": "This can be either the customer's primary domain name or the customer's unique identifier. If the domain name for a customer changes, the old domain name cannot be used to access the customer, but the customer's unique identifier (as returned by the API) can always be used. We recommend storing the unique identifier in your systems where applicable."
+            },
+            "customerNamePrefix": {
+              "type": "string",
+              "location": "query",
+              "description": "When retrieving all of your subscriptions and filtering for specific customers, you can enter a prefix for a customer name. Using an example customer group that includes `exam.com`, `example20.com` and `example.com`: - `exa` -- Returns all customer names that start with 'exa' which could include `exam.com`, `example20.com`, and `example.com`. A name prefix is similar to using a regular expression's asterisk, exa*. - `example` -- Returns `example20.com` and `example.com`. "
+            },
+            "customerAuthToken": {
+              "description": "The `customerAuthToken` query string is required when creating a resold account that transfers a direct customer's subscription or transfers another reseller customer's subscription to your reseller management. This is a hexadecimal authentication token needed to complete the subscription transfer. For more information, see the administrator help center.",
+              "location": "query",
+              "type": "string"
+            },
+            "maxResults": {
+              "maximum": "100",
+              "type": "integer",
+              "minimum": "1",
+              "description": "When retrieving a large list, the `maxResults` is the maximum number of results per page. The `nextPageToken` value takes you to the next page. The default is 20.",
+              "location": "query",
+              "format": "uint32"
+            },
+            "pageToken": {
+              "type": "string",
+              "description": "Token to specify next page in the list",
+              "location": "query"
+            }
+          },
+          "path": "apps/reseller/v1/subscriptions",
+          "id": "reseller.subscriptions.list",
+          "flatPath": "apps/reseller/v1/subscriptions",
+          "parameterOrder": []
+        },
+        "startPaidService": {
+          "id": "reseller.subscriptions.startPaidService",
+          "path": "apps/reseller/v1/customers/{customerId}/subscriptions/{subscriptionId}/startPaidService",
+          "parameters": {
+            "customerId": {
+              "location": "path",
+              "description": "This can be either the customer's primary domain name or the customer's unique identifier. If the domain name for a customer changes, the old domain name cannot be used to access the customer, but the customer's unique identifier (as returned by the API) can always be used. We recommend storing the unique identifier in your systems where applicable.",
+              "required": true,
+              "type": "string"
+            },
+            "subscriptionId": {
+              "location": "path",
+              "required": true,
+              "type": "string",
+              "description": "This is a required property. The `subscriptionId` is the subscription identifier and is unique for each customer. Since a `subscriptionId` changes when a subscription is updated, we recommend to not use this ID as a key for persistent data. And the `subscriptionId` can be found using the retrieve all reseller subscriptions method."
+            }
+          },
+          "flatPath": "apps/reseller/v1/customers/{customerId}/subscriptions/{subscriptionId}/startPaidService",
+          "httpMethod": "POST",
+          "description": "Immediately move a 30-day free trial subscription to a paid service subscription. This method is only applicable if a payment plan has already been set up for the 30-day trial subscription. For more information, see [manage subscriptions](https://developers.google.com/workspace/admin/reseller/v1/how-tos/manage_subscriptions#paid_service).",
+          "scopes": [
+            "https://www.googleapis.com/auth/apps.order"
+          ],
+          "parameterOrder": [
+            "customerId",
+            "subscriptionId"
+          ],
+          "response": {
+            "$ref": "Subscription"
+          }
+        },
+        "changePlan": {
+          "request": {
+            "$ref": "ChangePlanRequest"
+          },
+          "parameterOrder": [
+            "customerId",
+            "subscriptionId"
+          ],
+          "path": "apps/reseller/v1/customers/{customerId}/subscriptions/{subscriptionId}/changePlan",
+          "scopes": [
+            "https://www.googleapis.com/auth/apps.order"
+          ],
+          "parameters": {
+            "customerId": {
+              "location": "path",
+              "type": "string",
+              "description": "This can be either the customer's primary domain name or the customer's unique identifier. If the domain name for a customer changes, the old domain name cannot be used to access the customer, but the customer's unique identifier (as returned by the API) can always be used. We recommend storing the unique identifier in your systems where applicable.",
+              "required": true
+            },
+            "subscriptionId": {
+              "description": "This is a required property. The `subscriptionId` is the subscription identifier and is unique for each customer. Since a `subscriptionId` changes when a subscription is updated, we recommend to not use this ID as a key for persistent data. And the `subscriptionId` can be found using the retrieve all reseller subscriptions method.",
+              "type": "string",
+              "required": true,
+              "location": "path"
+            }
+          },
+          "response": {
+            "$ref": "Subscription"
+          },
+          "httpMethod": "POST",
+          "id": "reseller.subscriptions.changePlan",
+          "description": "Updates a subscription plan. Use this method to update a plan for a 30-day trial or a flexible plan subscription to an annual commitment plan with monthly or yearly payments. How a plan is updated differs depending on the plan and the products. For more information, see the description in [manage subscriptions](https://developers.google.com/workspace/admin/reseller/v1/how-tos/manage_subscriptions#update_subscription_plan).",
+          "flatPath": "apps/reseller/v1/customers/{customerId}/subscriptions/{subscriptionId}/changePlan"
+        },
+        "changeRenewalSettings": {
+          "httpMethod": "POST",
+          "id": "reseller.subscriptions.changeRenewalSettings",
+          "parameterOrder": [
+            "customerId",
+            "subscriptionId"
+          ],
+          "parameters": {
+            "customerId": {
+              "required": true,
+              "type": "string",
+              "location": "path",
+              "description": "This can be either the customer's primary domain name or the customer's unique identifier. If the domain name for a customer changes, the old domain name cannot be used to access the customer, but the customer's unique identifier (as returned by the API) can always be used. We recommend storing the unique identifier in your systems where applicable."
+            },
+            "subscriptionId": {
+              "description": "This is a required property. The `subscriptionId` is the subscription identifier and is unique for each customer. Since a `subscriptionId` changes when a subscription is updated, we recommend to not use this ID as a key for persistent data. And the `subscriptionId` can be found using the retrieve all reseller subscriptions method.",
+              "required": true,
+              "type": "string",
+              "location": "path"
+            }
+          },
+          "request": {
+            "$ref": "RenewalSettings"
+          },
+          "description": "Updates a user license's renewal settings. This is applicable for accounts with annual commitment plans only. For more information, see the description in [manage subscriptions](https://developers.google.com/workspace/admin/reseller/v1/how-tos/manage_subscriptions#update_renewal).",
+          "flatPath": "apps/reseller/v1/customers/{customerId}/subscriptions/{subscriptionId}/changeRenewalSettings",
+          "path": "apps/reseller/v1/customers/{customerId}/subscriptions/{subscriptionId}/changeRenewalSettings",
+          "scopes": [
+            "https://www.googleapis.com/auth/apps.order"
+          ],
+          "response": {
+            "$ref": "Subscription"
+          }
+        },
+        "insert": {
+          "id": "reseller.subscriptions.insert",
+          "request": {
+            "$ref": "Subscription"
+          },
+          "scopes": [
+            "https://www.googleapis.com/auth/apps.order"
+          ],
+          "response": {
+            "$ref": "Subscription"
+          },
+          "httpMethod": "POST",
+          "parameters": {
+            "action": {
+              "location": "query",
+              "type": "string",
+              "description": "The intented insert action. Advised to set this when the customer already has a subscription for a different SKU in the same product.",
+              "enum": [
+                "actionUnspecified",
+                "buy",
+                "switch"
+              ],
+              "enumDescriptions": [
+                "Auto determines whether to create new subscription, upgrade or downagrade existing subscription or transfer the existing subscription",
+                "Create new subscription",
+                "Switch existing subscription to another sku (upgrade/downgrade)"
+              ]
+            },
+            "customerId": {
+              "description": "This can be either the customer's primary domain name or the customer's unique identifier. If the domain name for a customer changes, the old domain name cannot be used to access the customer, but the customer's unique identifier (as returned by the API) can always be used. We recommend storing the unique identifier in your systems where applicable.",
+              "required": true,
+              "location": "path",
+              "type": "string"
+            },
+            "customerAuthToken": {
+              "type": "string",
+              "description": "The `customerAuthToken` query string is required when creating a resold account that transfers a direct customer's subscription or transfers another reseller customer's subscription to your reseller management. This is a hexadecimal authentication token needed to complete the subscription transfer. For more information, see the administrator help center.",
+              "location": "query"
+            },
+            "sourceSkuId": {
+              "description": "The sku_id of the existing subscription to be upgraded or downgraded. This is required when action is SWITCH.",
+              "location": "query",
+              "type": "string"
+            }
+          },
+          "description": "Creates or transfer a subscription. Create a subscription for a customer's account that you ordered using the [Order a new customer account](https://developers.google.com/workspace/admin/reseller/v1/reference/customers/insert.html) method. For more information about creating a subscription for different payment plans, see [manage subscriptions](https://developers.google.com/workspace/admin/reseller/v1/how-tos/manage_subscriptions#create_subscription).\\ If you did not order the customer's account using the customer insert method, use the customer's `customerAuthToken` when creating a subscription for that customer. If transferring a G Suite subscription with an associated Google Drive or Google Vault subscription, use the [batch operation](https://developers.google.com/workspace/admin/reseller/v1/how-tos/batch.html) to transfer all of these subscriptions. For more information, see how to [transfer subscriptions](https://developers.google.com/workspace/admin/reseller/v1/how-tos/manage_subscriptions#transfer_a_subscription).",
+          "path": "apps/reseller/v1/customers/{customerId}/subscriptions",
+          "flatPath": "apps/reseller/v1/customers/{customerId}/subscriptions",
+          "parameterOrder": [
+            "customerId"
+          ]
+        },
+        "suspend": {
+          "id": "reseller.subscriptions.suspend",
+          "httpMethod": "POST",
+          "parameterOrder": [
+            "customerId",
+            "subscriptionId"
+          ],
+          "parameters": {
+            "customerId": {
+              "description": "This can be either the customer's primary domain name or the customer's unique identifier. If the domain name for a customer changes, the old domain name cannot be used to access the customer, but the customer's unique identifier (as returned by the API) can always be used. We recommend storing the unique identifier in your systems where applicable.",
+              "type": "string",
+              "location": "path",
+              "required": true
+            },
+            "subscriptionId": {
+              "description": "This is a required property. The `subscriptionId` is the subscription identifier and is unique for each customer. Since a `subscriptionId` changes when a subscription is updated, we recommend to not use this ID as a key for persistent data. And the `subscriptionId` can be found using the retrieve all reseller subscriptions method.",
+              "location": "path",
+              "type": "string",
+              "required": true
+            }
+          },
+          "description": "Suspends an active subscription. You can use this method to suspend a paid subscription that is currently in the `ACTIVE` state. * For `FLEXIBLE` subscriptions, billing is paused. * For `ANNUAL_MONTHLY_PAY` or `ANNUAL_YEARLY_PAY` subscriptions: * Suspending the subscription does not change the renewal date that was originally committed to. * A suspended subscription does not renew. If you activate the subscription after the original renewal date, a new annual subscription will be created, starting on the day of activation. We strongly encourage you to suspend subscriptions only for short periods of time as suspensions over 60 days may result in the subscription being cancelled.",
+          "flatPath": "apps/reseller/v1/customers/{customerId}/subscriptions/{subscriptionId}/suspend",
+          "path": "apps/reseller/v1/customers/{customerId}/subscriptions/{subscriptionId}/suspend",
+          "response": {
+            "$ref": "Subscription"
+          },
+          "scopes": [
+            "https://www.googleapis.com/auth/apps.order"
+          ]
+        },
+        "get": {
+          "id": "reseller.subscriptions.get",
+          "path": "apps/reseller/v1/customers/{customerId}/subscriptions/{subscriptionId}",
+          "flatPath": "apps/reseller/v1/customers/{customerId}/subscriptions/{subscriptionId}",
+          "parameterOrder": [
+            "customerId",
+            "subscriptionId"
+          ],
+          "scopes": [
+            "https://www.googleapis.com/auth/apps.order",
+            "https://www.googleapis.com/auth/apps.order.readonly"
+          ],
+          "httpMethod": "GET",
+          "parameters": {
+            "customerId": {
+              "location": "path",
+              "required": true,
+              "type": "string",
+              "description": "This can be either the customer's primary domain name or the customer's unique identifier. If the domain name for a customer changes, the old domain name cannot be used to access the customer, but the customer's unique identifier (as returned by the API) can always be used. We recommend storing the unique identifier in your systems where applicable."
+            },
+            "subscriptionId": {
+              "type": "string",
+              "location": "path",
+              "description": "This is a required property. The `subscriptionId` is the subscription identifier and is unique for each customer. Since a `subscriptionId` changes when a subscription is updated, we recommend to not use this ID as a key for persistent data. And the `subscriptionId` can be found using the retrieve all reseller subscriptions method.",
+              "required": true
+            }
+          },
+          "response": {
+            "$ref": "Subscription"
+          },
+          "description": "Gets a specific subscription. The `subscriptionId` can be found using the [Retrieve all reseller subscriptions](https://developers.google.com/workspace/admin/reseller/v1/how-tos/manage_subscriptions#get_all_subscriptions) method. For more information about retrieving a specific subscription, see the information descrived in [manage subscriptions](https://developers.google.com/workspace/admin/reseller/v1/how-tos/manage_subscriptions#get_subscription)."
+        }
+      }
+    },
+    "resellernotify": {
+      "methods": {
+        "getwatchdetails": {
+          "id": "reseller.resellernotify.getwatchdetails",
+          "parameterOrder": [],
+          "description": "Returns all the details of the watch corresponding to the reseller.",
+          "response": {
+            "$ref": "ResellernotifyGetwatchdetailsResponse"
+          },
+          "parameters": {},
+          "httpMethod": "GET",
+          "path": "apps/reseller/v1/resellernotify/getwatchdetails",
+          "scopes": [
+            "https://www.googleapis.com/auth/apps.order",
+            "https://www.googleapis.com/auth/apps.order.readonly"
+          ],
+          "flatPath": "apps/reseller/v1/resellernotify/getwatchdetails"
+        },
+        "unregister": {
+          "flatPath": "apps/reseller/v1/resellernotify/unregister",
+          "httpMethod": "POST",
+          "path": "apps/reseller/v1/resellernotify/unregister",
+          "parameters": {
+            "serviceAccountEmailAddress": {
+              "description": "The service account which owns the Cloud-PubSub topic.",
+              "type": "string",
+              "location": "query"
+            }
+          },
+          "response": {
+            "$ref": "ResellernotifyResource"
+          },
+          "parameterOrder": [],
+          "scopes": [
+            "https://www.googleapis.com/auth/apps.order"
+          ],
+          "id": "reseller.resellernotify.unregister",
+          "description": "Unregisters a Reseller for receiving notifications."
+        },
+        "register": {
+          "parameters": {
+            "serviceAccountEmailAddress": {
+              "description": "The service account which will own the created Cloud-PubSub topic.",
+              "location": "query",
+              "type": "string"
+            }
+          },
+          "path": "apps/reseller/v1/resellernotify/register",
+          "response": {
+            "$ref": "ResellernotifyResource"
+          },
+          "httpMethod": "POST",
+          "description": "Registers a Reseller for receiving notifications.",
+          "scopes": [
+            "https://www.googleapis.com/auth/apps.order"
+          ],
+          "flatPath": "apps/reseller/v1/resellernotify/register",
+          "id": "reseller.resellernotify.register",
+          "parameterOrder": []
+        }
+      }
+    }
+  },
+  "baseUrl": "https://reseller.googleapis.com/",
+  "canonicalName": "Reseller",
+  "discoveryVersion": "v1",
+  "title": "Google Workspace Reseller API",
+  "version": "v1",
+  "ownerName": "Google",
+  "ownerDomain": "google.com",
+  "mtlsRootUrl": "https://reseller.mtls.googleapis.com/",
+  "protocol": "rest",
+  "auth": {
+    "oauth2": {
+      "scopes": {
+        "https://www.googleapis.com/auth/apps.order.readonly": {
+          "description": "Manage users on your domain"
+        },
+        "https://www.googleapis.com/auth/apps.order": {
+          "description": "Manage users on your domain"
+        }
+      }
+    }
+  },
+  "schemas": {
     "ResellernotifyGetwatchdetailsResponse": {
-      "id": "ResellernotifyGetwatchdetailsResponse",
+      "description": "JSON template for resellernotify getwatchdetails response.",
       "properties": {
         "topicName": {
-          "type": "string",
-          "description": "Topic name of the PubSub"
+          "description": "Topic name of the PubSub",
+          "type": "string"
         },
         "serviceAccountEmailAddresses": {
           "items": {
@@ -47,19 +672,95 @@
           "description": "List of registered service accounts."
         }
       },
-      "description": "JSON template for resellernotify getwatchdetails response.",
-      "type": "object"
+      "type": "object",
+      "id": "ResellernotifyGetwatchdetailsResponse"
     },
-    "PrimaryAdmin": {
+    "Subscriptions": {
+      "id": "Subscriptions",
+      "type": "object",
+      "description": "A subscription manages the relationship of a Google customer's payment plan with a product's SKU, user licenses, 30-day free trial status, and renewal options. A primary role of a reseller is to manage the Google customer's subscriptions.",
       "properties": {
-        "primaryEmail": {
-          "description": "The business email of the primary administrator of the customer. The email verification link is sent to this email address at the time of customer creation. Primary administrators have access to the customer's Admin Console, including the ability to invite and evict users and manage the administrative needs of the customer.",
+        "nextPageToken": {
+          "type": "string",
+          "description": "The continuation token, used to page through large result sets. Provide this value in a subsequent request to return the next page of results."
+        },
+        "subscriptions": {
+          "description": "The subscriptions in this page of results.",
+          "type": "array",
+          "items": {
+            "$ref": "Subscription"
+          }
+        },
+        "kind": {
+          "type": "string",
+          "default": "reseller#subscriptions",
+          "description": "Identifies the resource as a collection of subscriptions. Value: reseller#subscriptions"
+        }
+      }
+    },
+    "RenewalSettings": {
+      "id": "RenewalSettings",
+      "properties": {
+        "renewalType": {
+          "description": "Renewal settings for the annual commitment plan. For more detailed information, see renewal options in the administrator help center. When renewing a subscription, the `renewalType` is a required property.",
           "type": "string"
+        },
+        "kind": {
+          "default": "subscriptions#renewalSettings",
+          "type": "string",
+          "description": "Identifies the resource as a subscription renewal setting. Value: `subscriptions#renewalSettings`"
         }
       },
-      "id": "PrimaryAdmin",
-      "description": "JSON template for primary admin in case of TEAM customers",
+      "description": "JSON template for a subscription renewal settings.",
       "type": "object"
+    },
+    "Address": {
+      "type": "object",
+      "description": "JSON template for address of a customer.",
+      "id": "Address",
+      "properties": {
+        "organizationName": {
+          "description": "The company or company division name. This is required.",
+          "type": "string"
+        },
+        "addressLine2": {
+          "description": "Line 2 of the address.",
+          "type": "string"
+        },
+        "countryCode": {
+          "description": "For `countryCode` information, see the ISO 3166 country code elements. Verify that country is approved for resale of Google products. This property is required when creating a new customer.",
+          "type": "string"
+        },
+        "locality": {
+          "description": "An example of a `locality` value is the city of `San Francisco`.",
+          "type": "string"
+        },
+        "region": {
+          "description": "An example of a `region` value is `CA` for the state of California.",
+          "type": "string"
+        },
+        "kind": {
+          "default": "customers#address",
+          "type": "string",
+          "description": "Identifies the resource as a customer address. Value: `customers#address`"
+        },
+        "contactName": {
+          "type": "string",
+          "description": "The customer contact's name. This is required."
+        },
+        "postalCode": {
+          "type": "string",
+          "description": "A `postalCode` example is a postal zip code such as `94043`. This property is required when creating a new customer."
+        },
+        "addressLine3": {
+          "type": "string",
+          "description": "Line 3 of the address."
+        },
+        "addressLine1": {
+          "type": "string",
+          "description": "A customer's physical address. An address can be composed of one to three lines. The `addressline2` and `addressLine3` are optional."
+        }
+      }
     },
     "ResellernotifyResource": {
       "description": "JSON template for resellernotify response.",
@@ -72,18 +773,190 @@
         }
       }
     },
-    "Customer": {
+    "Subscription": {
+      "type": "object",
       "properties": {
-        "alternateEmail": {
-          "description": "Like the \"Customer email\" in the reseller tools, this email is the secondary contact used if something happens to the customer's service such as service outage or a security issue. This property is required when creating a new \"domain\" customer and should not use the same domain as `customerDomain`. The `alternateEmail` field is not necessary to create a \"team\" customer.",
+        "billingMethod": {
+          "description": "Read-only field that returns the current billing method for a subscription.",
+          "type": "string"
+        },
+        "transferInfo": {
+          "properties": {
+            "minimumTransferableSeats": {
+              "format": "int32",
+              "type": "integer",
+              "description": "When inserting a subscription, this is the minimum number of seats listed in the transfer order for this product. For example, if the customer has 20 users, the reseller cannot place a transfer order of 15 seats. The minimum is 20 seats."
+            },
+            "transferabilityExpirationTime": {
+              "format": "int64",
+              "type": "string",
+              "description": "The time when transfer token or intent to transfer will expire. The time is in milliseconds using UNIX Epoch format."
+            },
+            "currentLegacySkuId": {
+              "description": "The `skuId` of the current resold subscription. This is populated only when the customer has a subscription with a legacy SKU and the subscription resource is populated with the `skuId` of the SKU recommended for the transfer.",
+              "type": "string"
+            }
+          },
+          "type": "object",
+          "description": "Read-only transfer related information for the subscription. For more information, see retrieve transferable subscriptions for a customer."
+        },
+        "purchaseOrderId": {
+          "description": "This is an optional property. This purchase order (PO) information is for resellers to use for their company tracking usage. If a `purchaseOrderId` value is given it appears in the API responses and shows up in the invoice. The property accepts up to 80 plain text characters.",
+          "type": "string"
+        },
+        "seats": {
+          "description": "This is a required property. The number and limit of user seat licenses in the plan.",
+          "$ref": "Seats"
+        },
+        "skuName": {
+          "type": "string",
+          "description": "Read-only external display name for a product's SKU assigned to a customer in the subscription. SKU names are subject to change at Google's discretion. For products and SKUs available in this version of the API, see Product and SKU IDs."
+        },
+        "suspensionReasons": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Read-only field containing an enumerable of all the current suspension reasons for a subscription. It is possible for a subscription to have many concurrent, overlapping suspension reasons. A subscription's `STATUS` is `SUSPENDED` until all pending suspensions are removed. Possible options include: - `PENDING_TOS_ACCEPTANCE` - The customer has not logged in and accepted the G Suite Resold Terms of Services. - `RENEWAL_WITH_TYPE_CANCEL` - The customer's commitment ended and their service was cancelled at the end of their term. - `RESELLER_INITIATED` - A manual suspension invoked by a Reseller. - `TRIAL_ENDED` - The customer's trial expired without a plan selected. - `OTHER` - The customer is suspended for an internal Google reason (e.g. abuse or otherwise). "
+        },
+        "skuId": {
+          "description": "A required property. The `skuId` is a unique system identifier for a product's SKU assigned to a customer in the subscription. For products and SKUs available in this version of the API, see Product and SKU IDs.",
           "type": "string"
         },
         "resourceUiUrl": {
-          "type": "string",
-          "description": "URL to customer's Admin console dashboard. The read-only URL is generated by the API service. This is used if your client application requires the customer to complete a task in the Admin console."
+          "description": "URL to customer's Subscriptions page in the Admin console. The read-only URL is generated by the API service. This is used if your client application requires the customer to complete a task using the Subscriptions page in the Admin console.",
+          "type": "string"
         },
-        "phoneNumber": {
-          "description": "Customer contact phone number. Must start with \"+\" followed by the country code. The rest of the number can be contiguous numbers or respect the phone local format conventions, but it must be a real phone number and not, for example, \"123\". This field is silently ignored if invalid.",
+        "creationTime": {
+          "description": "The `creationTime` property is the date when subscription was created. It is in milliseconds using the Epoch format. See an example Epoch converter.",
+          "type": "string",
+          "format": "int64"
+        },
+        "kind": {
+          "default": "reseller#subscription",
+          "description": "Identifies the resource as a Subscription. Value: `reseller#subscription`",
+          "type": "string"
+        },
+        "renewalSettings": {
+          "description": "Renewal settings for the annual commitment plan. For more detailed information, see renewal options in the administrator help center.",
+          "$ref": "RenewalSettings"
+        },
+        "subscriptionId": {
+          "type": "string",
+          "description": "The `subscriptionId` is the subscription identifier and is unique for each customer. This is a required property. Since a `subscriptionId` changes when a subscription is updated, we recommend not using this ID as a key for persistent data. Use the `subscriptionId` as described in retrieve all reseller subscriptions."
+        },
+        "trialSettings": {
+          "description": "The G Suite annual commitment and flexible payment plans can be in a 30-day free trial. For more information, see the API concepts.",
+          "type": "object",
+          "properties": {
+            "isInTrial": {
+              "description": "Determines if a subscription's plan is in a 30-day free trial or not: - `true` — The plan is in trial. - `false` — The plan is not in trial. ",
+              "type": "boolean"
+            },
+            "trialEndTime": {
+              "type": "string",
+              "description": "Date when the trial ends. The value is in milliseconds using the UNIX Epoch format. See an example Epoch converter.",
+              "format": "int64"
+            }
+          }
+        },
+        "customerDomain": {
+          "description": "Primary domain name of the customer",
+          "type": "string"
+        },
+        "dealCode": {
+          "type": "string",
+          "description": "Google-issued code (100 char max) for discounted pricing on subscription plans. Deal code must be included in `insert` requests in order to receive discounted rate. This property is optional, regular pricing applies if left empty."
+        },
+        "plan": {
+          "properties": {
+            "planName": {
+              "type": "string",
+              "description": "The `planName` property is required. This is the name of the subscription's plan. For more information about the Google payment plans, see the API concepts. Possible values are: - `ANNUAL_MONTHLY_PAY` — The annual commitment plan with monthly payments. *Caution: *`ANNUAL_MONTHLY_PAY` is returned as `ANNUAL` in all API responses. - `ANNUAL_YEARLY_PAY` — The annual commitment plan with yearly payments - `FLEXIBLE` — The flexible plan - `TRIAL` — The 30-day free trial plan. A subscription in trial will be suspended after the 30th free day if no payment plan is assigned. Calling `changePlan` will assign a payment plan to a trial but will not activate the plan. A trial will automatically begin its assigned payment plan after its 30th free day or immediately after calling `startPaidService`. - `FREE` — The free plan is exclusive to the Cloud Identity SKU and does not incur any billing. "
+            },
+            "commitmentInterval": {
+              "type": "object",
+              "description": "In this version of the API, annual commitment plan's interval is one year. *Note: *When `billingMethod` value is `OFFLINE`, the subscription property object `plan.commitmentInterval` is omitted in all API responses. ",
+              "properties": {
+                "startTime": {
+                  "format": "int64",
+                  "type": "string",
+                  "description": "An annual commitment plan's interval's `startTime` in milliseconds using UNIX Epoch format. See an example Epoch converter."
+                },
+                "endTime": {
+                  "description": "An annual commitment plan's interval's `endTime` in milliseconds using the UNIX Epoch format. See an example Epoch converter.",
+                  "type": "string",
+                  "format": "int64"
+                }
+              }
+            },
+            "isCommitmentPlan": {
+              "description": "The `isCommitmentPlan` property's boolean value identifies the plan as an annual commitment plan: - `true` — The subscription's plan is an annual commitment plan. - `false` — The plan is not an annual commitment plan. ",
+              "type": "boolean"
+            }
+          },
+          "description": "The `plan` property is required. In this version of the API, the G Suite plans are the flexible plan, annual commitment plan, and the 30-day free trial plan. For more information about the API\"s payment plans, see the API concepts.",
+          "type": "object"
+        },
+        "customerId": {
+          "description": "This property will always be returned in a response as the unique identifier generated by Google. In a request, this property can be either the primary domain or the unique identifier generated by Google.",
+          "type": "string"
+        },
+        "status": {
+          "description": "This is an optional property.",
+          "type": "string"
+        }
+      },
+      "id": "Subscription",
+      "description": "JSON template for a subscription."
+    },
+    "PrimaryAdmin": {
+      "type": "object",
+      "properties": {
+        "primaryEmail": {
+          "type": "string",
+          "description": "The business email of the primary administrator of the customer. The email verification link is sent to this email address at the time of customer creation. Primary administrators have access to the customer's Admin Console, including the ability to invite and evict users and manage the administrative needs of the customer."
+        }
+      },
+      "id": "PrimaryAdmin",
+      "description": "JSON template for primary admin in case of TEAM customers"
+    },
+    "ChangePlanRequest": {
+      "type": "object",
+      "description": "JSON template for the ChangePlan rpc request.",
+      "id": "ChangePlanRequest",
+      "properties": {
+        "planName": {
+          "type": "string",
+          "description": "The `planName` property is required. This is the name of the subscription's payment plan. For more information about the Google payment plans, see API concepts. Possible values are: - `ANNUAL_MONTHLY_PAY` - The annual commitment plan with monthly payments *Caution: *`ANNUAL_MONTHLY_PAY` is returned as `ANNUAL` in all API responses. - `ANNUAL_YEARLY_PAY` - The annual commitment plan with yearly payments - `FLEXIBLE` - The flexible plan - `TRIAL` - The 30-day free trial plan "
+        },
+        "purchaseOrderId": {
+          "type": "string",
+          "description": "This is an optional property. This purchase order (PO) information is for resellers to use for their company tracking usage. If a `purchaseOrderId` value is given it appears in the API responses and shows up in the invoice. The property accepts up to 80 plain text characters."
+        },
+        "seats": {
+          "description": "This is a required property. The seats property is the number of user seat licenses.",
+          "$ref": "Seats"
+        },
+        "dealCode": {
+          "description": "Google-issued code (100 char max) for discounted pricing on subscription plans. Deal code must be included in `changePlan` request in order to receive discounted rate. This property is optional. If a deal code has already been added to a subscription, this property may be left empty and the existing discounted rate will still apply (if not empty, only provide the deal code that is already present on the subscription). If a deal code has never been added to a subscription and this property is left blank, regular pricing will apply.",
+          "type": "string"
+        },
+        "kind": {
+          "description": "Identifies the resource as a subscription change plan request. Value: `subscriptions#changePlanRequest`",
+          "type": "string",
+          "default": "subscriptions#changePlanRequest"
+        }
+      }
+    },
+    "Customer": {
+      "properties": {
+        "resourceUiUrl": {
+          "description": "URL to customer's Admin console dashboard. The read-only URL is generated by the API service. This is used if your client application requires the customer to complete a task in the Admin console.",
+          "type": "string"
+        },
+        "customerId": {
+          "description": "This property will always be returned in a response as the unique identifier generated by Google. In a request, this property can be either the primary domain or the unique identifier generated by Google.",
           "type": "string"
         },
         "customerType": {
@@ -100,939 +973,66 @@
           ],
           "type": "string"
         },
-        "postalAddress": {
-          "description": "A customer's address information. Each field has a limit of 255 charcters.",
-          "$ref": "Address"
-        },
-        "customerId": {
+        "alternateEmail": {
           "type": "string",
-          "description": "This property will always be returned in a response as the unique identifier generated by Google. In a request, this property can be either the primary domain or the unique identifier generated by Google."
-        },
-        "customerDomainVerified": {
-          "description": "Whether the customer's primary domain has been verified.",
-          "type": "boolean"
-        },
-        "primaryAdmin": {
-          "description": "The first admin details of the customer, present in case of TEAM customer.",
-          "$ref": "PrimaryAdmin"
+          "description": "Like the \"Customer email\" in the reseller tools, this email is the secondary contact used if something happens to the customer's service such as service outage or a security issue. This property is required when creating a new \"domain\" customer and should not use the same domain as `customerDomain`. The `alternateEmail` field is not necessary to create a \"team\" customer."
         },
         "kind": {
           "type": "string",
           "default": "reseller#customer",
           "description": "Identifies the resource as a customer. Value: `reseller#customer`"
         },
+        "customerDomainVerified": {
+          "description": "Whether the customer's primary domain has been verified.",
+          "type": "boolean"
+        },
+        "phoneNumber": {
+          "description": "Customer contact phone number. Must start with \"+\" followed by the country code. The rest of the number can be contiguous numbers or respect the phone local format conventions, but it must be a real phone number and not, for example, \"123\". This field is silently ignored if invalid.",
+          "type": "string"
+        },
+        "postalAddress": {
+          "description": "A customer's address information. Each field has a limit of 255 charcters.",
+          "$ref": "Address"
+        },
         "customerDomain": {
           "description": "The customer's primary domain name string. `customerDomain` is required when creating a new customer. Do not include the `www` prefix in the domain when adding a customer.",
           "type": "string"
+        },
+        "primaryAdmin": {
+          "description": "The first admin details of the customer, present in case of TEAM customer.",
+          "$ref": "PrimaryAdmin"
         }
       },
-      "description": "When a Google customer's account is registered with a reseller, the customer's subscriptions for Google services are managed by this reseller. A customer is described by a primary domain name and a physical address.",
       "type": "object",
-      "id": "Customer"
+      "id": "Customer",
+      "description": "When a Google customer's account is registered with a reseller, the customer's subscriptions for Google services are managed by this reseller. A customer is described by a primary domain name and a physical address."
     },
-    "RenewalSettings": {
-      "description": "JSON template for a subscription renewal settings.",
-      "type": "object",
+    "Seats": {
+      "id": "Seats",
+      "description": "JSON template for subscription seats.",
       "properties": {
-        "renewalType": {
-          "type": "string",
-          "description": "Renewal settings for the annual commitment plan. For more detailed information, see renewal options in the administrator help center. When renewing a subscription, the `renewalType` is a required property."
+        "licensedNumberOfSeats": {
+          "format": "int32",
+          "description": "Read-only field containing the current number of users that are assigned a license for the product defined in `skuId`. This field's value is equivalent to the numerical count of users returned by the Enterprise License Manager API method: [`listForProductAndSku`](https://developers.google.com/workspace/admin/licensing/v1/reference/licenseAssignments/listForProductAndSku).",
+          "type": "integer"
         },
         "kind": {
+          "description": "Identifies the resource as a subscription seat setting. Value: `subscriptions#seats`",
           "type": "string",
-          "description": "Identifies the resource as a subscription renewal setting. Value: `subscriptions#renewalSettings`",
-          "default": "subscriptions#renewalSettings"
+          "default": "subscriptions#seats"
+        },
+        "maximumNumberOfSeats": {
+          "type": "integer",
+          "format": "int32",
+          "description": "This is a required property and is exclusive to subscriptions with `FLEXIBLE` or `TRIAL` plans. This property sets the maximum number of licensed users allowed on a subscription. This quantity can be increased up to the maximum limit defined in the reseller's contract. The minimum quantity is the current number of users in the customer account. *Note: *G Suite subscriptions automatically assign a license to every user."
+        },
+        "numberOfSeats": {
+          "format": "int32",
+          "type": "integer",
+          "description": "This is a required property and is exclusive to subscriptions with `ANNUAL_MONTHLY_PAY` and `ANNUAL_YEARLY_PAY` plans. This property sets the maximum number of licenses assignable to users on a subscription. The reseller can add more licenses, but once set, the `numberOfSeats` cannot be reduced until renewal. The reseller is invoiced based on the `numberOfSeats` value regardless of how many of these user licenses are assigned. *Note: *Google Workspace subscriptions automatically assign a license to every user."
         }
       },
-      "id": "RenewalSettings"
-    },
-    "Subscriptions": {
-      "description": "A subscription manages the relationship of a Google customer's payment plan with a product's SKU, user licenses, 30-day free trial status, and renewal options. A primary role of a reseller is to manage the Google customer's subscriptions.",
-      "properties": {
-        "subscriptions": {
-          "items": {
-            "$ref": "Subscription"
-          },
-          "description": "The subscriptions in this page of results.",
-          "type": "array"
-        },
-        "kind": {
-          "type": "string",
-          "default": "reseller#subscriptions",
-          "description": "Identifies the resource as a collection of subscriptions. Value: reseller#subscriptions"
-        },
-        "nextPageToken": {
-          "description": "The continuation token, used to page through large result sets. Provide this value in a subsequent request to return the next page of results.",
-          "type": "string"
-        }
-      },
-      "id": "Subscriptions",
       "type": "object"
-    },
-    "Address": {
-      "type": "object",
-      "properties": {
-        "organizationName": {
-          "description": "The company or company division name. This is required.",
-          "type": "string"
-        },
-        "contactName": {
-          "description": "The customer contact's name. This is required.",
-          "type": "string"
-        },
-        "addressLine1": {
-          "description": "A customer's physical address. An address can be composed of one to three lines. The `addressline2` and `addressLine3` are optional.",
-          "type": "string"
-        },
-        "countryCode": {
-          "description": "For `countryCode` information, see the ISO 3166 country code elements. Verify that country is approved for resale of Google products. This property is required when creating a new customer.",
-          "type": "string"
-        },
-        "addressLine3": {
-          "type": "string",
-          "description": "Line 3 of the address."
-        },
-        "kind": {
-          "description": "Identifies the resource as a customer address. Value: `customers#address`",
-          "default": "customers#address",
-          "type": "string"
-        },
-        "locality": {
-          "type": "string",
-          "description": "An example of a `locality` value is the city of `San Francisco`."
-        },
-        "postalCode": {
-          "description": "A `postalCode` example is a postal zip code such as `94043`. This property is required when creating a new customer.",
-          "type": "string"
-        },
-        "addressLine2": {
-          "type": "string",
-          "description": "Line 2 of the address."
-        },
-        "region": {
-          "description": "An example of a `region` value is `CA` for the state of California.",
-          "type": "string"
-        }
-      },
-      "description": "JSON template for address of a customer.",
-      "id": "Address"
-    },
-    "Subscription": {
-      "properties": {
-        "dealCode": {
-          "type": "string",
-          "description": "Google-issued code (100 char max) for discounted pricing on subscription plans. Deal code must be included in `insert` requests in order to receive discounted rate. This property is optional, regular pricing applies if left empty."
-        },
-        "suspensionReasons": {
-          "description": "Read-only field containing an enumerable of all the current suspension reasons for a subscription. It is possible for a subscription to have many concurrent, overlapping suspension reasons. A subscription's `STATUS` is `SUSPENDED` until all pending suspensions are removed. Possible options include: - `PENDING_TOS_ACCEPTANCE` - The customer has not logged in and accepted the G Suite Resold Terms of Services. - `RENEWAL_WITH_TYPE_CANCEL` - The customer's commitment ended and their service was cancelled at the end of their term. - `RESELLER_INITIATED` - A manual suspension invoked by a Reseller. - `TRIAL_ENDED` - The customer's trial expired without a plan selected. - `OTHER` - The customer is suspended for an internal Google reason (e.g. abuse or otherwise). ",
-          "items": {
-            "type": "string"
-          },
-          "type": "array"
-        },
-        "trialSettings": {
-          "description": "The G Suite annual commitment and flexible payment plans can be in a 30-day free trial. For more information, see the API concepts.",
-          "properties": {
-            "isInTrial": {
-              "description": "Determines if a subscription's plan is in a 30-day free trial or not: - `true` — The plan is in trial. - `false` — The plan is not in trial. ",
-              "type": "boolean"
-            },
-            "trialEndTime": {
-              "format": "int64",
-              "description": "Date when the trial ends. The value is in milliseconds using the UNIX Epoch format. See an example Epoch converter.",
-              "type": "string"
-            }
-          },
-          "type": "object"
-        },
-        "skuName": {
-          "type": "string",
-          "description": "Read-only external display name for a product's SKU assigned to a customer in the subscription. SKU names are subject to change at Google's discretion. For products and SKUs available in this version of the API, see Product and SKU IDs."
-        },
-        "plan": {
-          "description": "The `plan` property is required. In this version of the API, the G Suite plans are the flexible plan, annual commitment plan, and the 30-day free trial plan. For more information about the API\"s payment plans, see the API concepts.",
-          "properties": {
-            "isCommitmentPlan": {
-              "description": "The `isCommitmentPlan` property's boolean value identifies the plan as an annual commitment plan: - `true` — The subscription's plan is an annual commitment plan. - `false` — The plan is not an annual commitment plan. ",
-              "type": "boolean"
-            },
-            "commitmentInterval": {
-              "description": "In this version of the API, annual commitment plan's interval is one year. *Note: *When `billingMethod` value is `OFFLINE`, the subscription property object `plan.commitmentInterval` is omitted in all API responses. ",
-              "type": "object",
-              "properties": {
-                "startTime": {
-                  "type": "string",
-                  "description": "An annual commitment plan's interval's `startTime` in milliseconds using UNIX Epoch format. See an example Epoch converter.",
-                  "format": "int64"
-                },
-                "endTime": {
-                  "type": "string",
-                  "format": "int64",
-                  "description": "An annual commitment plan's interval's `endTime` in milliseconds using the UNIX Epoch format. See an example Epoch converter."
-                }
-              }
-            },
-            "planName": {
-              "type": "string",
-              "description": "The `planName` property is required. This is the name of the subscription's plan. For more information about the Google payment plans, see the API concepts. Possible values are: - `ANNUAL_MONTHLY_PAY` — The annual commitment plan with monthly payments. *Caution: *`ANNUAL_MONTHLY_PAY` is returned as `ANNUAL` in all API responses. - `ANNUAL_YEARLY_PAY` — The annual commitment plan with yearly payments - `FLEXIBLE` — The flexible plan - `TRIAL` — The 30-day free trial plan. A subscription in trial will be suspended after the 30th free day if no payment plan is assigned. Calling `changePlan` will assign a payment plan to a trial but will not activate the plan. A trial will automatically begin its assigned payment plan after its 30th free day or immediately after calling `startPaidService`. - `FREE` — The free plan is exclusive to the Cloud Identity SKU and does not incur any billing. "
-            }
-          },
-          "type": "object"
-        },
-        "resourceUiUrl": {
-          "description": "URL to customer's Subscriptions page in the Admin console. The read-only URL is generated by the API service. This is used if your client application requires the customer to complete a task using the Subscriptions page in the Admin console.",
-          "type": "string"
-        },
-        "subscriptionId": {
-          "description": "The `subscriptionId` is the subscription identifier and is unique for each customer. This is a required property. Since a `subscriptionId` changes when a subscription is updated, we recommend not using this ID as a key for persistent data. Use the `subscriptionId` as described in retrieve all reseller subscriptions.",
-          "type": "string"
-        },
-        "skuId": {
-          "type": "string",
-          "description": "A required property. The `skuId` is a unique system identifier for a product's SKU assigned to a customer in the subscription. For products and SKUs available in this version of the API, see Product and SKU IDs."
-        },
-        "status": {
-          "type": "string",
-          "description": "This is an optional property."
-        },
-        "customerId": {
-          "description": "This property will always be returned in a response as the unique identifier generated by Google. In a request, this property can be either the primary domain or the unique identifier generated by Google.",
-          "type": "string"
-        },
-        "transferInfo": {
-          "type": "object",
-          "properties": {
-            "currentLegacySkuId": {
-              "description": "The `skuId` of the current resold subscription. This is populated only when the customer has a subscription with a legacy SKU and the subscription resource is populated with the `skuId` of the SKU recommended for the transfer.",
-              "type": "string"
-            },
-            "minimumTransferableSeats": {
-              "format": "int32",
-              "type": "integer",
-              "description": "When inserting a subscription, this is the minimum number of seats listed in the transfer order for this product. For example, if the customer has 20 users, the reseller cannot place a transfer order of 15 seats. The minimum is 20 seats."
-            },
-            "transferabilityExpirationTime": {
-              "type": "string",
-              "format": "int64",
-              "description": "The time when transfer token or intent to transfer will expire. The time is in milliseconds using UNIX Epoch format."
-            }
-          },
-          "description": "Read-only transfer related information for the subscription. For more information, see retrieve transferable subscriptions for a customer."
-        },
-        "seats": {
-          "$ref": "Seats",
-          "description": "This is a required property. The number and limit of user seat licenses in the plan."
-        },
-        "billingMethod": {
-          "type": "string",
-          "description": "Read-only field that returns the current billing method for a subscription."
-        },
-        "kind": {
-          "type": "string",
-          "default": "reseller#subscription",
-          "description": "Identifies the resource as a Subscription. Value: `reseller#subscription`"
-        },
-        "customerDomain": {
-          "type": "string",
-          "description": "Primary domain name of the customer"
-        },
-        "creationTime": {
-          "format": "int64",
-          "description": "The `creationTime` property is the date when subscription was created. It is in milliseconds using the Epoch format. See an example Epoch converter.",
-          "type": "string"
-        },
-        "renewalSettings": {
-          "$ref": "RenewalSettings",
-          "description": "Renewal settings for the annual commitment plan. For more detailed information, see renewal options in the administrator help center."
-        },
-        "purchaseOrderId": {
-          "description": "This is an optional property. This purchase order (PO) information is for resellers to use for their company tracking usage. If a `purchaseOrderId` value is given it appears in the API responses and shows up in the invoice. The property accepts up to 80 plain text characters.",
-          "type": "string"
-        }
-      },
-      "id": "Subscription",
-      "description": "JSON template for a subscription.",
-      "type": "object"
-    },
-    "ChangePlanRequest": {
-      "type": "object",
-      "id": "ChangePlanRequest",
-      "properties": {
-        "seats": {
-          "description": "This is a required property. The seats property is the number of user seat licenses.",
-          "$ref": "Seats"
-        },
-        "purchaseOrderId": {
-          "description": "This is an optional property. This purchase order (PO) information is for resellers to use for their company tracking usage. If a `purchaseOrderId` value is given it appears in the API responses and shows up in the invoice. The property accepts up to 80 plain text characters.",
-          "type": "string"
-        },
-        "dealCode": {
-          "type": "string",
-          "description": "Google-issued code (100 char max) for discounted pricing on subscription plans. Deal code must be included in `changePlan` request in order to receive discounted rate. This property is optional. If a deal code has already been added to a subscription, this property may be left empty and the existing discounted rate will still apply (if not empty, only provide the deal code that is already present on the subscription). If a deal code has never been added to a subscription and this property is left blank, regular pricing will apply."
-        },
-        "kind": {
-          "default": "subscriptions#changePlanRequest",
-          "type": "string",
-          "description": "Identifies the resource as a subscription change plan request. Value: `subscriptions#changePlanRequest`"
-        },
-        "planName": {
-          "type": "string",
-          "description": "The `planName` property is required. This is the name of the subscription's payment plan. For more information about the Google payment plans, see API concepts. Possible values are: - `ANNUAL_MONTHLY_PAY` - The annual commitment plan with monthly payments *Caution: *`ANNUAL_MONTHLY_PAY` is returned as `ANNUAL` in all API responses. - `ANNUAL_YEARLY_PAY` - The annual commitment plan with yearly payments - `FLEXIBLE` - The flexible plan - `TRIAL` - The 30-day free trial plan "
-        }
-      },
-      "description": "JSON template for the ChangePlan rpc request."
     }
-  },
-  "mtlsRootUrl": "https://reseller.mtls.googleapis.com/",
-  "kind": "discovery#restDescription",
-  "resources": {
-    "resellernotify": {
-      "methods": {
-        "unregister": {
-          "flatPath": "apps/reseller/v1/resellernotify/unregister",
-          "httpMethod": "POST",
-          "scopes": [
-            "https://www.googleapis.com/auth/apps.order"
-          ],
-          "id": "reseller.resellernotify.unregister",
-          "path": "apps/reseller/v1/resellernotify/unregister",
-          "response": {
-            "$ref": "ResellernotifyResource"
-          },
-          "description": "Unregisters a Reseller for receiving notifications.",
-          "parameters": {
-            "serviceAccountEmailAddress": {
-              "location": "query",
-              "type": "string",
-              "description": "The service account which owns the Cloud-PubSub topic."
-            }
-          },
-          "parameterOrder": []
-        },
-        "getwatchdetails": {
-          "parameters": {},
-          "httpMethod": "GET",
-          "id": "reseller.resellernotify.getwatchdetails",
-          "flatPath": "apps/reseller/v1/resellernotify/getwatchdetails",
-          "description": "Returns all the details of the watch corresponding to the reseller.",
-          "parameterOrder": [],
-          "scopes": [
-            "https://www.googleapis.com/auth/apps.order",
-            "https://www.googleapis.com/auth/apps.order.readonly"
-          ],
-          "path": "apps/reseller/v1/resellernotify/getwatchdetails",
-          "response": {
-            "$ref": "ResellernotifyGetwatchdetailsResponse"
-          }
-        },
-        "register": {
-          "response": {
-            "$ref": "ResellernotifyResource"
-          },
-          "httpMethod": "POST",
-          "id": "reseller.resellernotify.register",
-          "scopes": [
-            "https://www.googleapis.com/auth/apps.order"
-          ],
-          "description": "Registers a Reseller for receiving notifications.",
-          "path": "apps/reseller/v1/resellernotify/register",
-          "parameters": {
-            "serviceAccountEmailAddress": {
-              "description": "The service account which will own the created Cloud-PubSub topic.",
-              "type": "string",
-              "location": "query"
-            }
-          },
-          "flatPath": "apps/reseller/v1/resellernotify/register",
-          "parameterOrder": []
-        }
-      }
-    },
-    "customers": {
-      "methods": {
-        "get": {
-          "flatPath": "apps/reseller/v1/customers/{customerId}",
-          "description": "Gets a customer account. Use this operation to see a customer account already in your reseller management, or to see the minimal account information for an existing customer that you do not manage. For more information about the API response for existing customers, see [retrieving a customer account](https://developers.google.com/workspace/admin/reseller/v1/how-tos/manage_customers#get_customer).",
-          "id": "reseller.customers.get",
-          "response": {
-            "$ref": "Customer"
-          },
-          "parameterOrder": [
-            "customerId"
-          ],
-          "path": "apps/reseller/v1/customers/{customerId}",
-          "httpMethod": "GET",
-          "parameters": {
-            "customerId": {
-              "description": "This can be either the customer's primary domain name or the customer's unique identifier. If the domain name for a customer changes, the old domain name cannot be used to access the customer, but the customer's unique identifier (as returned by the API) can always be used. We recommend storing the unique identifier in your systems where applicable.",
-              "location": "path",
-              "required": true,
-              "type": "string"
-            }
-          },
-          "scopes": [
-            "https://www.googleapis.com/auth/apps.order",
-            "https://www.googleapis.com/auth/apps.order.readonly"
-          ]
-        },
-        "insert": {
-          "path": "apps/reseller/v1/customers",
-          "request": {
-            "$ref": "Customer"
-          },
-          "scopes": [
-            "https://www.googleapis.com/auth/apps.order"
-          ],
-          "parameterOrder": [],
-          "id": "reseller.customers.insert",
-          "parameters": {
-            "customerAuthToken": {
-              "description": "The `customerAuthToken` query string is required when creating a resold account that transfers a direct customer's subscription or transfers another reseller customer's subscription to your reseller management. This is a hexadecimal authentication token needed to complete the subscription transfer. For more information, see the administrator help center.",
-              "type": "string",
-              "location": "query"
-            }
-          },
-          "response": {
-            "$ref": "Customer"
-          },
-          "description": "Orders a new customer's account. Before ordering a new customer account, establish whether the customer account already exists using the [`customers.get`](https://developers.google.com/workspace/admin/reseller/v1/reference/customers/get) If the customer account exists as a direct Google account or as a resold customer account from another reseller, use the `customerAuthToken\\` as described in [order a resold account for an existing customer](https://developers.google.com/workspace/admin/reseller/v1/how-tos/manage_customers#create_existing_customer). For more information about ordering a new customer account, see [order a new customer account](https://developers.google.com/workspace/admin/reseller/v1/how-tos/manage_customers#create_customer). After creating a new customer account, you must provision a user as an administrator. The customer's administrator is required to sign in to the Admin console and sign the G Suite via Reseller agreement to activate the account. Resellers are prohibited from signing the G Suite via Reseller agreement on the customer's behalf. For more information, see [order a new customer account](https://developers.google.com/workspace/admin/reseller/v1/how-tos/manage_customers#tos).",
-          "httpMethod": "POST",
-          "flatPath": "apps/reseller/v1/customers"
-        },
-        "patch": {
-          "scopes": [
-            "https://www.googleapis.com/auth/apps.order"
-          ],
-          "request": {
-            "$ref": "Customer"
-          },
-          "flatPath": "apps/reseller/v1/customers/{customerId}",
-          "parameterOrder": [
-            "customerId"
-          ],
-          "response": {
-            "$ref": "Customer"
-          },
-          "httpMethod": "PATCH",
-          "id": "reseller.customers.patch",
-          "description": "Updates a customer account's settings. This method supports patch semantics. You cannot update `customerType` via the Reseller API, but a `\"team\"` customer can verify their domain and become `customerType = \"domain\"`. For more information, see [Verify your domain to unlock Essentials features](https://support.google.com/a/answer/9122284).",
-          "path": "apps/reseller/v1/customers/{customerId}",
-          "parameters": {
-            "customerId": {
-              "description": "This can be either the customer's primary domain name or the customer's unique identifier. If the domain name for a customer changes, the old domain name cannot be used to access the customer, but the customer's unique identifier (as returned by the API) can always be used. We recommend storing the unique identifier in your systems where applicable.",
-              "type": "string",
-              "location": "path",
-              "required": true
-            }
-          }
-        },
-        "update": {
-          "id": "reseller.customers.update",
-          "scopes": [
-            "https://www.googleapis.com/auth/apps.order"
-          ],
-          "response": {
-            "$ref": "Customer"
-          },
-          "description": "Updates a customer account's settings. You cannot update `customerType` via the Reseller API, but a `\"team\"` customer can verify their domain and become `customerType = \"domain\"`. For more information, see [update a customer's settings](https://developers.google.com/workspace/admin/reseller/v1/how-tos/manage_customers#update_customer).",
-          "flatPath": "apps/reseller/v1/customers/{customerId}",
-          "parameterOrder": [
-            "customerId"
-          ],
-          "request": {
-            "$ref": "Customer"
-          },
-          "httpMethod": "PUT",
-          "parameters": {
-            "customerId": {
-              "type": "string",
-              "description": "This can be either the customer's primary domain name or the customer's unique identifier. If the domain name for a customer changes, the old domain name cannot be used to access the customer, but the customer's unique identifier (as returned by the API) can always be used. We recommend storing the unique identifier in your systems where applicable.",
-              "location": "path",
-              "required": true
-            }
-          },
-          "path": "apps/reseller/v1/customers/{customerId}"
-        }
-      }
-    },
-    "subscriptions": {
-      "methods": {
-        "changeRenewalSettings": {
-          "scopes": [
-            "https://www.googleapis.com/auth/apps.order"
-          ],
-          "response": {
-            "$ref": "Subscription"
-          },
-          "flatPath": "apps/reseller/v1/customers/{customerId}/subscriptions/{subscriptionId}/changeRenewalSettings",
-          "path": "apps/reseller/v1/customers/{customerId}/subscriptions/{subscriptionId}/changeRenewalSettings",
-          "parameterOrder": [
-            "customerId",
-            "subscriptionId"
-          ],
-          "description": "Updates a user license's renewal settings. This is applicable for accounts with annual commitment plans only. For more information, see the description in [manage subscriptions](https://developers.google.com/workspace/admin/reseller/v1/how-tos/manage_subscriptions#update_renewal).",
-          "parameters": {
-            "subscriptionId": {
-              "type": "string",
-              "location": "path",
-              "required": true,
-              "description": "This is a required property. The `subscriptionId` is the subscription identifier and is unique for each customer. Since a `subscriptionId` changes when a subscription is updated, we recommend to not use this ID as a key for persistent data. And the `subscriptionId` can be found using the retrieve all reseller subscriptions method."
-            },
-            "customerId": {
-              "description": "This can be either the customer's primary domain name or the customer's unique identifier. If the domain name for a customer changes, the old domain name cannot be used to access the customer, but the customer's unique identifier (as returned by the API) can always be used. We recommend storing the unique identifier in your systems where applicable.",
-              "location": "path",
-              "required": true,
-              "type": "string"
-            }
-          },
-          "request": {
-            "$ref": "RenewalSettings"
-          },
-          "httpMethod": "POST",
-          "id": "reseller.subscriptions.changeRenewalSettings"
-        },
-        "suspend": {
-          "response": {
-            "$ref": "Subscription"
-          },
-          "parameters": {
-            "subscriptionId": {
-              "type": "string",
-              "location": "path",
-              "required": true,
-              "description": "This is a required property. The `subscriptionId` is the subscription identifier and is unique for each customer. Since a `subscriptionId` changes when a subscription is updated, we recommend to not use this ID as a key for persistent data. And the `subscriptionId` can be found using the retrieve all reseller subscriptions method."
-            },
-            "customerId": {
-              "location": "path",
-              "required": true,
-              "type": "string",
-              "description": "This can be either the customer's primary domain name or the customer's unique identifier. If the domain name for a customer changes, the old domain name cannot be used to access the customer, but the customer's unique identifier (as returned by the API) can always be used. We recommend storing the unique identifier in your systems where applicable."
-            }
-          },
-          "httpMethod": "POST",
-          "path": "apps/reseller/v1/customers/{customerId}/subscriptions/{subscriptionId}/suspend",
-          "flatPath": "apps/reseller/v1/customers/{customerId}/subscriptions/{subscriptionId}/suspend",
-          "id": "reseller.subscriptions.suspend",
-          "parameterOrder": [
-            "customerId",
-            "subscriptionId"
-          ],
-          "description": "Suspends an active subscription. You can use this method to suspend a paid subscription that is currently in the `ACTIVE` state. * For `FLEXIBLE` subscriptions, billing is paused. * For `ANNUAL_MONTHLY_PAY` or `ANNUAL_YEARLY_PAY` subscriptions: * Suspending the subscription does not change the renewal date that was originally committed to. * A suspended subscription does not renew. If you activate the subscription after the original renewal date, a new annual subscription will be created, starting on the day of activation. We strongly encourage you to suspend subscriptions only for short periods of time as suspensions over 60 days may result in the subscription being cancelled.",
-          "scopes": [
-            "https://www.googleapis.com/auth/apps.order"
-          ]
-        },
-        "list": {
-          "parameterOrder": [],
-          "httpMethod": "GET",
-          "description": "Lists of subscriptions managed by the reseller. The list can be all subscriptions, all of a customer's subscriptions, or all of a customer's transferable subscriptions. Optionally, this method can filter the response by a `customerNamePrefix`. For more information, see [manage subscriptions](https://developers.google.com/workspace/admin/reseller/v1/how-tos/manage_subscriptions).",
-          "scopes": [
-            "https://www.googleapis.com/auth/apps.order",
-            "https://www.googleapis.com/auth/apps.order.readonly"
-          ],
-          "response": {
-            "$ref": "Subscriptions"
-          },
-          "flatPath": "apps/reseller/v1/subscriptions",
-          "path": "apps/reseller/v1/subscriptions",
-          "id": "reseller.subscriptions.list",
-          "parameters": {
-            "maxResults": {
-              "format": "uint32",
-              "description": "When retrieving a large list, the `maxResults` is the maximum number of results per page. The `nextPageToken` value takes you to the next page. The default is 20.",
-              "maximum": "100",
-              "location": "query",
-              "type": "integer",
-              "minimum": "1"
-            },
-            "customerNamePrefix": {
-              "location": "query",
-              "description": "When retrieving all of your subscriptions and filtering for specific customers, you can enter a prefix for a customer name. Using an example customer group that includes `exam.com`, `example20.com` and `example.com`: - `exa` -- Returns all customer names that start with 'exa' which could include `exam.com`, `example20.com`, and `example.com`. A name prefix is similar to using a regular expression's asterisk, exa*. - `example` -- Returns `example20.com` and `example.com`. ",
-              "type": "string"
-            },
-            "pageToken": {
-              "type": "string",
-              "location": "query",
-              "description": "Token to specify next page in the list"
-            },
-            "customerAuthToken": {
-              "location": "query",
-              "description": "The `customerAuthToken` query string is required when creating a resold account that transfers a direct customer's subscription or transfers another reseller customer's subscription to your reseller management. This is a hexadecimal authentication token needed to complete the subscription transfer. For more information, see the administrator help center.",
-              "type": "string"
-            },
-            "customerId": {
-              "location": "query",
-              "description": "This can be either the customer's primary domain name or the customer's unique identifier. If the domain name for a customer changes, the old domain name cannot be used to access the customer, but the customer's unique identifier (as returned by the API) can always be used. We recommend storing the unique identifier in your systems where applicable.",
-              "type": "string"
-            }
-          }
-        },
-        "changeSeats": {
-          "parameters": {
-            "subscriptionId": {
-              "location": "path",
-              "required": true,
-              "description": "This is a required property. The `subscriptionId` is the subscription identifier and is unique for each customer. Since a `subscriptionId` changes when a subscription is updated, we recommend to not use this ID as a key for persistent data. And the `subscriptionId` can be found using the retrieve all reseller subscriptions method.",
-              "type": "string"
-            },
-            "customerId": {
-              "location": "path",
-              "required": true,
-              "type": "string",
-              "description": "This can be either the customer's primary domain name or the customer's unique identifier. If the domain name for a customer changes, the old domain name cannot be used to access the customer, but the customer's unique identifier (as returned by the API) can always be used. We recommend storing the unique identifier in your systems where applicable."
-            }
-          },
-          "request": {
-            "$ref": "Seats"
-          },
-          "response": {
-            "$ref": "Subscription"
-          },
-          "parameterOrder": [
-            "customerId",
-            "subscriptionId"
-          ],
-          "flatPath": "apps/reseller/v1/customers/{customerId}/subscriptions/{subscriptionId}/changeSeats",
-          "httpMethod": "POST",
-          "description": "Updates a subscription's user license settings. For more information about updating an annual commitment plan or a flexible plan subscription’s licenses, see [Manage Subscriptions](https://developers.google.com/workspace/admin/reseller/v1/how-tos/manage_subscriptions#update_subscription_seat).",
-          "scopes": [
-            "https://www.googleapis.com/auth/apps.order"
-          ],
-          "path": "apps/reseller/v1/customers/{customerId}/subscriptions/{subscriptionId}/changeSeats",
-          "id": "reseller.subscriptions.changeSeats"
-        },
-        "insert": {
-          "parameters": {
-            "customerId": {
-              "location": "path",
-              "required": true,
-              "description": "This can be either the customer's primary domain name or the customer's unique identifier. If the domain name for a customer changes, the old domain name cannot be used to access the customer, but the customer's unique identifier (as returned by the API) can always be used. We recommend storing the unique identifier in your systems where applicable.",
-              "type": "string"
-            },
-            "customerAuthToken": {
-              "description": "The `customerAuthToken` query string is required when creating a resold account that transfers a direct customer's subscription or transfers another reseller customer's subscription to your reseller management. This is a hexadecimal authentication token needed to complete the subscription transfer. For more information, see the administrator help center.",
-              "type": "string",
-              "location": "query"
-            },
-            "action": {
-              "enum": [
-                "actionUnspecified",
-                "buy",
-                "switch"
-              ],
-              "enumDescriptions": [
-                "Auto determines whether to create new subscription, upgrade or downagrade existing subscription or transfer the existing subscription",
-                "Create new subscription",
-                "Switch existing subscription to another sku (upgrade/downgrade)"
-              ],
-              "location": "query",
-              "type": "string",
-              "description": "The intented insert action. Advised to set this when the customer already has a subscription for a different SKU in the same product."
-            },
-            "sourceSkuId": {
-              "description": "The sku_id of the existing subscription to be upgraded or downgraded. This is required when action is SWITCH.",
-              "location": "query",
-              "type": "string"
-            }
-          },
-          "request": {
-            "$ref": "Subscription"
-          },
-          "httpMethod": "POST",
-          "id": "reseller.subscriptions.insert",
-          "path": "apps/reseller/v1/customers/{customerId}/subscriptions",
-          "flatPath": "apps/reseller/v1/customers/{customerId}/subscriptions",
-          "scopes": [
-            "https://www.googleapis.com/auth/apps.order"
-          ],
-          "response": {
-            "$ref": "Subscription"
-          },
-          "parameterOrder": [
-            "customerId"
-          ],
-          "description": "Creates or transfer a subscription. Create a subscription for a customer's account that you ordered using the [Order a new customer account](https://developers.google.com/workspace/admin/reseller/v1/reference/customers/insert.html) method. For more information about creating a subscription for different payment plans, see [manage subscriptions](https://developers.google.com/workspace/admin/reseller/v1/how-tos/manage_subscriptions#create_subscription).\\ If you did not order the customer's account using the customer insert method, use the customer's `customerAuthToken` when creating a subscription for that customer. If transferring a G Suite subscription with an associated Google Drive or Google Vault subscription, use the [batch operation](https://developers.google.com/workspace/admin/reseller/v1/how-tos/batch.html) to transfer all of these subscriptions. For more information, see how to [transfer subscriptions](https://developers.google.com/workspace/admin/reseller/v1/how-tos/manage_subscriptions#transfer_a_subscription)."
-        },
-        "get": {
-          "parameterOrder": [
-            "customerId",
-            "subscriptionId"
-          ],
-          "id": "reseller.subscriptions.get",
-          "response": {
-            "$ref": "Subscription"
-          },
-          "scopes": [
-            "https://www.googleapis.com/auth/apps.order",
-            "https://www.googleapis.com/auth/apps.order.readonly"
-          ],
-          "parameters": {
-            "customerId": {
-              "location": "path",
-              "required": true,
-              "description": "This can be either the customer's primary domain name or the customer's unique identifier. If the domain name for a customer changes, the old domain name cannot be used to access the customer, but the customer's unique identifier (as returned by the API) can always be used. We recommend storing the unique identifier in your systems where applicable.",
-              "type": "string"
-            },
-            "subscriptionId": {
-              "type": "string",
-              "description": "This is a required property. The `subscriptionId` is the subscription identifier and is unique for each customer. Since a `subscriptionId` changes when a subscription is updated, we recommend to not use this ID as a key for persistent data. And the `subscriptionId` can be found using the retrieve all reseller subscriptions method.",
-              "location": "path",
-              "required": true
-            }
-          },
-          "httpMethod": "GET",
-          "description": "Gets a specific subscription. The `subscriptionId` can be found using the [Retrieve all reseller subscriptions](https://developers.google.com/workspace/admin/reseller/v1/how-tos/manage_subscriptions#get_all_subscriptions) method. For more information about retrieving a specific subscription, see the information descrived in [manage subscriptions](https://developers.google.com/workspace/admin/reseller/v1/how-tos/manage_subscriptions#get_subscription).",
-          "path": "apps/reseller/v1/customers/{customerId}/subscriptions/{subscriptionId}",
-          "flatPath": "apps/reseller/v1/customers/{customerId}/subscriptions/{subscriptionId}"
-        },
-        "delete": {
-          "flatPath": "apps/reseller/v1/customers/{customerId}/subscriptions/{subscriptionId}",
-          "parameters": {
-            "subscriptionId": {
-              "description": "This is a required property. The `subscriptionId` is the subscription identifier and is unique for each customer. Since a `subscriptionId` changes when a subscription is updated, we recommend to not use this ID as a key for persistent data. And the `subscriptionId` can be found using the retrieve all reseller subscriptions method.",
-              "type": "string",
-              "location": "path",
-              "required": true
-            },
-            "customerId": {
-              "location": "path",
-              "required": true,
-              "description": "This can be either the customer's primary domain name or the customer's unique identifier. If the domain name for a customer changes, the old domain name cannot be used to access the customer, but the customer's unique identifier (as returned by the API) can always be used. We recommend storing the unique identifier in your systems where applicable.",
-              "type": "string"
-            },
-            "deletionType": {
-              "location": "query",
-              "description": "The `deletionType` query string enables the cancellation, downgrade, or suspension of a subscription.",
-              "required": true,
-              "type": "string",
-              "enumDescriptions": [
-                "",
-                "Cancels the subscription immediately. This does not apply to a G Suite subscription.",
-                "Transfers a subscription directly to Google. The customer is immediately transferred to a direct billing relationship with Google and is given a short amount of time with no service interruption. The customer can then choose to set up billing directly with Google by using a credit card, or they can transfer to another reseller."
-              ],
-              "enum": [
-                "deletion_type_undefined",
-                "cancel",
-                "transfer_to_direct"
-              ]
-            }
-          },
-          "scopes": [
-            "https://www.googleapis.com/auth/apps.order"
-          ],
-          "httpMethod": "DELETE",
-          "parameterOrder": [
-            "customerId",
-            "subscriptionId",
-            "deletionType"
-          ],
-          "description": "Cancels, suspends, or transfers a subscription to direct.",
-          "id": "reseller.subscriptions.delete",
-          "path": "apps/reseller/v1/customers/{customerId}/subscriptions/{subscriptionId}"
-        },
-        "activate": {
-          "path": "apps/reseller/v1/customers/{customerId}/subscriptions/{subscriptionId}/activate",
-          "response": {
-            "$ref": "Subscription"
-          },
-          "flatPath": "apps/reseller/v1/customers/{customerId}/subscriptions/{subscriptionId}/activate",
-          "parameterOrder": [
-            "customerId",
-            "subscriptionId"
-          ],
-          "id": "reseller.subscriptions.activate",
-          "description": "Activates a subscription previously suspended by the reseller. If you did not suspend the customer subscription and it is suspended for any other reason, such as for abuse or a pending ToS acceptance, this call will not reactivate the customer subscription.",
-          "parameters": {
-            "customerId": {
-              "type": "string",
-              "location": "path",
-              "required": true,
-              "description": "This can be either the customer's primary domain name or the customer's unique identifier. If the domain name for a customer changes, the old domain name cannot be used to access the customer, but the customer's unique identifier (as returned by the API) can always be used. We recommend storing the unique identifier in your systems where applicable."
-            },
-            "subscriptionId": {
-              "description": "This is a required property. The `subscriptionId` is the subscription identifier and is unique for each customer. Since a `subscriptionId` changes when a subscription is updated, we recommend to not use this ID as a key for persistent data. And the `subscriptionId` can be found using the retrieve all reseller subscriptions method.",
-              "type": "string",
-              "location": "path",
-              "required": true
-            }
-          },
-          "scopes": [
-            "https://www.googleapis.com/auth/apps.order"
-          ],
-          "httpMethod": "POST"
-        },
-        "startPaidService": {
-          "httpMethod": "POST",
-          "id": "reseller.subscriptions.startPaidService",
-          "parameters": {
-            "customerId": {
-              "location": "path",
-              "required": true,
-              "type": "string",
-              "description": "This can be either the customer's primary domain name or the customer's unique identifier. If the domain name for a customer changes, the old domain name cannot be used to access the customer, but the customer's unique identifier (as returned by the API) can always be used. We recommend storing the unique identifier in your systems where applicable."
-            },
-            "subscriptionId": {
-              "type": "string",
-              "location": "path",
-              "required": true,
-              "description": "This is a required property. The `subscriptionId` is the subscription identifier and is unique for each customer. Since a `subscriptionId` changes when a subscription is updated, we recommend to not use this ID as a key for persistent data. And the `subscriptionId` can be found using the retrieve all reseller subscriptions method."
-            }
-          },
-          "scopes": [
-            "https://www.googleapis.com/auth/apps.order"
-          ],
-          "flatPath": "apps/reseller/v1/customers/{customerId}/subscriptions/{subscriptionId}/startPaidService",
-          "parameterOrder": [
-            "customerId",
-            "subscriptionId"
-          ],
-          "response": {
-            "$ref": "Subscription"
-          },
-          "path": "apps/reseller/v1/customers/{customerId}/subscriptions/{subscriptionId}/startPaidService",
-          "description": "Immediately move a 30-day free trial subscription to a paid service subscription. This method is only applicable if a payment plan has already been set up for the 30-day trial subscription. For more information, see [manage subscriptions](https://developers.google.com/workspace/admin/reseller/v1/how-tos/manage_subscriptions#paid_service)."
-        },
-        "changePlan": {
-          "path": "apps/reseller/v1/customers/{customerId}/subscriptions/{subscriptionId}/changePlan",
-          "flatPath": "apps/reseller/v1/customers/{customerId}/subscriptions/{subscriptionId}/changePlan",
-          "parameters": {
-            "customerId": {
-              "type": "string",
-              "description": "This can be either the customer's primary domain name or the customer's unique identifier. If the domain name for a customer changes, the old domain name cannot be used to access the customer, but the customer's unique identifier (as returned by the API) can always be used. We recommend storing the unique identifier in your systems where applicable.",
-              "location": "path",
-              "required": true
-            },
-            "subscriptionId": {
-              "description": "This is a required property. The `subscriptionId` is the subscription identifier and is unique for each customer. Since a `subscriptionId` changes when a subscription is updated, we recommend to not use this ID as a key for persistent data. And the `subscriptionId` can be found using the retrieve all reseller subscriptions method.",
-              "type": "string",
-              "location": "path",
-              "required": true
-            }
-          },
-          "id": "reseller.subscriptions.changePlan",
-          "httpMethod": "POST",
-          "parameterOrder": [
-            "customerId",
-            "subscriptionId"
-          ],
-          "response": {
-            "$ref": "Subscription"
-          },
-          "description": "Updates a subscription plan. Use this method to update a plan for a 30-day trial or a flexible plan subscription to an annual commitment plan with monthly or yearly payments. How a plan is updated differs depending on the plan and the products. For more information, see the description in [manage subscriptions](https://developers.google.com/workspace/admin/reseller/v1/how-tos/manage_subscriptions#update_subscription_plan).",
-          "scopes": [
-            "https://www.googleapis.com/auth/apps.order"
-          ],
-          "request": {
-            "$ref": "ChangePlanRequest"
-          }
-        }
-      }
-    }
-  },
-  "rootUrl": "https://reseller.googleapis.com/",
-  "fullyEncodeReservedExpansion": true,
-  "basePath": "",
-  "batchPath": "batch",
-  "parameters": {
-    "uploadType": {
-      "description": "Legacy upload protocol for media (e.g. \"media\", \"multipart\").",
-      "type": "string",
-      "location": "query"
-    },
-    "oauth_token": {
-      "description": "OAuth 2.0 token for the current user.",
-      "type": "string",
-      "location": "query"
-    },
-    "fields": {
-      "type": "string",
-      "description": "Selector specifying which fields to include in a partial response.",
-      "location": "query"
-    },
-    "upload_protocol": {
-      "description": "Upload protocol for media (e.g. \"raw\", \"multipart\").",
-      "type": "string",
-      "location": "query"
-    },
-    "key": {
-      "location": "query",
-      "type": "string",
-      "description": "API key. Your API key identifies your project and provides you with API access, quota, and reports. Required unless you provide an OAuth 2.0 token."
-    },
-    "prettyPrint": {
-      "type": "boolean",
-      "location": "query",
-      "default": "true",
-      "description": "Returns response with indentations and line breaks."
-    },
-    "quotaUser": {
-      "type": "string",
-      "description": "Available to use for quota purposes for server-side applications. Can be any arbitrary string assigned to a user, but should not exceed 40 characters.",
-      "location": "query"
-    },
-    "callback": {
-      "type": "string",
-      "location": "query",
-      "description": "JSONP"
-    },
-    "access_token": {
-      "type": "string",
-      "location": "query",
-      "description": "OAuth access token."
-    },
-    "$.xgafv": {
-      "location": "query",
-      "enum": [
-        "1",
-        "2"
-      ],
-      "enumDescriptions": [
-        "v1 error format",
-        "v2 error format"
-      ],
-      "type": "string",
-      "description": "V1 error format."
-    },
-    "alt": {
-      "type": "string",
-      "location": "query",
-      "enum": [
-        "json",
-        "media",
-        "proto"
-      ],
-      "description": "Data format for response.",
-      "enumDescriptions": [
-        "Responses with Content-Type of application/json",
-        "Media download with context-dependent Content-Type",
-        "Responses with Content-Type of application/x-protobuf"
-      ],
-      "default": "json"
-    }
-  },
-  "title": "Google Workspace Reseller API",
-  "ownerName": "Google",
-  "auth": {
-    "oauth2": {
-      "scopes": {
-        "https://www.googleapis.com/auth/apps.order": {
-          "description": "Manage users on your domain"
-        },
-        "https://www.googleapis.com/auth/apps.order.readonly": {
-          "description": "Manage users on your domain"
-        }
-      }
-    }
-  },
-  "documentationLink": "https://developers.google.com/google-apps/reseller/",
-  "servicePath": "",
-  "version": "v1",
-  "canonicalName": "Reseller",
-  "protocol": "rest",
-  "name": "reseller",
-  "id": "reseller:v1",
-  "description": "Perform common functions that are available on the Channel Services console at scale, like placing orders and viewing customer information",
-  "ownerDomain": "google.com",
-  "discoveryVersion": "v1",
-  "revision": "20260907"
+  }
 }

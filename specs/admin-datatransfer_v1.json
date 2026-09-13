@@ -1,134 +1,34 @@
 {
+  "name": "admin",
+  "revision": "20260909",
+  "ownerName": "Google",
+  "ownerDomain": "google.com",
+  "fullyEncodeReservedExpansion": true,
   "schemas": {
-    "ApplicationTransferParam": {
-      "type": "object",
-      "properties": {
-        "key": {
-          "type": "string",
-          "description": "The type of the transfer parameter, such as `PRIVACY_LEVEL`."
-        },
-        "value": {
-          "description": "The value of the transfer parameter, such as `PRIVATE` or `SHARED`.",
-          "items": {
-            "type": "string"
-          },
-          "type": "array"
-        }
-      },
-      "description": "Template for application transfer parameters.",
-      "id": "ApplicationTransferParam"
-    },
-    "ApplicationDataTransfer": {
-      "type": "object",
-      "properties": {
-        "applicationId": {
-          "format": "int64",
-          "type": "string",
-          "description": "The application's ID."
-        },
-        "applicationTransferParams": {
-          "description": "The transfer parameters for the application. These parameters are used to select the data which will get transferred in context of this application. For more information about the specific values available for each application, see the [Transfer parameters](https://developers.google.com/workspace/admin/data-transfer/v1/parameters) reference.",
-          "type": "array",
-          "items": {
-            "$ref": "ApplicationTransferParam"
-          }
-        },
-        "applicationTransferStatus": {
-          "description": "Read-only. Current status of transfer for this application.",
-          "type": "string"
-        }
-      },
-      "description": "Template to map fields of ApplicationDataTransfer resource.",
-      "id": "ApplicationDataTransfer"
-    },
-    "ApplicationsListResponse": {
-      "properties": {
-        "etag": {
-          "type": "string",
-          "description": "ETag of the resource."
-        },
-        "nextPageToken": {
-          "type": "string",
-          "description": "Token to specify the next page in the list."
-        },
-        "applications": {
-          "items": {
-            "$ref": "Application"
-          },
-          "description": "The list of applications that support data transfer and are also installed for the customer.",
-          "type": "array"
-        },
-        "kind": {
-          "default": "admin#datatransfer#applicationsList",
-          "type": "string",
-          "description": "Identifies the resource as a collection of Applications."
-        }
-      },
-      "description": "Template for a collection of Applications.",
-      "id": "ApplicationsListResponse",
-      "type": "object"
-    },
-    "Application": {
-      "properties": {
-        "etag": {
-          "description": "Etag of the resource.",
-          "type": "string"
-        },
-        "id": {
-          "format": "int64",
-          "type": "string",
-          "description": "The application's ID. Retrievable by using the [`applications.list()`](https://developers.google.com/workspace/admin/data-transfer/reference/rest/v1/applications/list) method."
-        },
-        "kind": {
-          "type": "string",
-          "default": "admin#datatransfer#ApplicationResource",
-          "description": "Identifies the resource as a DataTransfer Application Resource."
-        },
-        "transferParams": {
-          "items": {
-            "$ref": "ApplicationTransferParam"
-          },
-          "description": "The list of all possible transfer parameters for this application. These parameters select which categories of the user's data to transfer.",
-          "type": "array"
-        },
-        "name": {
-          "description": "The application's name.",
-          "type": "string"
-        }
-      },
-      "type": "object",
-      "id": "Application",
-      "description": "Application resources represent applications installed on the domain that support transferring ownership of user data."
-    },
     "DataTransfer": {
-      "type": "object",
-      "description": "A Transfer resource represents the transfer of the ownership of user data between users.",
+      "id": "DataTransfer",
       "properties": {
-        "overallTransferStatusCode": {
-          "description": "Read-only. Overall transfer status.",
-          "type": "string"
-        },
         "etag": {
           "type": "string",
           "description": "ETag of the resource."
-        },
-        "newOwnerUserId": {
-          "description": "ID of the user to whom the data is being transferred.",
-          "type": "string"
         },
         "id": {
           "description": "Read-only. The transfer's ID.",
           "type": "string"
         },
-        "requestTime": {
-          "format": "date-time",
-          "description": "Read-only. The time at which the data transfer was requested.",
-          "type": "string"
-        },
         "kind": {
           "type": "string",
-          "description": "Identifies the resource as a DataTransfer request.",
-          "default": "admin#datatransfer#DataTransfer"
+          "default": "admin#datatransfer#DataTransfer",
+          "description": "Identifies the resource as a DataTransfer request."
+        },
+        "overallTransferStatusCode": {
+          "description": "Read-only. Overall transfer status.",
+          "type": "string"
+        },
+        "requestTime": {
+          "format": "date-time",
+          "type": "string",
+          "description": "Read-only. The time at which the data transfer was requested."
         },
         "applicationDataTransfers": {
           "description": "The list of per-application data transfer resources. It contains details of the applications associated with this transfer resource, and also specifies the applications for which data transfer has to be done at the time of the transfer resource creation.",
@@ -137,278 +37,180 @@
           },
           "type": "array"
         },
+        "newOwnerUserId": {
+          "description": "ID of the user to whom the data is being transferred.",
+          "type": "string"
+        },
         "oldOwnerUserId": {
-          "description": "ID of the user whose data is being transferred.",
+          "type": "string",
+          "description": "ID of the user whose data is being transferred."
+        }
+      },
+      "description": "A Transfer resource represents the transfer of the ownership of user data between users.",
+      "type": "object"
+    },
+    "ApplicationsListResponse": {
+      "description": "Template for a collection of Applications.",
+      "id": "ApplicationsListResponse",
+      "type": "object",
+      "properties": {
+        "applications": {
+          "type": "array",
+          "description": "The list of applications that support data transfer and are also installed for the customer.",
+          "items": {
+            "$ref": "Application"
+          }
+        },
+        "etag": {
+          "description": "ETag of the resource.",
+          "type": "string"
+        },
+        "kind": {
+          "default": "admin#datatransfer#applicationsList",
+          "type": "string",
+          "description": "Identifies the resource as a collection of Applications."
+        },
+        "nextPageToken": {
+          "type": "string",
+          "description": "Token to specify the next page in the list."
+        }
+      }
+    },
+    "Application": {
+      "id": "Application",
+      "type": "object",
+      "description": "Application resources represent applications installed on the domain that support transferring ownership of user data.",
+      "properties": {
+        "kind": {
+          "default": "admin#datatransfer#ApplicationResource",
+          "description": "Identifies the resource as a DataTransfer Application Resource.",
+          "type": "string"
+        },
+        "transferParams": {
+          "description": "The list of all possible transfer parameters for this application. These parameters select which categories of the user's data to transfer.",
+          "items": {
+            "$ref": "ApplicationTransferParam"
+          },
+          "type": "array"
+        },
+        "etag": {
+          "description": "Etag of the resource.",
+          "type": "string"
+        },
+        "id": {
+          "description": "The application's ID. Retrievable by using the [`applications.list()`](https://developers.google.com/workspace/admin/data-transfer/reference/rest/v1/applications/list) method.",
+          "type": "string",
+          "format": "int64"
+        },
+        "name": {
+          "type": "string",
+          "description": "The application's name."
+        }
+      }
+    },
+    "ApplicationTransferParam": {
+      "properties": {
+        "value": {
+          "description": "The value of the transfer parameter, such as `PRIVATE` or `SHARED`.",
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "key": {
+          "description": "The type of the transfer parameter, such as `PRIVACY_LEVEL`.",
           "type": "string"
         }
       },
-      "id": "DataTransfer"
+      "description": "Template for application transfer parameters.",
+      "type": "object",
+      "id": "ApplicationTransferParam"
+    },
+    "ApplicationDataTransfer": {
+      "properties": {
+        "applicationTransferParams": {
+          "description": "The transfer parameters for the application. These parameters are used to select the data which will get transferred in context of this application. For more information about the specific values available for each application, see the [Transfer parameters](https://developers.google.com/workspace/admin/data-transfer/v1/parameters) reference.",
+          "items": {
+            "$ref": "ApplicationTransferParam"
+          },
+          "type": "array"
+        },
+        "applicationId": {
+          "description": "The application's ID.",
+          "type": "string",
+          "format": "int64"
+        },
+        "applicationTransferStatus": {
+          "type": "string",
+          "description": "Read-only. Current status of transfer for this application."
+        }
+      },
+      "id": "ApplicationDataTransfer",
+      "type": "object",
+      "description": "Template to map fields of ApplicationDataTransfer resource."
     },
     "DataTransfersListResponse": {
-      "id": "DataTransfersListResponse",
-      "description": "Template for a collection of DataTransfer resources.",
       "properties": {
         "kind": {
+          "type": "string",
           "default": "admin#datatransfer#dataTransfersList",
-          "description": "Identifies the resource as a collection of data transfer requests.",
-          "type": "string"
-        },
-        "dataTransfers": {
-          "type": "array",
-          "items": {
-            "$ref": "DataTransfer"
-          },
-          "description": "List of data transfer requests."
+          "description": "Identifies the resource as a collection of data transfer requests."
         },
         "nextPageToken": {
           "description": "Token to specify the next page in the list.",
           "type": "string"
         },
         "etag": {
-          "type": "string",
-          "description": "ETag of the resource."
+          "description": "ETag of the resource.",
+          "type": "string"
+        },
+        "dataTransfers": {
+          "description": "List of data transfer requests.",
+          "items": {
+            "$ref": "DataTransfer"
+          },
+          "type": "array"
         }
       },
-      "type": "object"
-    }
-  },
-  "batchPath": "batch",
-  "version": "datatransfer_v1",
-  "canonicalName": "DataTransfer",
-  "basePath": "",
-  "description": "Admin SDK lets administrators of enterprise domains to view and manage resources like user, groups etc. It also provides audit and usage reports of domain.",
-  "ownerDomain": "google.com",
-  "icons": {
-    "x16": "http://www.google.com/images/icons/product/search-16.gif",
-    "x32": "http://www.google.com/images/icons/product/search-32.gif"
-  },
-  "fullyEncodeReservedExpansion": true,
-  "kind": "discovery#restDescription",
-  "rootUrl": "https://admin.googleapis.com/",
-  "documentationLink": "https://developers.google.com/workspace/admin/",
-  "resources": {
-    "applications": {
-      "methods": {
-        "list": {
-          "path": "admin/datatransfer/v1/applications",
-          "scopes": [
-            "https://www.googleapis.com/auth/admin.datatransfer",
-            "https://www.googleapis.com/auth/admin.datatransfer.readonly"
-          ],
-          "response": {
-            "$ref": "ApplicationsListResponse"
-          },
-          "description": "Lists the applications available for data transfer for a customer.",
-          "httpMethod": "GET",
-          "id": "datatransfer.applications.list",
-          "parameters": {
-            "customerId": {
-              "location": "query",
-              "description": "Immutable ID of the Google Workspace account.",
-              "type": "string"
-            },
-            "pageToken": {
-              "type": "string",
-              "location": "query",
-              "description": "Token to specify next page in the list."
-            },
-            "maxResults": {
-              "location": "query",
-              "format": "int32",
-              "minimum": "1",
-              "description": "Maximum number of results to return. Default is 100.",
-              "maximum": "500",
-              "type": "integer"
-            }
-          },
-          "flatPath": "admin/datatransfer/v1/applications",
-          "parameterOrder": []
-        },
-        "get": {
-          "path": "admin/datatransfer/v1/applications/{applicationId}",
-          "flatPath": "admin/datatransfer/v1/applications/{applicationId}",
-          "parameters": {
-            "applicationId": {
-              "description": "ID of the application resource to be retrieved.",
-              "location": "path",
-              "required": true,
-              "type": "string",
-              "format": "int64"
-            }
-          },
-          "scopes": [
-            "https://www.googleapis.com/auth/admin.datatransfer",
-            "https://www.googleapis.com/auth/admin.datatransfer.readonly"
-          ],
-          "description": "Retrieves information about an application for the given application ID.",
-          "httpMethod": "GET",
-          "id": "datatransfer.applications.get",
-          "response": {
-            "$ref": "Application"
-          },
-          "parameterOrder": [
-            "applicationId"
-          ]
-        }
-      }
-    },
-    "transfers": {
-      "methods": {
-        "list": {
-          "httpMethod": "GET",
-          "parameterOrder": [],
-          "description": "Lists the transfers for a customer by source user, destination user, or status.",
-          "id": "datatransfer.transfers.list",
-          "path": "admin/datatransfer/v1/transfers",
-          "flatPath": "admin/datatransfer/v1/transfers",
-          "response": {
-            "$ref": "DataTransfersListResponse"
-          },
-          "scopes": [
-            "https://www.googleapis.com/auth/admin.datatransfer",
-            "https://www.googleapis.com/auth/admin.datatransfer.readonly"
-          ],
-          "parameters": {
-            "maxResults": {
-              "minimum": "1",
-              "location": "query",
-              "maximum": "500",
-              "description": "Maximum number of results to return. Default is 100.",
-              "type": "integer",
-              "format": "int32"
-            },
-            "newOwnerUserId": {
-              "description": "Destination user's profile ID.",
-              "location": "query",
-              "type": "string"
-            },
-            "pageToken": {
-              "description": "Token to specify the next page in the list.",
-              "type": "string",
-              "location": "query"
-            },
-            "customerId": {
-              "location": "query",
-              "type": "string",
-              "description": "Immutable ID of the Google Workspace account."
-            },
-            "status": {
-              "description": "Status of the transfer.",
-              "type": "string",
-              "location": "query"
-            },
-            "oldOwnerUserId": {
-              "description": "Source user's profile ID.",
-              "type": "string",
-              "location": "query"
-            }
-          }
-        },
-        "get": {
-          "parameters": {
-            "dataTransferId": {
-              "type": "string",
-              "description": "ID of the resource to be retrieved. This is returned in the response from the insert method.",
-              "location": "path",
-              "required": true
-            }
-          },
-          "scopes": [
-            "https://www.googleapis.com/auth/admin.datatransfer",
-            "https://www.googleapis.com/auth/admin.datatransfer.readonly"
-          ],
-          "flatPath": "admin/datatransfer/v1/transfers/{dataTransferId}",
-          "response": {
-            "$ref": "DataTransfer"
-          },
-          "id": "datatransfer.transfers.get",
-          "path": "admin/datatransfer/v1/transfers/{dataTransferId}",
-          "parameterOrder": [
-            "dataTransferId"
-          ],
-          "description": "Retrieves a data transfer request by its resource ID.",
-          "httpMethod": "GET"
-        },
-        "insert": {
-          "path": "admin/datatransfer/v1/transfers",
-          "parameterOrder": [],
-          "httpMethod": "POST",
-          "flatPath": "admin/datatransfer/v1/transfers",
-          "id": "datatransfer.transfers.insert",
-          "request": {
-            "$ref": "DataTransfer"
-          },
-          "response": {
-            "$ref": "DataTransfer"
-          },
-          "description": "Inserts a data transfer request. See the [Transfer parameters](https://developers.google.com/workspace/admin/data-transfer/v1/parameters) reference for specific application requirements.",
-          "parameters": {},
-          "scopes": [
-            "https://www.googleapis.com/auth/admin.datatransfer"
-          ]
-        }
-      }
+      "id": "DataTransfersListResponse",
+      "type": "object",
+      "description": "Template for a collection of DataTransfer resources."
     }
   },
   "servicePath": "",
+  "id": "admin:datatransfer_v1",
+  "discoveryVersion": "v1",
   "baseUrl": "https://admin.googleapis.com/",
-  "ownerName": "Google",
-  "packagePath": "admin",
-  "protocol": "rest",
+  "basePath": "",
+  "description": "Admin SDK lets administrators of enterprise domains to view and manage resources like user, groups etc. It also provides audit and usage reports of domain.",
   "parameters": {
-    "fields": {
-      "type": "string",
+    "uploadType": {
       "location": "query",
-      "description": "Selector specifying which fields to include in a partial response."
+      "type": "string",
+      "description": "Legacy upload protocol for media (e.g. \"media\", \"multipart\")."
     },
-    "quotaUser": {
-      "location": "query",
+    "oauth_token": {
       "type": "string",
-      "description": "Available to use for quota purposes for server-side applications. Can be any arbitrary string assigned to a user, but should not exceed 40 characters."
+      "location": "query",
+      "description": "OAuth 2.0 token for the current user."
     },
-    "alt": {
-      "description": "Data format for response.",
-      "enumDescriptions": [
-        "Responses with Content-Type of application/json",
-        "Media download with context-dependent Content-Type",
-        "Responses with Content-Type of application/x-protobuf"
-      ],
-      "default": "json",
-      "type": "string",
+    "prettyPrint": {
       "location": "query",
-      "enum": [
-        "json",
-        "media",
-        "proto"
-      ]
+      "default": "true",
+      "description": "Returns response with indentations and line breaks.",
+      "type": "boolean"
     },
     "$.xgafv": {
-      "description": "V1 error format.",
-      "location": "query",
+      "enum": [
+        "1",
+        "2"
+      ],
       "enumDescriptions": [
         "v1 error format",
         "v2 error format"
       ],
       "type": "string",
-      "enum": [
-        "1",
-        "2"
-      ]
-    },
-    "callback": {
-      "type": "string",
-      "description": "JSONP",
-      "location": "query"
-    },
-    "prettyPrint": {
-      "type": "boolean",
-      "description": "Returns response with indentations and line breaks.",
-      "default": "true",
-      "location": "query"
-    },
-    "oauth_token": {
-      "type": "string",
-      "description": "OAuth 2.0 token for the current user.",
+      "description": "V1 error format.",
       "location": "query"
     },
     "upload_protocol": {
@@ -416,23 +218,226 @@
       "description": "Upload protocol for media (e.g. \"raw\", \"multipart\").",
       "location": "query"
     },
-    "key": {
-      "location": "query",
-      "description": "API key. Your API key identifies your project and provides you with API access, quota, and reports. Required unless you provide an OAuth 2.0 token.",
-      "type": "string"
-    },
-    "uploadType": {
+    "callback": {
       "type": "string",
-      "description": "Legacy upload protocol for media (e.g. \"media\", \"multipart\").",
+      "description": "JSONP",
       "location": "query"
     },
-    "access_token": {
+    "alt": {
+      "default": "json",
+      "enumDescriptions": [
+        "Responses with Content-Type of application/json",
+        "Media download with context-dependent Content-Type",
+        "Responses with Content-Type of application/x-protobuf"
+      ],
       "location": "query",
-      "description": "OAuth access token.",
+      "enum": [
+        "json",
+        "media",
+        "proto"
+      ],
+      "description": "Data format for response.",
+      "type": "string"
+    },
+    "access_token": {
+      "type": "string",
+      "location": "query",
+      "description": "OAuth access token."
+    },
+    "key": {
+      "type": "string",
+      "location": "query",
+      "description": "API key. Your API key identifies your project and provides you with API access, quota, and reports. Required unless you provide an OAuth 2.0 token."
+    },
+    "fields": {
+      "description": "Selector specifying which fields to include in a partial response.",
+      "location": "query",
+      "type": "string"
+    },
+    "quotaUser": {
+      "location": "query",
+      "description": "Available to use for quota purposes for server-side applications. Can be any arbitrary string assigned to a user, but should not exceed 40 characters.",
       "type": "string"
     }
   },
-  "revision": "20260907",
+  "rootUrl": "https://admin.googleapis.com/",
+  "resources": {
+    "applications": {
+      "methods": {
+        "list": {
+          "parameters": {
+            "pageToken": {
+              "type": "string",
+              "location": "query",
+              "description": "Token to specify next page in the list."
+            },
+            "customerId": {
+              "type": "string",
+              "location": "query",
+              "description": "Immutable ID of the Google Workspace account."
+            },
+            "maxResults": {
+              "format": "int32",
+              "description": "Maximum number of results to return. Default is 100.",
+              "type": "integer",
+              "location": "query",
+              "maximum": "500",
+              "minimum": "1"
+            }
+          },
+          "httpMethod": "GET",
+          "flatPath": "admin/datatransfer/v1/applications",
+          "path": "admin/datatransfer/v1/applications",
+          "description": "Lists the applications available for data transfer for a customer.",
+          "parameterOrder": [],
+          "scopes": [
+            "https://www.googleapis.com/auth/admin.datatransfer",
+            "https://www.googleapis.com/auth/admin.datatransfer.readonly"
+          ],
+          "id": "datatransfer.applications.list",
+          "response": {
+            "$ref": "ApplicationsListResponse"
+          }
+        },
+        "get": {
+          "httpMethod": "GET",
+          "parameters": {
+            "applicationId": {
+              "required": true,
+              "type": "string",
+              "description": "ID of the application resource to be retrieved.",
+              "format": "int64",
+              "location": "path"
+            }
+          },
+          "response": {
+            "$ref": "Application"
+          },
+          "parameterOrder": [
+            "applicationId"
+          ],
+          "scopes": [
+            "https://www.googleapis.com/auth/admin.datatransfer",
+            "https://www.googleapis.com/auth/admin.datatransfer.readonly"
+          ],
+          "path": "admin/datatransfer/v1/applications/{applicationId}",
+          "id": "datatransfer.applications.get",
+          "flatPath": "admin/datatransfer/v1/applications/{applicationId}",
+          "description": "Retrieves information about an application for the given application ID."
+        }
+      }
+    },
+    "transfers": {
+      "methods": {
+        "insert": {
+          "request": {
+            "$ref": "DataTransfer"
+          },
+          "id": "datatransfer.transfers.insert",
+          "scopes": [
+            "https://www.googleapis.com/auth/admin.datatransfer"
+          ],
+          "parameters": {},
+          "httpMethod": "POST",
+          "flatPath": "admin/datatransfer/v1/transfers",
+          "parameterOrder": [],
+          "description": "Inserts a data transfer request. See the [Transfer parameters](https://developers.google.com/workspace/admin/data-transfer/v1/parameters) reference for specific application requirements.",
+          "path": "admin/datatransfer/v1/transfers",
+          "response": {
+            "$ref": "DataTransfer"
+          }
+        },
+        "list": {
+          "parameters": {
+            "oldOwnerUserId": {
+              "type": "string",
+              "location": "query",
+              "description": "Source user's profile ID."
+            },
+            "status": {
+              "type": "string",
+              "description": "Status of the transfer.",
+              "location": "query"
+            },
+            "newOwnerUserId": {
+              "type": "string",
+              "location": "query",
+              "description": "Destination user's profile ID."
+            },
+            "pageToken": {
+              "location": "query",
+              "type": "string",
+              "description": "Token to specify the next page in the list."
+            },
+            "customerId": {
+              "location": "query",
+              "description": "Immutable ID of the Google Workspace account.",
+              "type": "string"
+            },
+            "maxResults": {
+              "description": "Maximum number of results to return. Default is 100.",
+              "minimum": "1",
+              "type": "integer",
+              "location": "query",
+              "maximum": "500",
+              "format": "int32"
+            }
+          },
+          "httpMethod": "GET",
+          "scopes": [
+            "https://www.googleapis.com/auth/admin.datatransfer",
+            "https://www.googleapis.com/auth/admin.datatransfer.readonly"
+          ],
+          "id": "datatransfer.transfers.list",
+          "path": "admin/datatransfer/v1/transfers",
+          "description": "Lists the transfers for a customer by source user, destination user, or status.",
+          "flatPath": "admin/datatransfer/v1/transfers",
+          "response": {
+            "$ref": "DataTransfersListResponse"
+          },
+          "parameterOrder": []
+        },
+        "get": {
+          "response": {
+            "$ref": "DataTransfer"
+          },
+          "parameterOrder": [
+            "dataTransferId"
+          ],
+          "scopes": [
+            "https://www.googleapis.com/auth/admin.datatransfer",
+            "https://www.googleapis.com/auth/admin.datatransfer.readonly"
+          ],
+          "flatPath": "admin/datatransfer/v1/transfers/{dataTransferId}",
+          "id": "datatransfer.transfers.get",
+          "description": "Retrieves a data transfer request by its resource ID.",
+          "path": "admin/datatransfer/v1/transfers/{dataTransferId}",
+          "httpMethod": "GET",
+          "parameters": {
+            "dataTransferId": {
+              "required": true,
+              "type": "string",
+              "description": "ID of the resource to be retrieved. This is returned in the response from the insert method.",
+              "location": "path"
+            }
+          }
+        }
+      }
+    }
+  },
+  "protocol": "rest",
+  "version": "datatransfer_v1",
+  "packagePath": "admin",
+  "documentationLink": "https://developers.google.com/workspace/admin/",
+  "kind": "discovery#restDescription",
+  "title": "Admin SDK API",
+  "batchPath": "batch",
+  "canonicalName": "DataTransfer",
+  "icons": {
+    "x32": "http://www.google.com/images/icons/product/search-32.gif",
+    "x16": "http://www.google.com/images/icons/product/search-16.gif"
+  },
+  "mtlsRootUrl": "https://admin.mtls.googleapis.com/",
   "auth": {
     "oauth2": {
       "scopes": {
@@ -444,10 +449,5 @@
         }
       }
     }
-  },
-  "title": "Admin SDK API",
-  "name": "admin",
-  "mtlsRootUrl": "https://admin.mtls.googleapis.com/",
-  "id": "admin:datatransfer_v1",
-  "discoveryVersion": "v1"
+  }
 }
