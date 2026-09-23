@@ -1,17 +1,174 @@
 {
   "rootUrl": "https://gmailpostmastertools.googleapis.com/",
-  "id": "gmailpostmastertools:v1",
-  "servicePath": "",
-  "discoveryVersion": "v1",
-  "ownerName": "Google",
-  "canonicalName": "Postmaster Tools",
-  "ownerDomain": "google.com",
-  "basePath": "",
-  "description": "The Postmaster Tools API is a RESTful API that provides programmatic access to email traffic metrics (like spam reports, delivery errors etc) otherwise available through the Gmail Postmaster Tools UI currently.",
-  "revision": "20260920",
-  "kind": "discovery#restDescription",
+  "protocol": "rest",
+  "version_module": true,
+  "batchPath": "batch",
   "mtlsRootUrl": "https://gmailpostmastertools.mtls.googleapis.com/",
-  "title": "Gmail Postmaster Tools API",
+  "resources": {
+    "domains": {
+      "methods": {
+        "list": {
+          "httpMethod": "GET",
+          "scopes": [
+            "https://www.googleapis.com/auth/postmaster.readonly"
+          ],
+          "response": {
+            "$ref": "ListDomainsResponse"
+          },
+          "parameters": {
+            "pageSize": {
+              "location": "query",
+              "description": "Requested page size. Server may return fewer domains than requested. If unspecified, server will pick an appropriate default.",
+              "format": "int32",
+              "type": "integer"
+            },
+            "pageToken": {
+              "location": "query",
+              "description": "The next_page_token value returned from a previous List request, if any. This is the value of ListDomainsResponse.next_page_token returned from the previous call to `ListDomains` method.",
+              "type": "string"
+            }
+          },
+          "id": "gmailpostmastertools.domains.list",
+          "flatPath": "v1/domains",
+          "path": "v1/domains",
+          "description": "Lists the domains that have been registered by the client. The order of domains in the response is unspecified and non-deterministic. Newly created domains will not necessarily be added to the end of this list.",
+          "parameterOrder": []
+        },
+        "get": {
+          "description": "Gets a specific domain registered by the client. Returns NOT_FOUND if the domain does not exist.",
+          "scopes": [
+            "https://www.googleapis.com/auth/postmaster.readonly"
+          ],
+          "httpMethod": "GET",
+          "parameters": {
+            "name": {
+              "required": true,
+              "description": "The resource name of the domain. It should have the form `domains/{domain_name}`, where domain_name is the fully qualified domain name.",
+              "pattern": "^domains/[^/]+$",
+              "location": "path",
+              "type": "string"
+            }
+          },
+          "response": {
+            "$ref": "Domain"
+          },
+          "parameterOrder": [
+            "name"
+          ],
+          "id": "gmailpostmastertools.domains.get",
+          "flatPath": "v1/domains/{domainsId}",
+          "path": "v1/{+name}"
+        }
+      },
+      "resources": {
+        "trafficStats": {
+          "methods": {
+            "get": {
+              "path": "v1/{+name}",
+              "description": "Get traffic statistics for a domain on a specific date. Returns PERMISSION_DENIED if user does not have permission to access TrafficStats for the domain.",
+              "parameterOrder": [
+                "name"
+              ],
+              "scopes": [
+                "https://www.googleapis.com/auth/postmaster.readonly"
+              ],
+              "response": {
+                "$ref": "TrafficStats"
+              },
+              "parameters": {
+                "name": {
+                  "pattern": "^domains/[^/]+/trafficStats/[^/]+$",
+                  "location": "path",
+                  "required": true,
+                  "description": "The resource name of the traffic statistics to get. E.g., domains/mymail.mydomain.com/trafficStats/20160807.",
+                  "type": "string"
+                }
+              },
+              "id": "gmailpostmastertools.domains.trafficStats.get",
+              "flatPath": "v1/domains/{domainsId}/trafficStats/{trafficStatsId}",
+              "httpMethod": "GET"
+            },
+            "list": {
+              "httpMethod": "GET",
+              "flatPath": "v1/domains/{domainsId}/trafficStats",
+              "parameterOrder": [
+                "parent"
+              ],
+              "id": "gmailpostmastertools.domains.trafficStats.list",
+              "scopes": [
+                "https://www.googleapis.com/auth/postmaster.readonly"
+              ],
+              "parameters": {
+                "endDate.month": {
+                  "location": "query",
+                  "type": "integer",
+                  "format": "int32",
+                  "description": "Month of a year. Must be from 1 to 12, or 0 to specify a year without a month and day."
+                },
+                "endDate.year": {
+                  "description": "Year of the date. Must be from 1 to 9999, or 0 to specify a date without a year.",
+                  "location": "query",
+                  "type": "integer",
+                  "format": "int32"
+                },
+                "parent": {
+                  "required": true,
+                  "description": "The resource name of the domain whose traffic statistics we'd like to list. It should have the form `domains/{domain_name}`, where domain_name is the fully qualified domain name.",
+                  "location": "path",
+                  "pattern": "^domains/[^/]+$",
+                  "type": "string"
+                },
+                "startDate.day": {
+                  "description": "Day of a month. Must be from 1 to 31 and valid for the year and month, or 0 to specify a year by itself or a year and month where the day isn't significant.",
+                  "format": "int32",
+                  "location": "query",
+                  "type": "integer"
+                },
+                "endDate.day": {
+                  "location": "query",
+                  "description": "Day of a month. Must be from 1 to 31 and valid for the year and month, or 0 to specify a year by itself or a year and month where the day isn't significant.",
+                  "format": "int32",
+                  "type": "integer"
+                },
+                "startDate.year": {
+                  "location": "query",
+                  "type": "integer",
+                  "format": "int32",
+                  "description": "Year of the date. Must be from 1 to 9999, or 0 to specify a date without a year."
+                },
+                "pageToken": {
+                  "type": "string",
+                  "location": "query",
+                  "description": "The next_page_token value returned from a previous List request, if any. This is the value of ListTrafficStatsResponse.next_page_token returned from the previous call to `ListTrafficStats` method."
+                },
+                "pageSize": {
+                  "type": "integer",
+                  "format": "int32",
+                  "location": "query",
+                  "description": "Requested page size. Server may return fewer TrafficStats than requested. If unspecified, server will pick an appropriate default."
+                },
+                "startDate.month": {
+                  "format": "int32",
+                  "type": "integer",
+                  "description": "Month of a year. Must be from 1 to 12, or 0 to specify a year without a month and day.",
+                  "location": "query"
+                }
+              },
+              "response": {
+                "$ref": "ListTrafficStatsResponse"
+              },
+              "description": "List traffic statistics for all available days. Returns PERMISSION_DENIED if user does not have permission to access TrafficStats for the domain.",
+              "path": "v1/{+parent}/trafficStats"
+            }
+          }
+        }
+      }
+    }
+  },
+  "documentationLink": "https://developers.google.com/workspace/gmail/postmaster",
+  "servicePath": "",
+  "name": "gmailpostmastertools",
+  "id": "gmailpostmastertools:v1",
   "auth": {
     "oauth2": {
       "scopes": {
@@ -21,274 +178,119 @@
       }
     }
   },
-  "name": "gmailpostmastertools",
+  "title": "Gmail Postmaster Tools API",
+  "baseUrl": "https://gmailpostmastertools.googleapis.com/",
+  "ownerName": "Google",
   "fullyEncodeReservedExpansion": true,
+  "version": "v1",
+  "canonicalName": "Postmaster Tools",
+  "description": "The Postmaster Tools API is a RESTful API that provides programmatic access to email traffic metrics (like spam reports, delivery errors etc) otherwise available through the Gmail Postmaster Tools UI currently.",
+  "discoveryVersion": "v1",
+  "revision": "20260921",
   "parameters": {
-    "oauth_token": {
-      "description": "OAuth 2.0 token for the current user.",
-      "location": "query",
-      "type": "string"
+    "prettyPrint": {
+      "description": "Returns response with indentations and line breaks.",
+      "default": "true",
+      "type": "boolean",
+      "location": "query"
     },
-    "fields": {
-      "description": "Selector specifying which fields to include in a partial response.",
+    "upload_protocol": {
+      "description": "Upload protocol for media (e.g. \"raw\", \"multipart\").",
       "type": "string",
       "location": "query"
     },
-    "alt": {
-      "default": "json",
-      "enumDescriptions": [
-        "Responses with Content-Type of application/json",
-        "Media download with context-dependent Content-Type",
-        "Responses with Content-Type of application/x-protobuf"
-      ],
-      "description": "Data format for response.",
+    "key": {
       "location": "query",
       "type": "string",
+      "description": "API key. Your API key identifies your project and provides you with API access, quota, and reports. Required unless you provide an OAuth 2.0 token."
+    },
+    "quotaUser": {
+      "location": "query",
+      "description": "Available to use for quota purposes for server-side applications. Can be any arbitrary string assigned to a user, but should not exceed 40 characters.",
+      "type": "string"
+    },
+    "uploadType": {
+      "type": "string",
+      "description": "Legacy upload protocol for media (e.g. \"media\", \"multipart\").",
+      "location": "query"
+    },
+    "oauth_token": {
+      "location": "query",
+      "description": "OAuth 2.0 token for the current user.",
+      "type": "string"
+    },
+    "alt": {
+      "location": "query",
       "enum": [
         "json",
         "media",
         "proto"
-      ]
-    },
-    "prettyPrint": {
-      "default": "true",
-      "type": "boolean",
-      "description": "Returns response with indentations and line breaks.",
-      "location": "query"
-    },
-    "key": {
-      "type": "string",
-      "description": "API key. Your API key identifies your project and provides you with API access, quota, and reports. Required unless you provide an OAuth 2.0 token.",
-      "location": "query"
-    },
-    "upload_protocol": {
-      "type": "string",
-      "location": "query",
-      "description": "Upload protocol for media (e.g. \"raw\", \"multipart\")."
-    },
-    "access_token": {
-      "location": "query",
-      "description": "OAuth access token.",
-      "type": "string"
-    },
-    "$.xgafv": {
-      "type": "string",
-      "enum": [
-        "1",
-        "2"
       ],
-      "description": "V1 error format.",
-      "location": "query",
+      "default": "json",
+      "description": "Data format for response.",
+      "type": "string",
       "enumDescriptions": [
-        "v1 error format",
-        "v2 error format"
+        "Responses with Content-Type of application/json",
+        "Media download with context-dependent Content-Type",
+        "Responses with Content-Type of application/x-protobuf"
       ]
     },
     "callback": {
       "description": "JSONP",
-      "type": "string",
-      "location": "query"
-    },
-    "quotaUser": {
-      "type": "string",
-      "description": "Available to use for quota purposes for server-side applications. Can be any arbitrary string assigned to a user, but should not exceed 40 characters.",
-      "location": "query"
-    },
-    "uploadType": {
-      "type": "string",
       "location": "query",
-      "description": "Legacy upload protocol for media (e.g. \"media\", \"multipart\")."
+      "type": "string"
+    },
+    "fields": {
+      "location": "query",
+      "description": "Selector specifying which fields to include in a partial response.",
+      "type": "string"
+    },
+    "access_token": {
+      "description": "OAuth access token.",
+      "type": "string",
+      "location": "query"
+    },
+    "$.xgafv": {
+      "description": "V1 error format.",
+      "type": "string",
+      "enumDescriptions": [
+        "v1 error format",
+        "v2 error format"
+      ],
+      "location": "query",
+      "enum": [
+        "1",
+        "2"
+      ]
     }
   },
-  "documentationLink": "https://developers.google.com/workspace/gmail/postmaster",
-  "version": "v1",
-  "batchPath": "batch",
-  "baseUrl": "https://gmailpostmastertools.googleapis.com/",
-  "version_module": true,
+  "ownerDomain": "google.com",
   "icons": {
     "x16": "http://www.google.com/images/icons/product/search-16.gif",
     "x32": "http://www.google.com/images/icons/product/search-32.gif"
   },
+  "kind": "discovery#restDescription",
+  "basePath": "",
   "schemas": {
-    "ListTrafficStatsResponse": {
+    "FeedbackLoop": {
+      "id": "FeedbackLoop",
       "properties": {
-        "nextPageToken": {
-          "type": "string",
-          "description": "Token to retrieve the next page of results, or empty if there are no more results in the list."
+        "spamRatio": {
+          "description": "The ratio of user marked spam messages with the identifier vs the total number of inboxed messages with that identifier.",
+          "format": "double",
+          "type": "number"
         },
-        "trafficStats": {
-          "type": "array",
-          "items": {
-            "$ref": "TrafficStats"
-          },
-          "description": "The list of TrafficStats."
+        "id": {
+          "type": "string",
+          "description": "Feedback loop identifier that uniquely identifies individual campaigns."
         }
       },
-      "description": "Response message for ListTrafficStats.",
       "type": "object",
-      "id": "ListTrafficStatsResponse"
-    },
-    "TrafficStats": {
-      "description": "Email traffic statistics pertaining to a specific date.",
-      "type": "object",
-      "id": "TrafficStats",
-      "properties": {
-        "domainReputation": {
-          "type": "string",
-          "enum": [
-            "REPUTATION_CATEGORY_UNSPECIFIED",
-            "HIGH",
-            "MEDIUM",
-            "LOW",
-            "BAD"
-          ],
-          "enumDescriptions": [
-            "The default value which should never be used explicitly. This represents the state where no reputation information is available.",
-            "Has a good track record of a very low spam rate, and complies with Gmail's sender guidelines. Mail will rarely be marked by the spam filter.",
-            "Known to send good mail, but is prone to sending a low volume of spam intermittently. Most of the email from this entity will have a fair deliverability rate, except when there is a notable increase in spam levels.",
-            "Known to send a considerable volume of spam regularly, and mail from this sender will likely be marked as spam.",
-            "History of sending an enormously high volume of spam. Mail coming from this entity will almost always be rejected at SMTP level or marked as spam."
-          ],
-          "description": "Reputation of the domain."
-        },
-        "userReportedSpamRatio": {
-          "format": "double",
-          "description": "The ratio of user-report spam vs. email that was sent to the inbox. This is potentially inexact -- users may want to refer to the description of the interval fields userReportedSpamRatioLowerBound and userReportedSpamRatioUpperBound for more explicit accuracy guarantees. This metric only pertains to emails authenticated by [DKIM](http://www.dkim.org/).",
-          "type": "number"
-        },
-        "deliveryErrors": {
-          "items": {
-            "$ref": "DeliveryError"
-          },
-          "type": "array",
-          "description": "Delivery errors for the domain. This metric only pertains to traffic that passed [SPF](http://www.openspf.org/) or [DKIM](http://www.dkim.org/)."
-        },
-        "ipReputations": {
-          "type": "array",
-          "items": {
-            "$ref": "IpReputation"
-          },
-          "description": "Reputation information pertaining to the IP addresses of the email servers for the domain. There is exactly one entry for each reputation category except REPUTATION_CATEGORY_UNSPECIFIED."
-        },
-        "userReportedSpamRatioUpperBound": {
-          "description": "The upper bound of the confidence interval for the user reported spam ratio. If this field is set, then the value of userReportedSpamRatio is set to the midpoint of this interval and is thus inexact. However, the true ratio is guaranteed to be in between this upper bound and the corresponding lower bound 95% of the time. This metric only pertains to emails authenticated by [DKIM](http://www.dkim.org/).",
-          "format": "double",
-          "type": "number"
-        },
-        "spfSuccessRatio": {
-          "type": "number",
-          "format": "double",
-          "description": "The ratio of mail that successfully authenticated with SPF vs. all mail that attempted to authenticate with [SPF](http://www.openspf.org/). Spoofed mail is excluded."
-        },
-        "spammyFeedbackLoops": {
-          "items": {
-            "$ref": "FeedbackLoop"
-          },
-          "type": "array",
-          "description": "Spammy [Feedback loop identifiers] (https://support.google.com/mail/answer/6254652) with their individual spam rates. This metric only pertains to traffic that is authenticated by [DKIM](http://www.dkim.org/)."
-        },
-        "outboundEncryptionRatio": {
-          "format": "double",
-          "type": "number",
-          "description": "The ratio of outgoing mail (from Gmail) that was accepted over secure transport (TLS)."
-        },
-        "name": {
-          "type": "string",
-          "description": "The resource name of the traffic statistics. Traffic statistic names have the form `domains/{domain}/trafficStats/{date}`, where domain_name is the fully qualified domain name (i.e., mymail.mydomain.com) of the domain this traffic statistics pertains to and date is the date in yyyymmdd format that these statistics corresponds to. For example: domains/mymail.mydomain.com/trafficStats/20160807"
-        },
-        "dmarcSuccessRatio": {
-          "type": "number",
-          "format": "double",
-          "description": "The ratio of mail that passed [DMARC](https://dmarc.org/) alignment checks vs all mail received from the domain that successfully authenticated with either of [SPF](http://www.openspf.org/) or [DKIM](http://www.dkim.org/)."
-        },
-        "userReportedSpamRatioLowerBound": {
-          "description": "The lower bound of the confidence interval for the user reported spam ratio. If this field is set, then the value of userReportedSpamRatio is set to the midpoint of this interval and is thus inexact. However, the true ratio is guaranteed to be in between this lower bound and the corresponding upper bound 95% of the time. This metric only pertains to emails authenticated by [DKIM](http://www.dkim.org/).",
-          "format": "double",
-          "type": "number"
-        },
-        "dkimSuccessRatio": {
-          "type": "number",
-          "format": "double",
-          "description": "The ratio of mail that successfully authenticated with DKIM vs. all mail that attempted to authenticate with [DKIM](http://www.dkim.org/). Spoofed mail is excluded."
-        },
-        "inboundEncryptionRatio": {
-          "type": "number",
-          "format": "double",
-          "description": "The ratio of incoming mail (to Gmail), that passed secure transport (TLS) vs all mail received from that domain. This metric only pertains to traffic that passed [SPF](http://www.openspf.org/) or [DKIM](http://www.dkim.org/)."
-        }
-      }
-    },
-    "IpReputation": {
-      "description": "IP Reputation information for a set of IPs in a specific reputation category.",
-      "id": "IpReputation",
-      "properties": {
-        "reputation": {
-          "type": "string",
-          "enum": [
-            "REPUTATION_CATEGORY_UNSPECIFIED",
-            "HIGH",
-            "MEDIUM",
-            "LOW",
-            "BAD"
-          ],
-          "description": "The reputation category this IP reputation represents.",
-          "enumDescriptions": [
-            "The default value which should never be used explicitly. This represents the state where no reputation information is available.",
-            "Has a good track record of a very low spam rate, and complies with Gmail's sender guidelines. Mail will rarely be marked by the spam filter.",
-            "Known to send good mail, but is prone to sending a low volume of spam intermittently. Most of the email from this entity will have a fair deliverability rate, except when there is a notable increase in spam levels.",
-            "Known to send a considerable volume of spam regularly, and mail from this sender will likely be marked as spam.",
-            "History of sending an enormously high volume of spam. Mail coming from this entity will almost always be rejected at SMTP level or marked as spam."
-          ]
-        },
-        "sampleIps": {
-          "type": "array",
-          "description": "A sample of IPs in this reputation category.",
-          "items": {
-            "type": "string"
-          }
-        },
-        "ipCount": {
-          "description": "Total number of unique IPs in this reputation category. This metric only pertains to traffic that passed [SPF](http://www.openspf.org/) or [DKIM](http://www.dkim.org/).",
-          "format": "int64",
-          "type": "string"
-        }
-      },
-      "type": "object"
-    },
-    "Domain": {
-      "properties": {
-        "permission": {
-          "description": "User’s permission for this domain. Assigned by the server.",
-          "enumDescriptions": [
-            "The default value and should never be used explicitly.",
-            "User has read access to the domain and can share access with others.",
-            "User has read access to the domain.",
-            "User doesn't have permission to access information about the domain. User did not verify ownership of domain nor was access granted by other domain owners."
-          ],
-          "type": "string",
-          "enum": [
-            "PERMISSION_UNSPECIFIED",
-            "OWNER",
-            "READER",
-            "NONE"
-          ]
-        },
-        "name": {
-          "type": "string",
-          "description": "The resource name of the Domain. Domain names have the form `domains/{domain_name}`, where domain_name is the fully qualified domain name (i.e., mymail.mydomain.com)."
-        },
-        "createTime": {
-          "description": "Timestamp when the user registered this domain. Assigned by the server.",
-          "format": "google-datetime",
-          "type": "string"
-        }
-      },
-      "id": "Domain",
-      "description": "A registered domain resource in the Postmaster API.",
-      "type": "object"
+      "description": "[Feedback loop](https://support.google.com/mail/answer/6254652) identifier information."
     },
     "DeliveryError": {
-      "id": "DeliveryError",
+      "description": "Metric on a particular delivery error type.",
+      "type": "object",
       "properties": {
         "errorClass": {
           "enumDescriptions": [
@@ -296,15 +298,34 @@
             "Delivery of message has been rejected.",
             "Temporary failure of message delivery to the recipient."
           ],
-          "description": "The class of delivery error.",
           "type": "string",
+          "description": "The class of delivery error.",
           "enum": [
             "DELIVERY_ERROR_CLASS_UNSPECIFIED",
             "PERMANENT_ERROR",
             "TEMPORARY_ERROR"
           ]
         },
+        "errorRatio": {
+          "description": "The ratio of messages where the error occurred vs all authenticated traffic.",
+          "type": "number",
+          "format": "double"
+        },
         "errorType": {
+          "enum": [
+            "DELIVERY_ERROR_TYPE_UNSPECIFIED",
+            "RATE_LIMIT_EXCEEDED",
+            "SUSPECTED_SPAM",
+            "CONTENT_SPAMMY",
+            "BAD_ATTACHMENT",
+            "BAD_DMARC_POLICY",
+            "LOW_IP_REPUTATION",
+            "LOW_DOMAIN_REPUTATION",
+            "IP_IN_RBL",
+            "DOMAIN_IN_RBL",
+            "BAD_PTR_RECORD"
+          ],
+          "type": "string",
           "description": "The type of delivery error.",
           "enumDescriptions": [
             "The default value which should never be used explicitly.",
@@ -318,226 +339,205 @@
             "The IP is listed in one or more public [Real-time Blackhole Lists](http://en.wikipedia.org/wiki/DNSBL). Work with the RBL to get your IP delisted.",
             "The Domain is listed in one or more public [Real-time Blackhole Lists](http://en.wikipedia.org/wiki/DNSBL). Work with the RBL to get your domain delisted.",
             "The sending IP is missing a [PTR record](https://support.google.com/domains/answer/3251147#ptr)."
-          ],
-          "type": "string",
-          "enum": [
-            "DELIVERY_ERROR_TYPE_UNSPECIFIED",
-            "RATE_LIMIT_EXCEEDED",
-            "SUSPECTED_SPAM",
-            "CONTENT_SPAMMY",
-            "BAD_ATTACHMENT",
-            "BAD_DMARC_POLICY",
-            "LOW_IP_REPUTATION",
-            "LOW_DOMAIN_REPUTATION",
-            "IP_IN_RBL",
-            "DOMAIN_IN_RBL",
-            "BAD_PTR_RECORD"
           ]
-        },
-        "errorRatio": {
-          "description": "The ratio of messages where the error occurred vs all authenticated traffic.",
-          "type": "number",
-          "format": "double"
         }
       },
-      "type": "object",
-      "description": "Metric on a particular delivery error type."
+      "id": "DeliveryError"
+    },
+    "ListTrafficStatsResponse": {
+      "properties": {
+        "nextPageToken": {
+          "type": "string",
+          "description": "Token to retrieve the next page of results, or empty if there are no more results in the list."
+        },
+        "trafficStats": {
+          "description": "The list of TrafficStats.",
+          "items": {
+            "$ref": "TrafficStats"
+          },
+          "type": "array"
+        }
+      },
+      "description": "Response message for ListTrafficStats.",
+      "id": "ListTrafficStatsResponse",
+      "type": "object"
     },
     "ListDomainsResponse": {
       "type": "object",
-      "description": "Response message for ListDomains.",
       "properties": {
         "domains": {
-          "description": "The list of domains.",
           "items": {
             "$ref": "Domain"
           },
-          "type": "array"
+          "type": "array",
+          "description": "The list of domains."
         },
         "nextPageToken": {
           "description": "Token to retrieve the next page of results, or empty if there are no more results in the list.",
           "type": "string"
         }
       },
+      "description": "Response message for ListDomains.",
       "id": "ListDomainsResponse"
     },
-    "FeedbackLoop": {
+    "TrafficStats": {
+      "id": "TrafficStats",
       "type": "object",
-      "description": "[Feedback loop](https://support.google.com/mail/answer/6254652) identifier information.",
       "properties": {
-        "spamRatio": {
+        "userReportedSpamRatioLowerBound": {
+          "type": "number",
+          "description": "The lower bound of the confidence interval for the user reported spam ratio. If this field is set, then the value of userReportedSpamRatio is set to the midpoint of this interval and is thus inexact. However, the true ratio is guaranteed to be in between this lower bound and the corresponding upper bound 95% of the time. This metric only pertains to emails authenticated by [DKIM](http://www.dkim.org/).",
+          "format": "double"
+        },
+        "dkimSuccessRatio": {
+          "type": "number",
+          "format": "double",
+          "description": "The ratio of mail that successfully authenticated with DKIM vs. all mail that attempted to authenticate with [DKIM](http://www.dkim.org/). Spoofed mail is excluded."
+        },
+        "userReportedSpamRatio": {
+          "description": "The ratio of user-report spam vs. email that was sent to the inbox. This is potentially inexact -- users may want to refer to the description of the interval fields userReportedSpamRatioLowerBound and userReportedSpamRatioUpperBound for more explicit accuracy guarantees. This metric only pertains to emails authenticated by [DKIM](http://www.dkim.org/).",
+          "format": "double",
+          "type": "number"
+        },
+        "name": {
+          "description": "The resource name of the traffic statistics. Traffic statistic names have the form `domains/{domain}/trafficStats/{date}`, where domain_name is the fully qualified domain name (i.e., mymail.mydomain.com) of the domain this traffic statistics pertains to and date is the date in yyyymmdd format that these statistics corresponds to. For example: domains/mymail.mydomain.com/trafficStats/20160807",
+          "type": "string"
+        },
+        "dmarcSuccessRatio": {
           "format": "double",
           "type": "number",
-          "description": "The ratio of user marked spam messages with the identifier vs the total number of inboxed messages with that identifier."
+          "description": "The ratio of mail that passed [DMARC](https://dmarc.org/) alignment checks vs all mail received from the domain that successfully authenticated with either of [SPF](http://www.openspf.org/) or [DKIM](http://www.dkim.org/)."
         },
-        "id": {
+        "domainReputation": {
           "type": "string",
-          "description": "Feedback loop identifier that uniquely identifies individual campaigns."
-        }
-      },
-      "id": "FeedbackLoop"
-    }
-  },
-  "protocol": "rest",
-  "resources": {
-    "domains": {
-      "methods": {
-        "list": {
-          "response": {
-            "$ref": "ListDomainsResponse"
-          },
-          "path": "v1/domains",
-          "parameters": {
-            "pageSize": {
-              "type": "integer",
-              "location": "query",
-              "description": "Requested page size. Server may return fewer domains than requested. If unspecified, server will pick an appropriate default.",
-              "format": "int32"
-            },
-            "pageToken": {
-              "description": "The next_page_token value returned from a previous List request, if any. This is the value of ListDomainsResponse.next_page_token returned from the previous call to `ListDomains` method.",
-              "type": "string",
-              "location": "query"
-            }
-          },
-          "scopes": [
-            "https://www.googleapis.com/auth/postmaster.readonly"
+          "description": "Reputation of the domain.",
+          "enumDescriptions": [
+            "The default value which should never be used explicitly. This represents the state where no reputation information is available.",
+            "Has a good track record of a very low spam rate, and complies with Gmail's sender guidelines. Mail will rarely be marked by the spam filter.",
+            "Known to send good mail, but is prone to sending a low volume of spam intermittently. Most of the email from this entity will have a fair deliverability rate, except when there is a notable increase in spam levels.",
+            "Known to send a considerable volume of spam regularly, and mail from this sender will likely be marked as spam.",
+            "History of sending an enormously high volume of spam. Mail coming from this entity will almost always be rejected at SMTP level or marked as spam."
           ],
-          "id": "gmailpostmastertools.domains.list",
-          "parameterOrder": [],
-          "description": "Lists the domains that have been registered by the client. The order of domains in the response is unspecified and non-deterministic. Newly created domains will not necessarily be added to the end of this list.",
-          "flatPath": "v1/domains",
-          "httpMethod": "GET"
+          "enum": [
+            "REPUTATION_CATEGORY_UNSPECIFIED",
+            "HIGH",
+            "MEDIUM",
+            "LOW",
+            "BAD"
+          ]
         },
-        "get": {
-          "parameterOrder": [
-            "name"
-          ],
-          "id": "gmailpostmastertools.domains.get",
-          "httpMethod": "GET",
-          "flatPath": "v1/domains/{domainsId}",
-          "description": "Gets a specific domain registered by the client. Returns NOT_FOUND if the domain does not exist.",
-          "response": {
-            "$ref": "Domain"
+        "inboundEncryptionRatio": {
+          "format": "double",
+          "description": "The ratio of incoming mail (to Gmail), that passed secure transport (TLS) vs all mail received from that domain. This metric only pertains to traffic that passed [SPF](http://www.openspf.org/) or [DKIM](http://www.dkim.org/).",
+          "type": "number"
+        },
+        "spfSuccessRatio": {
+          "description": "The ratio of mail that successfully authenticated with SPF vs. all mail that attempted to authenticate with [SPF](http://www.openspf.org/). Spoofed mail is excluded.",
+          "format": "double",
+          "type": "number"
+        },
+        "ipReputations": {
+          "description": "Reputation information pertaining to the IP addresses of the email servers for the domain. There is exactly one entry for each reputation category except REPUTATION_CATEGORY_UNSPECIFIED.",
+          "items": {
+            "$ref": "IpReputation"
           },
-          "path": "v1/{+name}",
-          "scopes": [
-            "https://www.googleapis.com/auth/postmaster.readonly"
-          ],
-          "parameters": {
-            "name": {
-              "location": "path",
-              "required": true,
-              "description": "The resource name of the domain. It should have the form `domains/{domain_name}`, where domain_name is the fully qualified domain name.",
-              "pattern": "^domains/[^/]+$",
-              "type": "string"
-            }
-          }
+          "type": "array"
+        },
+        "spammyFeedbackLoops": {
+          "items": {
+            "$ref": "FeedbackLoop"
+          },
+          "description": "Spammy [Feedback loop identifiers] (https://support.google.com/mail/answer/6254652) with their individual spam rates. This metric only pertains to traffic that is authenticated by [DKIM](http://www.dkim.org/).",
+          "type": "array"
+        },
+        "deliveryErrors": {
+          "description": "Delivery errors for the domain. This metric only pertains to traffic that passed [SPF](http://www.openspf.org/) or [DKIM](http://www.dkim.org/).",
+          "items": {
+            "$ref": "DeliveryError"
+          },
+          "type": "array"
+        },
+        "outboundEncryptionRatio": {
+          "description": "The ratio of outgoing mail (from Gmail) that was accepted over secure transport (TLS).",
+          "type": "number",
+          "format": "double"
+        },
+        "userReportedSpamRatioUpperBound": {
+          "type": "number",
+          "description": "The upper bound of the confidence interval for the user reported spam ratio. If this field is set, then the value of userReportedSpamRatio is set to the midpoint of this interval and is thus inexact. However, the true ratio is guaranteed to be in between this upper bound and the corresponding lower bound 95% of the time. This metric only pertains to emails authenticated by [DKIM](http://www.dkim.org/).",
+          "format": "double"
         }
       },
-      "resources": {
-        "trafficStats": {
-          "methods": {
-            "list": {
-              "id": "gmailpostmastertools.domains.trafficStats.list",
-              "scopes": [
-                "https://www.googleapis.com/auth/postmaster.readonly"
-              ],
-              "httpMethod": "GET",
-              "path": "v1/{+parent}/trafficStats",
-              "flatPath": "v1/domains/{domainsId}/trafficStats",
-              "description": "List traffic statistics for all available days. Returns PERMISSION_DENIED if user does not have permission to access TrafficStats for the domain.",
-              "response": {
-                "$ref": "ListTrafficStatsResponse"
-              },
-              "parameters": {
-                "endDate.month": {
-                  "type": "integer",
-                  "description": "Month of a year. Must be from 1 to 12, or 0 to specify a year without a month and day.",
-                  "location": "query",
-                  "format": "int32"
-                },
-                "endDate.day": {
-                  "description": "Day of a month. Must be from 1 to 31 and valid for the year and month, or 0 to specify a year by itself or a year and month where the day isn't significant.",
-                  "location": "query",
-                  "format": "int32",
-                  "type": "integer"
-                },
-                "startDate.month": {
-                  "location": "query",
-                  "format": "int32",
-                  "description": "Month of a year. Must be from 1 to 12, or 0 to specify a year without a month and day.",
-                  "type": "integer"
-                },
-                "endDate.year": {
-                  "type": "integer",
-                  "location": "query",
-                  "format": "int32",
-                  "description": "Year of the date. Must be from 1 to 9999, or 0 to specify a date without a year."
-                },
-                "startDate.day": {
-                  "location": "query",
-                  "type": "integer",
-                  "format": "int32",
-                  "description": "Day of a month. Must be from 1 to 31 and valid for the year and month, or 0 to specify a year by itself or a year and month where the day isn't significant."
-                },
-                "startDate.year": {
-                  "type": "integer",
-                  "location": "query",
-                  "format": "int32",
-                  "description": "Year of the date. Must be from 1 to 9999, or 0 to specify a date without a year."
-                },
-                "pageToken": {
-                  "description": "The next_page_token value returned from a previous List request, if any. This is the value of ListTrafficStatsResponse.next_page_token returned from the previous call to `ListTrafficStats` method.",
-                  "type": "string",
-                  "location": "query"
-                },
-                "pageSize": {
-                  "type": "integer",
-                  "format": "int32",
-                  "description": "Requested page size. Server may return fewer TrafficStats than requested. If unspecified, server will pick an appropriate default.",
-                  "location": "query"
-                },
-                "parent": {
-                  "location": "path",
-                  "required": true,
-                  "description": "The resource name of the domain whose traffic statistics we'd like to list. It should have the form `domains/{domain_name}`, where domain_name is the fully qualified domain name.",
-                  "pattern": "^domains/[^/]+$",
-                  "type": "string"
-                }
-              },
-              "parameterOrder": [
-                "parent"
-              ]
-            },
-            "get": {
-              "path": "v1/{+name}",
-              "httpMethod": "GET",
-              "flatPath": "v1/domains/{domainsId}/trafficStats/{trafficStatsId}",
-              "description": "Get traffic statistics for a domain on a specific date. Returns PERMISSION_DENIED if user does not have permission to access TrafficStats for the domain.",
-              "parameterOrder": [
-                "name"
-              ],
-              "response": {
-                "$ref": "TrafficStats"
-              },
-              "parameters": {
-                "name": {
-                  "description": "The resource name of the traffic statistics to get. E.g., domains/mymail.mydomain.com/trafficStats/20160807.",
-                  "location": "path",
-                  "required": true,
-                  "pattern": "^domains/[^/]+/trafficStats/[^/]+$",
-                  "type": "string"
-                }
-              },
-              "id": "gmailpostmastertools.domains.trafficStats.get",
-              "scopes": [
-                "https://www.googleapis.com/auth/postmaster.readonly"
-              ]
-            }
-          }
+      "description": "Email traffic statistics pertaining to a specific date."
+    },
+    "Domain": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "description": "The resource name of the Domain. Domain names have the form `domains/{domain_name}`, where domain_name is the fully qualified domain name (i.e., mymail.mydomain.com).",
+          "type": "string"
+        },
+        "createTime": {
+          "description": "Timestamp when the user registered this domain. Assigned by the server.",
+          "type": "string",
+          "format": "google-datetime"
+        },
+        "permission": {
+          "enumDescriptions": [
+            "The default value and should never be used explicitly.",
+            "User has read access to the domain and can share access with others.",
+            "User has read access to the domain.",
+            "User doesn't have permission to access information about the domain. User did not verify ownership of domain nor was access granted by other domain owners."
+          ],
+          "type": "string",
+          "description": "User’s permission for this domain. Assigned by the server.",
+          "enum": [
+            "PERMISSION_UNSPECIFIED",
+            "OWNER",
+            "READER",
+            "NONE"
+          ]
         }
-      }
+      },
+      "id": "Domain",
+      "description": "A registered domain resource in the Postmaster API."
+    },
+    "IpReputation": {
+      "properties": {
+        "sampleIps": {
+          "items": {
+            "type": "string"
+          },
+          "description": "A sample of IPs in this reputation category.",
+          "type": "array"
+        },
+        "reputation": {
+          "enumDescriptions": [
+            "The default value which should never be used explicitly. This represents the state where no reputation information is available.",
+            "Has a good track record of a very low spam rate, and complies with Gmail's sender guidelines. Mail will rarely be marked by the spam filter.",
+            "Known to send good mail, but is prone to sending a low volume of spam intermittently. Most of the email from this entity will have a fair deliverability rate, except when there is a notable increase in spam levels.",
+            "Known to send a considerable volume of spam regularly, and mail from this sender will likely be marked as spam.",
+            "History of sending an enormously high volume of spam. Mail coming from this entity will almost always be rejected at SMTP level or marked as spam."
+          ],
+          "type": "string",
+          "enum": [
+            "REPUTATION_CATEGORY_UNSPECIFIED",
+            "HIGH",
+            "MEDIUM",
+            "LOW",
+            "BAD"
+          ],
+          "description": "The reputation category this IP reputation represents."
+        },
+        "ipCount": {
+          "description": "Total number of unique IPs in this reputation category. This metric only pertains to traffic that passed [SPF](http://www.openspf.org/) or [DKIM](http://www.dkim.org/).",
+          "type": "string",
+          "format": "int64"
+        }
+      },
+      "type": "object",
+      "id": "IpReputation",
+      "description": "IP Reputation information for a set of IPs in a specific reputation category."
     }
   }
 }
