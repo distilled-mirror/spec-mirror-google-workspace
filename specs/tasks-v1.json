@@ -1,462 +1,22 @@
 {
-  "rootUrl": "https://tasks.googleapis.com/",
-  "documentationLink": "https://developers.google.com/workspace/tasks/",
-  "fullyEncodeReservedExpansion": true,
-  "ownerDomain": "google.com",
-  "mtlsRootUrl": "https://tasks.mtls.googleapis.com/",
-  "basePath": "",
-  "schemas": {
-    "DriveResourceInfo": {
-      "type": "object",
-      "description": "Information about the Drive resource where a task was assigned from (the document, sheet, etc.).",
-      "properties": {
-        "driveFileId": {
-          "type": "string",
-          "readOnly": true,
-          "description": "Output only. Identifier of the file in the Drive API."
-        },
-        "resourceKey": {
-          "readOnly": true,
-          "type": "string",
-          "description": "Output only. Resource key required to access files shared via a shared link. Not required for all files. See also developers.google.com/drive/api/guides/resource-keys."
-        }
-      },
-      "id": "DriveResourceInfo"
-    },
-    "Task": {
-      "type": "object",
-      "id": "Task",
-      "properties": {
-        "deleted": {
-          "description": "Flag indicating whether the task has been deleted. For assigned tasks this field is read-only. They can only be deleted by calling tasks.delete, in which case both the assigned task and the original task (in Docs or Chat Spaces) are deleted. To delete the assigned task only, navigate to the assignment surface and unassign the task from there. The default is False.",
-          "type": "boolean"
-        },
-        "parent": {
-          "readOnly": true,
-          "description": "Output only. Parent task identifier. This field is omitted if it is a top-level task. Use the \"move\" method to move the task under a different parent or to the top level. A parent task can never be an assigned task (from Chat Spaces, Docs). This field is read-only.",
-          "type": "string"
-        },
-        "completed": {
-          "description": "Completion date of the task (as a RFC 3339 timestamp). This field is omitted if the task has not been completed.",
-          "type": "string"
-        },
-        "kind": {
-          "readOnly": true,
-          "type": "string",
-          "description": "Output only. Type of the resource. This is always \"tasks#task\"."
-        },
-        "id": {
-          "description": "Task identifier.",
-          "type": "string"
-        },
-        "notes": {
-          "description": "Notes describing the task. Tasks assigned from Google Docs cannot have notes. Optional. Maximum length allowed: 8192 characters.",
-          "type": "string"
-        },
-        "title": {
-          "type": "string",
-          "description": "Title of the task. Maximum length allowed: 1024 characters."
-        },
-        "position": {
-          "description": "Output only. String indicating the position of the task among its sibling tasks under the same parent task or at the top level. If this string is greater than another task's corresponding position string according to lexicographical ordering, the task is positioned after the other task under the same parent task (or at the top level). Use the \"move\" method to move the task to another position.",
-          "readOnly": true,
-          "type": "string"
-        },
-        "updated": {
-          "readOnly": true,
-          "type": "string",
-          "description": "Output only. Last modification time of the task (as a RFC 3339 timestamp)."
-        },
-        "selfLink": {
-          "type": "string",
-          "description": "Output only. URL pointing to this task. Used to retrieve, update, or delete this task.",
-          "readOnly": true
-        },
-        "assignmentInfo": {
-          "description": "Output only. Context information for assigned tasks. A task can be assigned to a user, currently possible from surfaces like Docs and Chat Spaces. This field is populated for tasks assigned to the current user and identifies where the task was assigned from. This field is read-only.",
-          "$ref": "AssignmentInfo",
-          "readOnly": true
-        },
-        "due": {
-          "description": "Scheduled date for the task (as an RFC 3339 timestamp). Optional. This represents the day that the task should be done, or that the task is visible on the calendar grid. It doesn't represent the deadline of the task. Only date information is recorded; the time portion of the timestamp is discarded when setting this field. It isn't possible to read or write the time that a task is scheduled for using the API.",
-          "type": "string"
-        },
-        "webViewLink": {
-          "description": "Output only. An absolute link to the task in the Google Tasks Web UI.",
-          "type": "string",
-          "readOnly": true
-        },
-        "links": {
-          "readOnly": true,
-          "description": "Output only. Collection of links. This collection is read-only.",
-          "type": "array",
-          "items": {
-            "properties": {
-              "link": {
-                "type": "string",
-                "description": "The URL."
-              },
-              "description": {
-                "description": "The description (might be empty).",
-                "type": "string"
-              },
-              "type": {
-                "type": "string",
-                "description": "Type of the link, e.g. \"email\", \"generic\", \"chat_message\", \"keep_note\"."
-              }
-            },
-            "type": "object"
-          }
-        },
-        "hidden": {
-          "type": "boolean",
-          "description": "Flag indicating whether the task is hidden. This is the case if the task had been marked completed when the task list was last cleared. The default is False. This field is read-only."
-        },
-        "etag": {
-          "description": "ETag of the resource.",
-          "type": "string"
-        },
-        "status": {
-          "type": "string",
-          "description": "Status of the task. This is either \"needsAction\" or \"completed\"."
-        }
-      }
-    },
-    "AssignmentInfo": {
-      "type": "object",
-      "id": "AssignmentInfo",
-      "description": "Information about the source of the task assignment (Document, Chat Space).",
-      "properties": {
-        "surfaceType": {
-          "description": "Output only. The type of surface this assigned task originates from. Currently limited to DOCUMENT or SPACE.",
-          "enumDescriptions": [
-            "Unknown value for this task's context.",
-            "The task is created from Gmail.",
-            "The task is assigned from a document.",
-            "The task is assigned from a Chat Space."
-          ],
-          "readOnly": true,
-          "type": "string",
-          "enum": [
-            "CONTEXT_TYPE_UNSPECIFIED",
-            "GMAIL",
-            "DOCUMENT",
-            "SPACE"
-          ]
-        },
-        "driveResourceInfo": {
-          "description": "Output only. Information about the Drive file where this task originates from. Currently, the Drive file can only be a document. This field is read-only.",
-          "readOnly": true,
-          "$ref": "DriveResourceInfo"
-        },
-        "linkToTask": {
-          "description": "Output only. An absolute link to the original task in the surface of assignment (Docs, Chat spaces, etc.).",
-          "readOnly": true,
-          "type": "string"
-        },
-        "spaceInfo": {
-          "$ref": "SpaceInfo",
-          "readOnly": true,
-          "description": "Output only. Information about the Chat Space where this task originates from. This field is read-only."
-        }
-      }
-    },
-    "TaskList": {
-      "type": "object",
-      "properties": {
-        "etag": {
-          "type": "string",
-          "description": "ETag of the resource."
-        },
-        "id": {
-          "type": "string",
-          "description": "Task list identifier."
-        },
-        "selfLink": {
-          "description": "Output only. URL pointing to this task list. Used to retrieve, update, or delete this task list.",
-          "type": "string",
-          "readOnly": true
-        },
-        "title": {
-          "type": "string",
-          "description": "Title of the task list. Maximum length allowed: 1024 characters."
-        },
-        "kind": {
-          "description": "Output only. Type of the resource. This is always \"tasks#taskList\".",
-          "type": "string",
-          "readOnly": true
-        },
-        "updated": {
-          "readOnly": true,
-          "description": "Output only. Last modification time of the task list (as a RFC 3339 timestamp).",
-          "type": "string"
-        }
-      },
-      "id": "TaskList"
-    },
-    "Tasks": {
-      "type": "object",
-      "properties": {
-        "etag": {
-          "type": "string",
-          "description": "ETag of the resource."
-        },
-        "items": {
-          "description": "Collection of tasks.",
-          "type": "array",
-          "items": {
-            "$ref": "Task"
-          }
-        },
-        "nextPageToken": {
-          "description": "Token used to access the next page of this result.",
-          "type": "string"
-        },
-        "kind": {
-          "type": "string",
-          "description": "Type of the resource. This is always \"tasks#tasks\"."
-        }
-      },
-      "id": "Tasks"
-    },
-    "SpaceInfo": {
-      "id": "SpaceInfo",
-      "description": "Information about the Chat Space where a task was assigned from.",
-      "properties": {
-        "space": {
-          "readOnly": true,
-          "type": "string",
-          "description": "Output only. The Chat space where this task originates from. The format is \"spaces/{space}\"."
-        }
-      },
-      "type": "object"
-    },
-    "TaskLists": {
-      "properties": {
-        "items": {
-          "description": "Collection of task lists.",
-          "items": {
-            "$ref": "TaskList"
-          },
-          "type": "array"
-        },
-        "etag": {
-          "description": "ETag of the resource.",
-          "type": "string"
-        },
-        "nextPageToken": {
-          "description": "Token that can be used to request the next page of this result.",
-          "type": "string"
-        },
-        "kind": {
-          "description": "Type of the resource. This is always \"tasks#taskLists\".",
-          "type": "string"
-        }
-      },
-      "type": "object",
-      "id": "TaskLists"
-    }
+  "icons": {
+    "x16": "http://www.google.com/images/icons/product/search-16.gif",
+    "x32": "http://www.google.com/images/icons/product/search-32.gif"
   },
   "resources": {
     "tasks": {
       "methods": {
-        "update": {
-          "id": "tasks.tasks.update",
-          "flatPath": "tasks/v1/lists/{tasklist}/tasks/{task}",
-          "parameters": {
-            "task": {
-              "type": "string",
-              "required": true,
-              "description": "Task identifier.",
-              "location": "path"
-            },
-            "tasklist": {
-              "required": true,
-              "location": "path",
-              "type": "string",
-              "description": "Task list identifier."
-            }
-          },
-          "description": "Updates the specified task.",
-          "httpMethod": "PUT",
-          "request": {
-            "$ref": "Task"
-          },
-          "parameterOrder": [
-            "tasklist",
-            "task"
-          ],
-          "response": {
-            "$ref": "Task"
-          },
-          "scopes": [
-            "https://www.googleapis.com/auth/tasks"
-          ],
-          "path": "tasks/v1/lists/{tasklist}/tasks/{task}"
-        },
-        "get": {
-          "parameters": {
-            "tasklist": {
-              "required": true,
-              "type": "string",
-              "location": "path",
-              "description": "Task list identifier."
-            },
-            "task": {
-              "description": "Task identifier.",
-              "required": true,
-              "location": "path",
-              "type": "string"
-            }
-          },
-          "description": "Returns the specified task.",
-          "httpMethod": "GET",
-          "flatPath": "tasks/v1/lists/{tasklist}/tasks/{task}",
-          "scopes": [
-            "https://www.googleapis.com/auth/tasks",
-            "https://www.googleapis.com/auth/tasks.readonly"
-          ],
-          "id": "tasks.tasks.get",
-          "path": "tasks/v1/lists/{tasklist}/tasks/{task}",
-          "response": {
-            "$ref": "Task"
-          },
-          "parameterOrder": [
-            "tasklist",
-            "task"
-          ]
-        },
-        "list": {
-          "path": "tasks/v1/lists/{tasklist}/tasks",
-          "flatPath": "tasks/v1/lists/{tasklist}/tasks",
-          "scopes": [
-            "https://www.googleapis.com/auth/tasks",
-            "https://www.googleapis.com/auth/tasks.readonly"
-          ],
-          "id": "tasks.tasks.list",
-          "response": {
-            "$ref": "Tasks"
-          },
-          "httpMethod": "GET",
-          "description": "Returns all tasks in the specified task list. Doesn't return assigned tasks by default (from Docs, Chat Spaces). A user can have up to 20,000 non-hidden tasks per list and up to 100,000 tasks in total at a time.",
-          "parameters": {
-            "showHidden": {
-              "description": "Flag indicating whether hidden tasks are returned in the result. Optional. The default is False.",
-              "location": "query",
-              "type": "boolean"
-            },
-            "completedMax": {
-              "description": "Upper bound for a task's completion date (as a RFC 3339 timestamp) to filter by. Optional. The default is not to filter by completion date.",
-              "type": "string",
-              "location": "query"
-            },
-            "showAssigned": {
-              "description": "Optional. Flag indicating whether tasks assigned to the current user are returned in the result. Optional. The default is False.",
-              "type": "boolean",
-              "location": "query"
-            },
-            "maxResults": {
-              "format": "int32",
-              "location": "query",
-              "description": "Maximum number of tasks returned on one page. Optional. The default is 20 (max allowed: 100).",
-              "type": "integer"
-            },
-            "updatedMin": {
-              "location": "query",
-              "type": "string",
-              "description": "Lower bound for a task's last modification time (as a RFC 3339 timestamp) to filter by. Optional. The default is not to filter by last modification time."
-            },
-            "showCompleted": {
-              "type": "boolean",
-              "description": "Flag indicating whether completed tasks are returned in the result. Note that showHidden must also be True to show tasks completed in first party clients, such as the web UI and Google's mobile apps. Optional. The default is True.",
-              "location": "query"
-            },
-            "pageToken": {
-              "location": "query",
-              "type": "string",
-              "description": "Token specifying the result page to return. Optional."
-            },
-            "dueMax": {
-              "description": "Upper bound for a task's due date (as a RFC 3339 timestamp) to filter by. Optional. The default is not to filter by due date.",
-              "location": "query",
-              "type": "string"
-            },
-            "dueMin": {
-              "location": "query",
-              "type": "string",
-              "description": "Lower bound for a task's due date (as a RFC 3339 timestamp) to filter by. Optional. The default is not to filter by due date."
-            },
-            "tasklist": {
-              "required": true,
-              "description": "Task list identifier.",
-              "location": "path",
-              "type": "string"
-            },
-            "completedMin": {
-              "type": "string",
-              "location": "query",
-              "description": "Lower bound for a task's completion date (as a RFC 3339 timestamp) to filter by. Optional. The default is not to filter by completion date."
-            },
-            "showDeleted": {
-              "type": "boolean",
-              "description": "Flag indicating whether deleted tasks are returned in the result. Optional. The default is False.",
-              "location": "query"
-            }
-          },
-          "parameterOrder": [
-            "tasklist"
-          ]
-        },
-        "delete": {
-          "scopes": [
-            "https://www.googleapis.com/auth/tasks"
-          ],
-          "flatPath": "tasks/v1/lists/{tasklist}/tasks/{task}",
-          "path": "tasks/v1/lists/{tasklist}/tasks/{task}",
-          "parameterOrder": [
-            "tasklist",
-            "task"
-          ],
-          "id": "tasks.tasks.delete",
-          "parameters": {
-            "tasklist": {
-              "location": "path",
-              "type": "string",
-              "required": true,
-              "description": "Task list identifier."
-            },
-            "task": {
-              "required": true,
-              "type": "string",
-              "location": "path",
-              "description": "Task identifier."
-            }
-          },
-          "description": "Deletes the specified task from the task list. If the task is assigned, both the assigned task and the original task (in Docs, Chat Spaces) are deleted. To delete the assigned task only, navigate to the assignment surface and unassign the task from there.",
-          "httpMethod": "DELETE"
-        },
         "patch": {
-          "parameterOrder": [
-            "tasklist",
-            "task"
-          ],
           "scopes": [
             "https://www.googleapis.com/auth/tasks"
           ],
-          "response": {
-            "$ref": "Task"
-          },
           "httpMethod": "PATCH",
-          "request": {
-            "$ref": "Task"
-          },
-          "description": "Updates the specified task. This method supports patch semantics.",
           "parameters": {
             "tasklist": {
               "description": "Task list identifier.",
               "type": "string",
-              "required": true,
-              "location": "path"
+              "location": "path",
+              "required": true
             },
             "task": {
               "description": "Task identifier.",
@@ -465,352 +25,460 @@
               "required": true
             }
           },
-          "path": "tasks/v1/lists/{tasklist}/tasks/{task}",
-          "id": "tasks.tasks.patch",
-          "flatPath": "tasks/v1/lists/{tasklist}/tasks/{task}"
-        },
-        "insert": {
-          "request": {
-            "$ref": "Task"
-          },
           "response": {
             "$ref": "Task"
           },
-          "description": "Creates a new task on the specified task list. Tasks assigned from Docs or Chat Spaces cannot be inserted from Tasks Public API; they can only be created by assigning them from Docs or Chat Spaces. A user can have up to 20,000 non-hidden tasks per list and up to 100,000 tasks in total at a time.",
-          "flatPath": "tasks/v1/lists/{tasklist}/tasks",
-          "path": "tasks/v1/lists/{tasklist}/tasks",
-          "scopes": [
-            "https://www.googleapis.com/auth/tasks"
-          ],
-          "httpMethod": "POST",
-          "id": "tasks.tasks.insert",
+          "id": "tasks.tasks.patch",
+          "path": "tasks/v1/lists/{tasklist}/tasks/{task}",
+          "description": "Updates the specified task. This method supports patch semantics.",
           "parameterOrder": [
-            "tasklist"
+            "tasklist",
+            "task"
           ],
+          "flatPath": "tasks/v1/lists/{tasklist}/tasks/{task}",
+          "request": {
+            "$ref": "Task"
+          }
+        },
+        "delete": {
+          "path": "tasks/v1/lists/{tasklist}/tasks/{task}",
           "parameters": {
-            "previous": {
-              "location": "query",
-              "type": "string",
-              "description": "Previous sibling task identifier. If the task is created at the first position among its siblings, this parameter is omitted. Optional."
+            "task": {
+              "description": "Task identifier.",
+              "location": "path",
+              "required": true,
+              "type": "string"
             },
             "tasklist": {
               "description": "Task list identifier.",
               "type": "string",
-              "required": true,
-              "location": "path"
-            },
-            "parent": {
-              "description": "Parent task identifier. If the task is created at the top level, this parameter is omitted. An assigned task cannot be a parent task, nor can it have a parent. Setting the parent to an assigned task results in failure of the request. Optional.",
-              "location": "query",
-              "type": "string"
-            }
-          }
-        },
-        "move": {
-          "response": {
-            "$ref": "Task"
-          },
-          "httpMethod": "POST",
-          "description": "Moves the specified task to another position in the destination task list. If the destination list is not specified, the task is moved within its current list. This can include putting it as a child task under a new parent and/or move it to a different position among its sibling tasks. A user can have up to 2,000 subtasks per task.",
-          "parameters": {
-            "parent": {
-              "type": "string",
-              "description": "Optional. New parent task identifier. If the task is moved to the top level, this parameter is omitted. The task set as parent must exist in the task list and can not be hidden. Exceptions: 1. Assigned and repeating tasks cannot be set as parent tasks (have subtasks), or be moved under a parent task (become subtasks). 2. Tasks that are both completed and hidden cannot be nested, so the parent field must be empty.",
-              "location": "query"
-            },
-            "destinationTasklist": {
-              "description": "Optional. Destination task list identifier. If set, the task is moved from tasklist to the destinationTasklist list. Otherwise the task is moved within its current list. Recurrent tasks cannot currently be moved between lists.",
-              "type": "string",
-              "location": "query"
-            },
-            "tasklist": {
-              "type": "string",
               "location": "path",
-              "required": true,
-              "description": "Task list identifier."
-            },
-            "task": {
-              "type": "string",
-              "required": true,
-              "description": "Task identifier.",
-              "location": "path"
-            },
-            "previous": {
-              "location": "query",
-              "type": "string",
-              "description": "Optional. New previous sibling task identifier. If the task is moved to the first position among its siblings, this parameter is omitted. The task set as previous must exist in the task list and can not be hidden. Exceptions: 1. Tasks that are both completed and hidden can only be moved to position 0, so the previous field must be empty."
+              "required": true
             }
           },
-          "path": "tasks/v1/lists/{tasklist}/tasks/{task}/move",
+          "flatPath": "tasks/v1/lists/{tasklist}/tasks/{task}",
+          "description": "Deletes the specified task from the task list. If the task is assigned, both the assigned task and the original task (in Docs, Chat Spaces) are deleted. To delete the assigned task only, navigate to the assignment surface and unassign the task from there.",
+          "httpMethod": "DELETE",
+          "id": "tasks.tasks.delete",
           "scopes": [
             "https://www.googleapis.com/auth/tasks"
           ],
-          "flatPath": "tasks/v1/lists/{tasklist}/tasks/{task}/move",
-          "id": "tasks.tasks.move",
           "parameterOrder": [
             "tasklist",
             "task"
           ]
         },
-        "clear": {
+        "move": {
+          "description": "Moves the specified task to another position in the destination task list. If the destination list is not specified, the task is moved within its current list. This can include putting it as a child task under a new parent and/or move it to a different position among its sibling tasks. A user can have up to 2,000 subtasks per task.",
+          "path": "tasks/v1/lists/{tasklist}/tasks/{task}/move",
           "scopes": [
             "https://www.googleapis.com/auth/tasks"
           ],
+          "id": "tasks.tasks.move",
+          "flatPath": "tasks/v1/lists/{tasklist}/tasks/{task}/move",
+          "httpMethod": "POST",
           "parameters": {
+            "previous": {
+              "description": "Optional. New previous sibling task identifier. If the task is moved to the first position among its siblings, this parameter is omitted. The task set as previous must exist in the task list and can not be hidden. Exceptions: 1. Tasks that are both completed and hidden can only be moved to position 0, so the previous field must be empty.",
+              "type": "string",
+              "location": "query"
+            },
+            "parent": {
+              "description": "Optional. New parent task identifier. If the task is moved to the top level, this parameter is omitted. The task set as parent must exist in the task list and can not be hidden. Exceptions: 1. Assigned and repeating tasks cannot be set as parent tasks (have subtasks), or be moved under a parent task (become subtasks). 2. Tasks that are both completed and hidden cannot be nested, so the parent field must be empty.",
+              "location": "query",
+              "type": "string"
+            },
+            "task": {
+              "type": "string",
+              "location": "path",
+              "required": true,
+              "description": "Task identifier."
+            },
             "tasklist": {
+              "location": "path",
+              "required": true,
+              "type": "string",
+              "description": "Task list identifier."
+            },
+            "destinationTasklist": {
+              "type": "string",
+              "location": "query",
+              "description": "Optional. Destination task list identifier. If set, the task is moved from tasklist to the destinationTasklist list. Otherwise the task is moved within its current list. Recurrent tasks cannot currently be moved between lists."
+            }
+          },
+          "response": {
+            "$ref": "Task"
+          },
+          "parameterOrder": [
+            "tasklist",
+            "task"
+          ]
+        },
+        "update": {
+          "parameterOrder": [
+            "tasklist",
+            "task"
+          ],
+          "request": {
+            "$ref": "Task"
+          },
+          "httpMethod": "PUT",
+          "parameters": {
+            "task": {
+              "description": "Task identifier.",
+              "location": "path",
+              "required": true,
+              "type": "string"
+            },
+            "tasklist": {
+              "location": "path",
               "required": true,
               "description": "Task list identifier.",
+              "type": "string"
+            }
+          },
+          "response": {
+            "$ref": "Task"
+          },
+          "scopes": [
+            "https://www.googleapis.com/auth/tasks"
+          ],
+          "description": "Updates the specified task.",
+          "path": "tasks/v1/lists/{tasklist}/tasks/{task}",
+          "id": "tasks.tasks.update",
+          "flatPath": "tasks/v1/lists/{tasklist}/tasks/{task}"
+        },
+        "insert": {
+          "id": "tasks.tasks.insert",
+          "flatPath": "tasks/v1/lists/{tasklist}/tasks",
+          "parameterOrder": [
+            "tasklist"
+          ],
+          "parameters": {
+            "tasklist": {
+              "description": "Task list identifier.",
+              "type": "string",
               "location": "path",
+              "required": true
+            },
+            "parent": {
+              "description": "Parent task identifier. If the task is created at the top level, this parameter is omitted. An assigned task cannot be a parent task, nor can it have a parent. Setting the parent to an assigned task results in failure of the request. Optional.",
+              "location": "query",
+              "type": "string"
+            },
+            "previous": {
+              "description": "Previous sibling task identifier. If the task is created at the first position among its siblings, this parameter is omitted. Optional.",
+              "location": "query",
               "type": "string"
             }
           },
           "httpMethod": "POST",
+          "response": {
+            "$ref": "Task"
+          },
+          "scopes": [
+            "https://www.googleapis.com/auth/tasks"
+          ],
+          "description": "Creates a new task on the specified task list. Tasks assigned from Docs or Chat Spaces cannot be inserted from Tasks Public API; they can only be created by assigning them from Docs or Chat Spaces. A user can have up to 20,000 non-hidden tasks per list and up to 100,000 tasks in total at a time.",
+          "request": {
+            "$ref": "Task"
+          },
+          "path": "tasks/v1/lists/{tasklist}/tasks"
+        },
+        "get": {
+          "scopes": [
+            "https://www.googleapis.com/auth/tasks",
+            "https://www.googleapis.com/auth/tasks.readonly"
+          ],
+          "id": "tasks.tasks.get",
+          "flatPath": "tasks/v1/lists/{tasklist}/tasks/{task}",
+          "parameterOrder": [
+            "tasklist",
+            "task"
+          ],
+          "description": "Returns the specified task.",
+          "path": "tasks/v1/lists/{tasklist}/tasks/{task}",
+          "parameters": {
+            "tasklist": {
+              "description": "Task list identifier.",
+              "type": "string",
+              "location": "path",
+              "required": true
+            },
+            "task": {
+              "type": "string",
+              "location": "path",
+              "required": true,
+              "description": "Task identifier."
+            }
+          },
+          "httpMethod": "GET",
+          "response": {
+            "$ref": "Task"
+          }
+        },
+        "clear": {
           "path": "tasks/v1/lists/{tasklist}/clear",
+          "httpMethod": "POST",
+          "scopes": [
+            "https://www.googleapis.com/auth/tasks"
+          ],
           "description": "Clears all completed tasks from the specified task list. The affected tasks will be marked as 'hidden' and no longer be returned by default when retrieving all tasks for a task list.",
           "id": "tasks.tasks.clear",
+          "parameters": {
+            "tasklist": {
+              "description": "Task list identifier.",
+              "location": "path",
+              "required": true,
+              "type": "string"
+            }
+          },
           "parameterOrder": [
             "tasklist"
           ],
           "flatPath": "tasks/v1/lists/{tasklist}/clear"
+        },
+        "list": {
+          "path": "tasks/v1/lists/{tasklist}/tasks",
+          "parameterOrder": [
+            "tasklist"
+          ],
+          "httpMethod": "GET",
+          "id": "tasks.tasks.list",
+          "flatPath": "tasks/v1/lists/{tasklist}/tasks",
+          "parameters": {
+            "completedMax": {
+              "description": "Upper bound for a task's completion date (as a RFC 3339 timestamp) to filter by. Optional. The default is not to filter by completion date.",
+              "type": "string",
+              "location": "query"
+            },
+            "pageToken": {
+              "location": "query",
+              "description": "Token specifying the result page to return. Optional.",
+              "type": "string"
+            },
+            "completedMin": {
+              "location": "query",
+              "type": "string",
+              "description": "Lower bound for a task's completion date (as a RFC 3339 timestamp) to filter by. Optional. The default is not to filter by completion date."
+            },
+            "dueMin": {
+              "location": "query",
+              "type": "string",
+              "description": "Lower bound for a task's due date (as a RFC 3339 timestamp) to filter by. Optional. The default is not to filter by due date."
+            },
+            "showCompleted": {
+              "location": "query",
+              "description": "Flag indicating whether completed tasks are returned in the result. Note that showHidden must also be True to show tasks completed in first party clients, such as the web UI and Google's mobile apps. Optional. The default is True.",
+              "type": "boolean"
+            },
+            "showHidden": {
+              "location": "query",
+              "type": "boolean",
+              "description": "Flag indicating whether hidden tasks are returned in the result. Optional. The default is False."
+            },
+            "showAssigned": {
+              "location": "query",
+              "description": "Optional. Flag indicating whether tasks assigned to the current user are returned in the result. Optional. The default is False.",
+              "type": "boolean"
+            },
+            "updatedMin": {
+              "location": "query",
+              "description": "Lower bound for a task's last modification time (as a RFC 3339 timestamp) to filter by. Optional. The default is not to filter by last modification time.",
+              "type": "string"
+            },
+            "dueMax": {
+              "type": "string",
+              "description": "Upper bound for a task's due date (as a RFC 3339 timestamp) to filter by. Optional. The default is not to filter by due date.",
+              "location": "query"
+            },
+            "showDeleted": {
+              "type": "boolean",
+              "description": "Flag indicating whether deleted tasks are returned in the result. Optional. The default is False.",
+              "location": "query"
+            },
+            "maxResults": {
+              "type": "integer",
+              "description": "Maximum number of tasks returned on one page. Optional. The default is 20 (max allowed: 100).",
+              "format": "int32",
+              "location": "query"
+            },
+            "tasklist": {
+              "description": "Task list identifier.",
+              "type": "string",
+              "location": "path",
+              "required": true
+            }
+          },
+          "scopes": [
+            "https://www.googleapis.com/auth/tasks",
+            "https://www.googleapis.com/auth/tasks.readonly"
+          ],
+          "description": "Returns all tasks in the specified task list. Doesn't return assigned tasks by default (from Docs, Chat Spaces). A user can have up to 20,000 non-hidden tasks per list and up to 100,000 tasks in total at a time.",
+          "response": {
+            "$ref": "Tasks"
+          }
         }
       }
     },
     "tasklists": {
       "methods": {
-        "patch": {
-          "httpMethod": "PATCH",
-          "request": {
-            "$ref": "TaskList"
-          },
-          "response": {
-            "$ref": "TaskList"
-          },
-          "id": "tasks.tasklists.patch",
+        "update": {
+          "flatPath": "tasks/v1/users/@me/lists/{tasklist}",
           "scopes": [
             "https://www.googleapis.com/auth/tasks"
           ],
+          "description": "Updates the authenticated user's specified task list.",
           "parameters": {
             "tasklist": {
               "location": "path",
-              "type": "string",
               "required": true,
-              "description": "Task list identifier."
+              "description": "Task list identifier.",
+              "type": "string"
             }
           },
-          "description": "Updates the authenticated user's specified task list. This method supports patch semantics.",
-          "flatPath": "tasks/v1/users/@me/lists/{tasklist}",
+          "request": {
+            "$ref": "TaskList"
+          },
+          "httpMethod": "PUT",
+          "response": {
+            "$ref": "TaskList"
+          },
           "path": "tasks/v1/users/@me/lists/{tasklist}",
+          "id": "tasks.tasklists.update",
           "parameterOrder": [
             "tasklist"
           ]
         },
-        "update": {
-          "id": "tasks.tasklists.update",
+        "get": {
+          "flatPath": "tasks/v1/users/@me/lists/{tasklist}",
+          "description": "Returns the authenticated user's specified task list.",
+          "scopes": [
+            "https://www.googleapis.com/auth/tasks",
+            "https://www.googleapis.com/auth/tasks.readonly"
+          ],
+          "path": "tasks/v1/users/@me/lists/{tasklist}",
+          "parameters": {
+            "tasklist": {
+              "description": "Task list identifier.",
+              "type": "string",
+              "location": "path",
+              "required": true
+            }
+          },
+          "httpMethod": "GET",
+          "parameterOrder": [
+            "tasklist"
+          ],
+          "response": {
+            "$ref": "TaskList"
+          },
+          "id": "tasks.tasklists.get"
+        },
+        "insert": {
+          "flatPath": "tasks/v1/users/@me/lists",
+          "description": "Creates a new task list and adds it to the authenticated user's task lists. A user can have up to 2000 lists at a time.",
+          "path": "tasks/v1/users/@me/lists",
+          "parameterOrder": [],
+          "id": "tasks.tasklists.insert",
+          "response": {
+            "$ref": "TaskList"
+          },
+          "scopes": [
+            "https://www.googleapis.com/auth/tasks"
+          ],
+          "request": {
+            "$ref": "TaskList"
+          },
+          "parameters": {},
+          "httpMethod": "POST"
+        },
+        "patch": {
+          "response": {
+            "$ref": "TaskList"
+          },
           "path": "tasks/v1/users/@me/lists/{tasklist}",
           "request": {
             "$ref": "TaskList"
           },
-          "response": {
-            "$ref": "TaskList"
-          },
-          "parameterOrder": [
-            "tasklist"
+          "scopes": [
+            "https://www.googleapis.com/auth/tasks"
           ],
           "parameters": {
             "tasklist": {
               "location": "path",
               "required": true,
-              "type": "string",
-              "description": "Task list identifier."
+              "description": "Task list identifier.",
+              "type": "string"
             }
-          },
-          "httpMethod": "PUT",
-          "description": "Updates the authenticated user's specified task list.",
-          "scopes": [
-            "https://www.googleapis.com/auth/tasks"
-          ],
-          "flatPath": "tasks/v1/users/@me/lists/{tasklist}"
-        },
-        "get": {
-          "id": "tasks.tasklists.get",
-          "flatPath": "tasks/v1/users/@me/lists/{tasklist}",
-          "scopes": [
-            "https://www.googleapis.com/auth/tasks",
-            "https://www.googleapis.com/auth/tasks.readonly"
-          ],
-          "response": {
-            "$ref": "TaskList"
           },
           "parameterOrder": [
             "tasklist"
           ],
-          "path": "tasks/v1/users/@me/lists/{tasklist}",
-          "description": "Returns the authenticated user's specified task list.",
-          "parameters": {
-            "tasklist": {
-              "required": true,
-              "type": "string",
-              "description": "Task list identifier.",
-              "location": "path"
-            }
-          },
-          "httpMethod": "GET"
-        },
-        "insert": {
-          "parameterOrder": [],
-          "scopes": [
-            "https://www.googleapis.com/auth/tasks"
-          ],
-          "parameters": {},
-          "response": {
-            "$ref": "TaskList"
-          },
-          "httpMethod": "POST",
-          "path": "tasks/v1/users/@me/lists",
-          "description": "Creates a new task list and adds it to the authenticated user's task lists. A user can have up to 2000 lists at a time.",
-          "id": "tasks.tasklists.insert",
-          "request": {
-            "$ref": "TaskList"
-          },
-          "flatPath": "tasks/v1/users/@me/lists"
+          "flatPath": "tasks/v1/users/@me/lists/{tasklist}",
+          "httpMethod": "PATCH",
+          "description": "Updates the authenticated user's specified task list. This method supports patch semantics.",
+          "id": "tasks.tasklists.patch"
         },
         "delete": {
-          "parameterOrder": [
-            "tasklist"
-          ],
           "flatPath": "tasks/v1/users/@me/lists/{tasklist}",
           "path": "tasks/v1/users/@me/lists/{tasklist}",
           "description": "Deletes the authenticated user's specified task list. If the list contains assigned tasks, both the assigned tasks and the original tasks in the assignment surface (Docs, Chat Spaces) are deleted.",
+          "id": "tasks.tasklists.delete",
+          "parameterOrder": [
+            "tasklist"
+          ],
+          "parameters": {
+            "tasklist": {
+              "type": "string",
+              "location": "path",
+              "required": true,
+              "description": "Task list identifier."
+            }
+          },
           "scopes": [
             "https://www.googleapis.com/auth/tasks"
           ],
-          "id": "tasks.tasklists.delete",
-          "httpMethod": "DELETE",
-          "parameters": {
-            "tasklist": {
-              "location": "path",
-              "required": true,
-              "type": "string",
-              "description": "Task list identifier."
-            }
-          }
+          "httpMethod": "DELETE"
         },
         "list": {
-          "id": "tasks.tasklists.list",
-          "response": {
-            "$ref": "TaskLists"
-          },
-          "path": "tasks/v1/users/@me/lists",
+          "description": "Returns all the authenticated user's task lists. A user can have up to 2000 lists at a time.",
+          "httpMethod": "GET",
+          "parameterOrder": [],
           "parameters": {
             "pageToken": {
-              "location": "query",
               "type": "string",
-              "description": "Token specifying the result page to return. Optional."
+              "description": "Token specifying the result page to return. Optional.",
+              "location": "query"
             },
             "maxResults": {
-              "description": "Maximum number of task lists returned on one page. Optional. The default is 1000 (max allowed: 1000).",
               "location": "query",
-              "type": "integer",
-              "format": "int32"
+              "format": "int32",
+              "description": "Maximum number of task lists returned on one page. Optional. The default is 1000 (max allowed: 1000).",
+              "type": "integer"
             }
+          },
+          "path": "tasks/v1/users/@me/lists",
+          "response": {
+            "$ref": "TaskLists"
           },
           "scopes": [
             "https://www.googleapis.com/auth/tasks",
             "https://www.googleapis.com/auth/tasks.readonly"
           ],
-          "httpMethod": "GET",
-          "description": "Returns all the authenticated user's task lists. A user can have up to 2000 lists at a time.",
-          "flatPath": "tasks/v1/users/@me/lists",
-          "parameterOrder": []
+          "id": "tasks.tasklists.list",
+          "flatPath": "tasks/v1/users/@me/lists"
         }
       }
     }
   },
+  "description": "The Google Tasks API lets you manage your tasks and task lists.",
   "baseUrl": "https://tasks.googleapis.com/",
-  "protocol": "rest",
-  "icons": {
-    "x16": "http://www.google.com/images/icons/product/search-16.gif",
-    "x32": "http://www.google.com/images/icons/product/search-32.gif"
-  },
-  "discoveryVersion": "v1",
-  "parameters": {
-    "upload_protocol": {
-      "type": "string",
-      "description": "Upload protocol for media (e.g. \"raw\", \"multipart\").",
-      "location": "query"
-    },
-    "key": {
-      "type": "string",
-      "description": "API key. Your API key identifies your project and provides you with API access, quota, and reports. Required unless you provide an OAuth 2.0 token.",
-      "location": "query"
-    },
-    "fields": {
-      "type": "string",
-      "location": "query",
-      "description": "Selector specifying which fields to include in a partial response."
-    },
-    "uploadType": {
-      "type": "string",
-      "location": "query",
-      "description": "Legacy upload protocol for media (e.g. \"media\", \"multipart\")."
-    },
-    "$.xgafv": {
-      "enumDescriptions": [
-        "v1 error format",
-        "v2 error format"
-      ],
-      "location": "query",
-      "type": "string",
-      "enum": [
-        "1",
-        "2"
-      ],
-      "description": "V1 error format."
-    },
-    "callback": {
-      "location": "query",
-      "type": "string",
-      "description": "JSONP"
-    },
-    "prettyPrint": {
-      "type": "boolean",
-      "default": "true",
-      "location": "query",
-      "description": "Returns response with indentations and line breaks."
-    },
-    "access_token": {
-      "location": "query",
-      "description": "OAuth access token.",
-      "type": "string"
-    },
-    "oauth_token": {
-      "location": "query",
-      "description": "OAuth 2.0 token for the current user.",
-      "type": "string"
-    },
-    "quotaUser": {
-      "description": "Available to use for quota purposes for server-side applications. Can be any arbitrary string assigned to a user, but should not exceed 40 characters.",
-      "type": "string",
-      "location": "query"
-    },
-    "alt": {
-      "default": "json",
-      "description": "Data format for response.",
-      "enumDescriptions": [
-        "Responses with Content-Type of application/json",
-        "Media download with context-dependent Content-Type",
-        "Responses with Content-Type of application/x-protobuf"
-      ],
-      "enum": [
-        "json",
-        "media",
-        "proto"
-      ],
-      "type": "string",
-      "location": "query"
-    }
-  },
-  "batchPath": "batch",
+  "fullyEncodeReservedExpansion": true,
+  "mtlsRootUrl": "https://tasks.mtls.googleapis.com/",
+  "id": "tasks:v1",
+  "ownerName": "Google",
+  "version": "v1",
   "auth": {
     "oauth2": {
       "scopes": {
@@ -824,13 +492,345 @@
     }
   },
   "title": "Google Tasks API",
-  "ownerName": "Google",
-  "canonicalName": "Tasks",
-  "id": "tasks:v1",
-  "servicePath": "",
-  "version": "v1",
+  "revision": "20260922",
   "kind": "discovery#restDescription",
-  "description": "The Google Tasks API lets you manage your tasks and task lists.",
-  "revision": "20260920",
-  "name": "tasks"
+  "parameters": {
+    "access_token": {
+      "description": "OAuth access token.",
+      "location": "query",
+      "type": "string"
+    },
+    "key": {
+      "location": "query",
+      "type": "string",
+      "description": "API key. Your API key identifies your project and provides you with API access, quota, and reports. Required unless you provide an OAuth 2.0 token."
+    },
+    "uploadType": {
+      "type": "string",
+      "location": "query",
+      "description": "Legacy upload protocol for media (e.g. \"media\", \"multipart\")."
+    },
+    "callback": {
+      "type": "string",
+      "location": "query",
+      "description": "JSONP"
+    },
+    "$.xgafv": {
+      "enum": [
+        "1",
+        "2"
+      ],
+      "description": "V1 error format.",
+      "type": "string",
+      "enumDescriptions": [
+        "v1 error format",
+        "v2 error format"
+      ],
+      "location": "query"
+    },
+    "prettyPrint": {
+      "location": "query",
+      "default": "true",
+      "description": "Returns response with indentations and line breaks.",
+      "type": "boolean"
+    },
+    "quotaUser": {
+      "location": "query",
+      "type": "string",
+      "description": "Available to use for quota purposes for server-side applications. Can be any arbitrary string assigned to a user, but should not exceed 40 characters."
+    },
+    "alt": {
+      "description": "Data format for response.",
+      "enum": [
+        "json",
+        "media",
+        "proto"
+      ],
+      "enumDescriptions": [
+        "Responses with Content-Type of application/json",
+        "Media download with context-dependent Content-Type",
+        "Responses with Content-Type of application/x-protobuf"
+      ],
+      "type": "string",
+      "default": "json",
+      "location": "query"
+    },
+    "fields": {
+      "location": "query",
+      "description": "Selector specifying which fields to include in a partial response.",
+      "type": "string"
+    },
+    "upload_protocol": {
+      "location": "query",
+      "type": "string",
+      "description": "Upload protocol for media (e.g. \"raw\", \"multipart\")."
+    },
+    "oauth_token": {
+      "location": "query",
+      "type": "string",
+      "description": "OAuth 2.0 token for the current user."
+    }
+  },
+  "rootUrl": "https://tasks.googleapis.com/",
+  "servicePath": "",
+  "discoveryVersion": "v1",
+  "ownerDomain": "google.com",
+  "documentationLink": "https://developers.google.com/workspace/tasks/",
+  "name": "tasks",
+  "batchPath": "batch",
+  "schemas": {
+    "TaskList": {
+      "id": "TaskList",
+      "properties": {
+        "kind": {
+          "readOnly": true,
+          "type": "string",
+          "description": "Output only. Type of the resource. This is always \"tasks#taskList\"."
+        },
+        "title": {
+          "description": "Title of the task list. Maximum length allowed: 1024 characters.",
+          "type": "string"
+        },
+        "id": {
+          "description": "Task list identifier.",
+          "type": "string"
+        },
+        "updated": {
+          "description": "Output only. Last modification time of the task list (as a RFC 3339 timestamp).",
+          "readOnly": true,
+          "type": "string"
+        },
+        "etag": {
+          "description": "ETag of the resource.",
+          "type": "string"
+        },
+        "selfLink": {
+          "readOnly": true,
+          "type": "string",
+          "description": "Output only. URL pointing to this task list. Used to retrieve, update, or delete this task list."
+        }
+      },
+      "type": "object"
+    },
+    "AssignmentInfo": {
+      "id": "AssignmentInfo",
+      "type": "object",
+      "properties": {
+        "surfaceType": {
+          "description": "Output only. The type of surface this assigned task originates from. Currently limited to DOCUMENT or SPACE.",
+          "type": "string",
+          "readOnly": true,
+          "enum": [
+            "CONTEXT_TYPE_UNSPECIFIED",
+            "GMAIL",
+            "DOCUMENT",
+            "SPACE"
+          ],
+          "enumDescriptions": [
+            "Unknown value for this task's context.",
+            "The task is created from Gmail.",
+            "The task is assigned from a document.",
+            "The task is assigned from a Chat Space."
+          ]
+        },
+        "linkToTask": {
+          "readOnly": true,
+          "description": "Output only. An absolute link to the original task in the surface of assignment (Docs, Chat spaces, etc.).",
+          "type": "string"
+        },
+        "driveResourceInfo": {
+          "description": "Output only. Information about the Drive file where this task originates from. Currently, the Drive file can only be a document. This field is read-only.",
+          "readOnly": true,
+          "$ref": "DriveResourceInfo"
+        },
+        "spaceInfo": {
+          "description": "Output only. Information about the Chat Space where this task originates from. This field is read-only.",
+          "$ref": "SpaceInfo",
+          "readOnly": true
+        }
+      },
+      "description": "Information about the source of the task assignment (Document, Chat Space)."
+    },
+    "Tasks": {
+      "type": "object",
+      "id": "Tasks",
+      "properties": {
+        "kind": {
+          "description": "Type of the resource. This is always \"tasks#tasks\".",
+          "type": "string"
+        },
+        "etag": {
+          "description": "ETag of the resource.",
+          "type": "string"
+        },
+        "nextPageToken": {
+          "type": "string",
+          "description": "Token used to access the next page of this result."
+        },
+        "items": {
+          "items": {
+            "$ref": "Task"
+          },
+          "description": "Collection of tasks.",
+          "type": "array"
+        }
+      }
+    },
+    "DriveResourceInfo": {
+      "description": "Information about the Drive resource where a task was assigned from (the document, sheet, etc.).",
+      "id": "DriveResourceInfo",
+      "properties": {
+        "driveFileId": {
+          "description": "Output only. Identifier of the file in the Drive API.",
+          "readOnly": true,
+          "type": "string"
+        },
+        "resourceKey": {
+          "description": "Output only. Resource key required to access files shared via a shared link. Not required for all files. See also developers.google.com/drive/api/guides/resource-keys.",
+          "type": "string",
+          "readOnly": true
+        }
+      },
+      "type": "object"
+    },
+    "SpaceInfo": {
+      "id": "SpaceInfo",
+      "description": "Information about the Chat Space where a task was assigned from.",
+      "type": "object",
+      "properties": {
+        "space": {
+          "type": "string",
+          "description": "Output only. The Chat space where this task originates from. The format is \"spaces/{space}\".",
+          "readOnly": true
+        }
+      }
+    },
+    "Task": {
+      "id": "Task",
+      "properties": {
+        "deleted": {
+          "description": "Flag indicating whether the task has been deleted. For assigned tasks this field is read-only. They can only be deleted by calling tasks.delete, in which case both the assigned task and the original task (in Docs or Chat Spaces) are deleted. To delete the assigned task only, navigate to the assignment surface and unassign the task from there. The default is False.",
+          "type": "boolean"
+        },
+        "completed": {
+          "description": "Completion date of the task (as a RFC 3339 timestamp). This field is omitted if the task has not been completed.",
+          "type": "string"
+        },
+        "kind": {
+          "readOnly": true,
+          "description": "Output only. Type of the resource. This is always \"tasks#task\".",
+          "type": "string"
+        },
+        "etag": {
+          "description": "ETag of the resource.",
+          "type": "string"
+        },
+        "status": {
+          "description": "Status of the task. This is either \"needsAction\" or \"completed\".",
+          "type": "string"
+        },
+        "due": {
+          "type": "string",
+          "description": "Scheduled date for the task (as an RFC 3339 timestamp). Optional. This represents the day that the task should be done, or that the task is visible on the calendar grid. It doesn't represent the deadline of the task. Only date information is recorded; the time portion of the timestamp is discarded when setting this field. It isn't possible to read or write the time that a task is scheduled for using the API."
+        },
+        "updated": {
+          "readOnly": true,
+          "type": "string",
+          "description": "Output only. Last modification time of the task (as a RFC 3339 timestamp)."
+        },
+        "links": {
+          "readOnly": true,
+          "type": "array",
+          "items": {
+            "properties": {
+              "type": {
+                "description": "Type of the link, e.g. \"email\", \"generic\", \"chat_message\", \"keep_note\".",
+                "type": "string"
+              },
+              "link": {
+                "type": "string",
+                "description": "The URL."
+              },
+              "description": {
+                "description": "The description (might be empty).",
+                "type": "string"
+              }
+            },
+            "type": "object"
+          },
+          "description": "Output only. Collection of links. This collection is read-only."
+        },
+        "hidden": {
+          "type": "boolean",
+          "description": "Flag indicating whether the task is hidden. This is the case if the task had been marked completed when the task list was last cleared. The default is False. This field is read-only."
+        },
+        "id": {
+          "description": "Task identifier.",
+          "type": "string"
+        },
+        "parent": {
+          "type": "string",
+          "description": "Output only. Parent task identifier. This field is omitted if it is a top-level task. Use the \"move\" method to move the task under a different parent or to the top level. A parent task can never be an assigned task (from Chat Spaces, Docs). This field is read-only.",
+          "readOnly": true
+        },
+        "assignmentInfo": {
+          "$ref": "AssignmentInfo",
+          "description": "Output only. Context information for assigned tasks. A task can be assigned to a user, currently possible from surfaces like Docs and Chat Spaces. This field is populated for tasks assigned to the current user and identifies where the task was assigned from. This field is read-only.",
+          "readOnly": true
+        },
+        "title": {
+          "type": "string",
+          "description": "Title of the task. Maximum length allowed: 1024 characters."
+        },
+        "notes": {
+          "description": "Notes describing the task. Tasks assigned from Google Docs cannot have notes. Optional. Maximum length allowed: 8192 characters.",
+          "type": "string"
+        },
+        "position": {
+          "description": "Output only. String indicating the position of the task among its sibling tasks under the same parent task or at the top level. If this string is greater than another task's corresponding position string according to lexicographical ordering, the task is positioned after the other task under the same parent task (or at the top level). Use the \"move\" method to move the task to another position.",
+          "type": "string",
+          "readOnly": true
+        },
+        "webViewLink": {
+          "type": "string",
+          "readOnly": true,
+          "description": "Output only. An absolute link to the task in the Google Tasks Web UI."
+        },
+        "selfLink": {
+          "description": "Output only. URL pointing to this task. Used to retrieve, update, or delete this task.",
+          "readOnly": true,
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "TaskLists": {
+      "id": "TaskLists",
+      "type": "object",
+      "properties": {
+        "nextPageToken": {
+          "description": "Token that can be used to request the next page of this result.",
+          "type": "string"
+        },
+        "kind": {
+          "description": "Type of the resource. This is always \"tasks#taskLists\".",
+          "type": "string"
+        },
+        "etag": {
+          "type": "string",
+          "description": "ETag of the resource."
+        },
+        "items": {
+          "type": "array",
+          "description": "Collection of task lists.",
+          "items": {
+            "$ref": "TaskList"
+          }
+        }
+      }
+    }
+  },
+  "basePath": "",
+  "canonicalName": "Tasks",
+  "protocol": "rest"
 }
