@@ -1,86 +1,719 @@
 {
-  "parameters": {
-    "callback": {
-      "location": "query",
-      "type": "string",
-      "description": "JSONP"
+  "fullyEncodeReservedExpansion": true,
+  "version": "v2",
+  "resources": {
+    "domainStats": {
+      "methods": {
+        "batchQuery": {
+          "scopes": [
+            "https://www.googleapis.com/auth/postmaster",
+            "https://www.googleapis.com/auth/postmaster.traffic.readonly"
+          ],
+          "parameters": {},
+          "response": {
+            "$ref": "BatchQueryDomainStatsResponse"
+          },
+          "parameterOrder": [],
+          "request": {
+            "$ref": "BatchQueryDomainStatsRequest"
+          },
+          "description": "Executes a batch of QueryDomainStats requests for multiple domains. Returns PERMISSION_DENIED if you don't have permission to access DomainStats for any of the requested domains.",
+          "httpMethod": "POST",
+          "flatPath": "v2/domainStats:batchQuery",
+          "id": "gmailpostmastertools.domainStats.batchQuery",
+          "path": "v2/domainStats:batchQuery"
+        }
+      }
     },
-    "oauth_token": {
-      "type": "string",
-      "location": "query",
-      "description": "OAuth 2.0 token for the current user."
-    },
-    "alt": {
-      "description": "Data format for response.",
-      "type": "string",
-      "enum": [
-        "json",
-        "media",
-        "proto"
-      ],
-      "default": "json",
-      "location": "query",
-      "enumDescriptions": [
-        "Responses with Content-Type of application/json",
-        "Media download with context-dependent Content-Type",
-        "Responses with Content-Type of application/x-protobuf"
-      ]
-    },
-    "$.xgafv": {
-      "enumDescriptions": [
-        "v1 error format",
-        "v2 error format"
-      ],
-      "description": "V1 error format.",
-      "location": "query",
-      "type": "string",
-      "enum": [
-        "1",
-        "2"
-      ]
-    },
-    "key": {
-      "location": "query",
-      "type": "string",
-      "description": "API key. Your API key identifies your project and provides you with API access, quota, and reports. Required unless you provide an OAuth 2.0 token."
-    },
-    "quotaUser": {
-      "type": "string",
-      "location": "query",
-      "description": "Available to use for quota purposes for server-side applications. Can be any arbitrary string assigned to a user, but should not exceed 40 characters."
-    },
-    "uploadType": {
-      "location": "query",
-      "type": "string",
-      "description": "Legacy upload protocol for media (e.g. \"media\", \"multipart\")."
-    },
-    "upload_protocol": {
-      "location": "query",
-      "description": "Upload protocol for media (e.g. \"raw\", \"multipart\").",
-      "type": "string"
-    },
-    "access_token": {
-      "type": "string",
-      "description": "OAuth access token.",
-      "location": "query"
-    },
-    "fields": {
-      "type": "string",
-      "location": "query",
-      "description": "Selector specifying which fields to include in a partial response."
-    },
-    "prettyPrint": {
-      "default": "true",
-      "type": "boolean",
-      "location": "query",
-      "description": "Returns response with indentations and line breaks."
+    "domains": {
+      "methods": {
+        "getVerificationToken": {
+          "scopes": [
+            "https://www.googleapis.com/auth/postmaster",
+            "https://www.googleapis.com/auth/postmaster.domain"
+          ],
+          "id": "gmailpostmastertools.domains.getVerificationToken",
+          "parameterOrder": [
+            "name"
+          ],
+          "response": {
+            "$ref": "DomainVerificationToken"
+          },
+          "path": "v2/{+name}",
+          "parameters": {
+            "verificationMethod": {
+              "description": "Required. The verification method used. Must be specified, i.e. TXT or CNAME.",
+              "enum": [
+                "DOMAIN_VERIFICATION_METHOD_UNSPECIFIED",
+                "TXT",
+                "CNAME"
+              ],
+              "enumDescriptions": [
+                "Unspecified.",
+                "Generate a DNS TXT verification token.",
+                "Generate a DNS CNAME verification token."
+              ],
+              "location": "query",
+              "type": "string"
+            },
+            "name": {
+              "description": "Required. The resource name of the verification token to retrieve. Format: `domains/{domain}/verificationToken`",
+              "required": true,
+              "location": "path",
+              "pattern": "^domains/[^/]+/verificationToken$",
+              "type": "string"
+            }
+          },
+          "httpMethod": "GET",
+          "description": "[Developer Preview](https://developers.google.com/workspace/preview): Gets a verification token used for verifying a user's ownership over a domain.",
+          "flatPath": "v2/domains/{domainsId}/verificationToken"
+        },
+        "verify": {
+          "scopes": [
+            "https://www.googleapis.com/auth/postmaster",
+            "https://www.googleapis.com/auth/postmaster.domain"
+          ],
+          "parameters": {
+            "name": {
+              "location": "path",
+              "type": "string",
+              "pattern": "^domains/[^/]+$",
+              "description": "Required. The domain to verify.",
+              "required": true
+            }
+          },
+          "httpMethod": "POST",
+          "flatPath": "v2/domains/{domainsId}:verify",
+          "id": "gmailpostmastertools.domains.verify",
+          "description": "[Developer Preview](https://developers.google.com/workspace/preview): Verifies a user's ownership of a domain at the DNS level. Note that this is distinct from checking if the user has OWNER status within IRDB.",
+          "request": {
+            "$ref": "VerifyDomainRequest"
+          },
+          "parameterOrder": [
+            "name"
+          ],
+          "response": {
+            "$ref": "VerifyDomainResponse"
+          },
+          "path": "v2/{+name}:verify"
+        },
+        "get": {
+          "path": "v2/{+name}",
+          "httpMethod": "GET",
+          "id": "gmailpostmastertools.domains.get",
+          "parameterOrder": [
+            "name"
+          ],
+          "flatPath": "v2/domains/{domainsId}",
+          "parameters": {
+            "name": {
+              "required": true,
+              "description": "Required. The resource name of the domain. Format: `domains/{domain_name}`, where domain_name is the fully qualified domain name (i.e., mymail.mydomain.com).",
+              "pattern": "^domains/[^/]+$",
+              "type": "string",
+              "location": "path"
+            }
+          },
+          "response": {
+            "$ref": "Domain"
+          },
+          "description": "Retrieves detailed information about a domain registered by you. Returns NOT_FOUND if the domain is not registered by you. Domain represents the metadata of a domain that has been registered within the system and linked to a user.",
+          "scopes": [
+            "https://www.googleapis.com/auth/postmaster",
+            "https://www.googleapis.com/auth/postmaster.domain"
+          ]
+        },
+        "list": {
+          "scopes": [
+            "https://www.googleapis.com/auth/postmaster",
+            "https://www.googleapis.com/auth/postmaster.domain"
+          ],
+          "parameters": {
+            "pageToken": {
+              "type": "string",
+              "location": "query",
+              "description": "Optional. The next_page_token value returned from a previous List request, if any."
+            },
+            "pageSize": {
+              "type": "integer",
+              "location": "query",
+              "description": "Optional. Requested page size. Server may return fewer domains than requested. If unspecified, the default value for this field is 10. The maximum value for this field is 200.",
+              "format": "int32"
+            }
+          },
+          "httpMethod": "GET",
+          "flatPath": "v2/domains",
+          "parameterOrder": [],
+          "path": "v2/domains",
+          "description": "Retrieves a list of all domains registered by you, along with their corresponding metadata. The order of domains in the response is unspecified and non-deterministic. Newly registered domains will not necessarily be added to the end of this list.",
+          "id": "gmailpostmastertools.domains.list",
+          "response": {
+            "$ref": "ListDomainsResponse"
+          }
+        },
+        "create": {
+          "scopes": [
+            "https://www.googleapis.com/auth/postmaster",
+            "https://www.googleapis.com/auth/postmaster.domain"
+          ],
+          "httpMethod": "POST",
+          "response": {
+            "$ref": "Domain"
+          },
+          "parameters": {},
+          "parameterOrder": [],
+          "request": {
+            "$ref": "CreateDomainRequest"
+          },
+          "description": "[Developer Preview](https://developers.google.com/workspace/preview): Adds a domain to the user's account. Returns INVALID_ARGUMENT if a domain is not provided. Returns ALREADY_EXISTS if the domain is already registered by the user.",
+          "flatPath": "v2/domains",
+          "id": "gmailpostmastertools.domains.create",
+          "path": "v2/domains"
+        },
+        "delete": {
+          "flatPath": "v2/domains/{domainsId}",
+          "parameterOrder": [
+            "name"
+          ],
+          "httpMethod": "DELETE",
+          "parameters": {
+            "name": {
+              "pattern": "^domains/[^/]+$",
+              "required": true,
+              "type": "string",
+              "location": "path",
+              "description": "Required. The domain to delete."
+            }
+          },
+          "description": "[Developer Preview](https://developers.google.com/workspace/preview): Deletes a domain from the user's account. Returns NOT_FOUND if the domain is not registered by the user.",
+          "response": {
+            "$ref": "Empty"
+          },
+          "scopes": [
+            "https://www.googleapis.com/auth/postmaster",
+            "https://www.googleapis.com/auth/postmaster.domain"
+          ],
+          "id": "gmailpostmastertools.domains.delete",
+          "path": "v2/{+name}"
+        },
+        "getComplianceStatus": {
+          "parameters": {
+            "name": {
+              "pattern": "^domains/[^/]+/complianceStatus$",
+              "location": "path",
+              "description": "Required. The resource name of the domain's compliance status to retrieve. Format: `domains/{domain_id}/complianceStatus`.",
+              "type": "string",
+              "required": true
+            }
+          },
+          "id": "gmailpostmastertools.domains.getComplianceStatus",
+          "response": {
+            "$ref": "DomainComplianceStatus"
+          },
+          "httpMethod": "GET",
+          "description": "Retrieves the compliance status for a given domain. Returns PERMISSION_DENIED if you don't have permission to access compliance status for the domain.",
+          "flatPath": "v2/domains/{domainsId}/complianceStatus",
+          "path": "v2/{+name}",
+          "parameterOrder": [
+            "name"
+          ],
+          "scopes": [
+            "https://www.googleapis.com/auth/postmaster",
+            "https://www.googleapis.com/auth/postmaster.traffic.readonly"
+          ]
+        }
+      },
+      "resources": {
+        "domainStats": {
+          "methods": {
+            "query": {
+              "path": "v2/{+parent}/domainStats:query",
+              "flatPath": "v2/domains/{domainsId}/domainStats:query",
+              "id": "gmailpostmastertools.domains.domainStats.query",
+              "description": "Retrieves a list of domain statistics for a given domain and time period. Returns statistics only for dates where data is available. Returns PERMISSION_DENIED if you don't have permission to access DomainStats for the domain.",
+              "scopes": [
+                "https://www.googleapis.com/auth/postmaster",
+                "https://www.googleapis.com/auth/postmaster.traffic.readonly"
+              ],
+              "request": {
+                "$ref": "QueryDomainStatsRequest"
+              },
+              "parameterOrder": [
+                "parent"
+              ],
+              "parameters": {
+                "parent": {
+                  "location": "path",
+                  "pattern": "^domains/[^/]+$",
+                  "type": "string",
+                  "required": true,
+                  "description": "Required. The parent resource name where the stats are queried. Format: domains/{domain}"
+                }
+              },
+              "response": {
+                "$ref": "QueryDomainStatsResponse"
+              },
+              "httpMethod": "POST"
+            }
+          }
+        },
+        "users": {
+          "methods": {
+            "get": {
+              "id": "gmailpostmastertools.domains.users.get",
+              "path": "v2/{+name}",
+              "response": {
+                "$ref": "User"
+              },
+              "scopes": [
+                "https://www.googleapis.com/auth/postmaster",
+                "https://www.googleapis.com/auth/postmaster.user"
+              ],
+              "httpMethod": "GET",
+              "description": "[Developer Preview](https://developers.google.com/workspace/preview): Retrieves detailed information about a user that has access to a domain. Returns NOT_FOUND if the user does not exist.",
+              "flatPath": "v2/domains/{domainsId}/users/{usersId}",
+              "parameterOrder": [
+                "name"
+              ],
+              "parameters": {
+                "name": {
+                  "required": true,
+                  "pattern": "^domains/[^/]+/users/[^/]+$",
+                  "description": "Required. The resource name of the user to retrieve. Format: `domains/{domain}/users/{user}`",
+                  "location": "path",
+                  "type": "string"
+                }
+              }
+            },
+            "create": {
+              "description": "[Developer Preview](https://developers.google.com/workspace/preview): Creates a user, who has access to a domain. Returns INVALID_ARGUMENT if a user is not provided.",
+              "parameters": {
+                "parent": {
+                  "type": "string",
+                  "description": "Required. The parent resource where this user will be created. Format: domains/{domain}",
+                  "required": true,
+                  "pattern": "^domains/[^/]+$",
+                  "location": "path"
+                }
+              },
+              "httpMethod": "POST",
+              "response": {
+                "$ref": "User"
+              },
+              "parameterOrder": [
+                "parent"
+              ],
+              "scopes": [
+                "https://www.googleapis.com/auth/postmaster",
+                "https://www.googleapis.com/auth/postmaster.user"
+              ],
+              "path": "v2/{+parent}/users",
+              "request": {
+                "$ref": "CreateUserRequest"
+              },
+              "flatPath": "v2/domains/{domainsId}/users",
+              "id": "gmailpostmastertools.domains.users.create"
+            },
+            "delete": {
+              "flatPath": "v2/domains/{domainsId}/users/{usersId}",
+              "id": "gmailpostmastertools.domains.users.delete",
+              "path": "v2/{+name}",
+              "httpMethod": "DELETE",
+              "description": "[Developer Preview](https://developers.google.com/workspace/preview): Deletes a user from a domain. Returns NOT_FOUND if the user does not exist.",
+              "parameterOrder": [
+                "name"
+              ],
+              "response": {
+                "$ref": "Empty"
+              },
+              "parameters": {
+                "name": {
+                  "type": "string",
+                  "required": true,
+                  "pattern": "^domains/[^/]+/users/[^/]+$",
+                  "description": "Required. The resource name of the user to delete. Format: domains/{domain}/users/{user}",
+                  "location": "path"
+                }
+              },
+              "scopes": [
+                "https://www.googleapis.com/auth/postmaster",
+                "https://www.googleapis.com/auth/postmaster.user"
+              ]
+            },
+            "patch": {
+              "response": {
+                "$ref": "User"
+              },
+              "parameterOrder": [
+                "name"
+              ],
+              "request": {
+                "$ref": "User"
+              },
+              "path": "v2/{+name}",
+              "id": "gmailpostmastertools.domains.users.patch",
+              "flatPath": "v2/domains/{domainsId}/users/{usersId}",
+              "httpMethod": "PATCH",
+              "description": "[Developer Preview](https://developers.google.com/workspace/preview): Updates a user for a domain. Only Owners and Admins can execute this RPC, only a user's domain permission will be allowed to be updated. Returns NOT_FOUND if the user does not exist. Returns INVALID_ARGUMENT if a permission is not provided or is PERMISSION_UNSPECIFIED, NONE, or OWNER.",
+              "scopes": [
+                "https://www.googleapis.com/auth/postmaster",
+                "https://www.googleapis.com/auth/postmaster.user"
+              ],
+              "parameters": {
+                "name": {
+                  "description": "Identifier. The resource name of the user. Format: users/{user} Note: {user} is the user's email address.",
+                  "type": "string",
+                  "required": true,
+                  "pattern": "^domains/[^/]+/users/[^/]+$",
+                  "location": "path"
+                },
+                "updateMask": {
+                  "description": "The list of fields to update.",
+                  "type": "string",
+                  "format": "google-fieldmask",
+                  "location": "query"
+                }
+              }
+            },
+            "list": {
+              "path": "v2/{+parent}/users",
+              "flatPath": "v2/domains/{domainsId}/users",
+              "scopes": [
+                "https://www.googleapis.com/auth/postmaster",
+                "https://www.googleapis.com/auth/postmaster.user"
+              ],
+              "httpMethod": "GET",
+              "parameterOrder": [
+                "parent"
+              ],
+              "response": {
+                "$ref": "ListUsersResponse"
+              },
+              "description": "[Developer Preview](https://developers.google.com/workspace/preview): Lists the users that have access to a domain.",
+              "parameters": {
+                "pageToken": {
+                  "location": "query",
+                  "type": "string",
+                  "description": "Optional. The next_page_token value returned from a previous List request, if any."
+                },
+                "pageSize": {
+                  "location": "query",
+                  "format": "int32",
+                  "type": "integer",
+                  "description": "Optional. Requested page size. Server may return fewer users than requested. If unspecified, the default value for this field is 10. The maximum value for this field is 200."
+                },
+                "parent": {
+                  "description": "Required. The parent resource name for which to list users. Format: `domains/{domain}`",
+                  "required": true,
+                  "type": "string",
+                  "pattern": "^domains/[^/]+$",
+                  "location": "path"
+                }
+              },
+              "id": "gmailpostmastertools.domains.users.list"
+            }
+          }
+        }
+      }
     }
   },
+  "mtlsRootUrl": "https://gmailpostmastertools.mtls.googleapis.com/",
+  "ownerDomain": "google.com",
+  "title": "Gmail Postmaster Tools API",
+  "name": "gmailpostmastertools",
+  "rootUrl": "https://gmailpostmastertools.googleapis.com/",
+  "kind": "discovery#restDescription",
+  "baseUrl": "https://gmailpostmastertools.googleapis.com/",
+  "protocol": "rest",
+  "id": "gmailpostmastertools:v2",
   "schemas": {
+    "TimeQuery": {
+      "id": "TimeQuery",
+      "description": "The date ranges or specific dates for which you want to retrieve data.",
+      "type": "object",
+      "properties": {
+        "dateList": {
+          "description": "A list of specific dates.",
+          "$ref": "DateList"
+        },
+        "dateRanges": {
+          "description": "A list of date ranges.",
+          "$ref": "DateRanges"
+        }
+      }
+    },
+    "ListUsersResponse": {
+      "id": "ListUsersResponse",
+      "type": "object",
+      "properties": {
+        "users": {
+          "description": "The users that have access to the domain.",
+          "type": "array",
+          "items": {
+            "$ref": "User"
+          }
+        },
+        "nextPageToken": {
+          "description": "Token to retrieve the next page of results, or empty if there are no more results in the list.",
+          "type": "string"
+        }
+      },
+      "description": "[Developer Preview](https://developers.google.com/workspace/preview): Response message for ListUsers."
+    },
+    "QueryDomainStatsResponse": {
+      "properties": {
+        "domainStats": {
+          "description": "The list of domain statistics. Each DomainStat object contains the value for a metric requested in the QueryDomainStatsRequest.",
+          "items": {
+            "$ref": "DomainStat"
+          },
+          "type": "array"
+        },
+        "nextPageToken": {
+          "description": "Token to retrieve the next page of results, or empty if there are no more results in the list.",
+          "type": "string"
+        }
+      },
+      "description": "Response message for QueryDomainStats.",
+      "type": "object",
+      "id": "QueryDomainStatsResponse"
+    },
+    "ListDomainsResponse": {
+      "id": "ListDomainsResponse",
+      "description": "Response message for ListDomains.",
+      "type": "object",
+      "properties": {
+        "domains": {
+          "items": {
+            "$ref": "Domain"
+          },
+          "type": "array",
+          "description": "The domains that have been registered by the user."
+        },
+        "nextPageToken": {
+          "type": "string",
+          "description": "Token to retrieve the next page of results, or empty if there are no more results in the list."
+        }
+      }
+    },
+    "DomainComplianceStatus": {
+      "type": "object",
+      "id": "DomainComplianceStatus",
+      "description": "Compliance status for a domain.",
+      "properties": {
+        "subdomainComplianceData": {
+          "description": "Compliance data calculated specifically for the subdomain in `name`. This field is only populated if the domain in `name` is a subdomain that differs from its registrable domain (e.g., `sub.example.com`), and if compliance data is available for that specific subdomain.",
+          "$ref": "DomainComplianceData"
+        },
+        "name": {
+          "type": "string",
+          "description": "Identifier. The resource name of the domain's compliance status. Format: `domains/{domain_id}/complianceStatus`."
+        },
+        "complianceData": {
+          "description": "Compliance data for the registrable domain part of the domain in `name`. For example, if `name` is `domains/example.com/complianceStatus`, this field contains compliance data for `example.com`.",
+          "$ref": "DomainComplianceData"
+        }
+      }
+    },
+    "StringList": {
+      "properties": {
+        "values": {
+          "items": {
+            "type": "string"
+          },
+          "description": "The string values.",
+          "type": "array"
+        }
+      },
+      "id": "StringList",
+      "description": "Represents a list of strings.",
+      "type": "object"
+    },
+    "Domain": {
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Identifier. The resource name of the domain. Format: `domains/{domain_name}`, where domain_name is the fully qualified domain name (i.e., mymail.mydomain.com)."
+        },
+        "createTime": {
+          "type": "string",
+          "description": "Output only. Immutable. The timestamp at which the domain was added to the user's account.",
+          "readOnly": true,
+          "format": "google-datetime"
+        },
+        "verificationState": {
+          "enumDescriptions": [
+            "Unspecified.",
+            "The domain is unverified.",
+            "The domain is verified."
+          ],
+          "type": "string",
+          "readOnly": true,
+          "enum": [
+            "VERIFICATION_STATE_UNSPECIFIED",
+            "UNVERIFIED",
+            "VERIFIED"
+          ],
+          "description": "Output only. Information about a user's verification history and properties for the domain."
+        },
+        "permission": {
+          "readOnly": true,
+          "type": "string",
+          "description": "Output only. User's permission of this domain.",
+          "enumDescriptions": [
+            "Unspecified permission.",
+            "User has read access to the domain.",
+            "User has admin access to the domain.",
+            "User has owner access to the domain.",
+            "User has no access to the domain."
+          ],
+          "enum": [
+            "PERMISSION_UNSPECIFIED",
+            "READER",
+            "ADMIN",
+            "OWNER",
+            "NONE"
+          ]
+        },
+        "lastVerifyTime": {
+          "description": "The timestamp at which the domain was last verified by the user.",
+          "format": "google-datetime",
+          "type": "string"
+        }
+      },
+      "description": "Information about a domain registered by the user.",
+      "id": "Domain",
+      "type": "object"
+    },
+    "HonorUnsubscribeVerdict": {
+      "properties": {
+        "status": {
+          "description": "The compliance status.",
+          "$ref": "ComplianceStatus"
+        },
+        "reason": {
+          "enum": [
+            "REASON_UNSPECIFIED",
+            "NOT_HONORING",
+            "NOT_HONORING_TOO_FEW_CAMPAIGNS",
+            "NOT_HONORING_TOO_MANY_CAMPAIGNS"
+          ],
+          "type": "string",
+          "enumDescriptions": [
+            "Unspecified.",
+            "The sender does not honor unsubscribe requests.",
+            "The sender does not honor unsubscribe requests and consider to increase the number of relevant campaigns.",
+            "The sender does not honor unsubscribe requests and consider to reduce the number of relevant campaigns."
+          ],
+          "description": "The specific reason for the compliance verdict. Must be empty if the status is compliant."
+        }
+      },
+      "description": "Compliance verdict for whether a sender meets the unsubscribe honoring compliance requirement.",
+      "id": "HonorUnsubscribeVerdict",
+      "type": "object"
+    },
+    "DomainComplianceData": {
+      "type": "object",
+      "description": "Compliance data for a given domain.",
+      "properties": {
+        "honorUnsubscribeVerdict": {
+          "description": "Unsubscribe honoring compliance verdict.",
+          "$ref": "HonorUnsubscribeVerdict"
+        },
+        "oneClickUnsubscribeVerdict": {
+          "$ref": "OneClickUnsubscribeVerdict",
+          "description": "One-click unsubscribe compliance verdict."
+        },
+        "domainId": {
+          "description": "Domain that this data is for.",
+          "type": "string"
+        },
+        "rowData": {
+          "items": {
+            "$ref": "ComplianceRowData"
+          },
+          "description": "Data for each of the rows of the table. Each message contains all the data that backs a single row.",
+          "type": "array"
+        },
+        "deliverabilityStatusVerdict": {
+          "readOnly": true,
+          "description": "Output only. Deliverability status verdict.",
+          "$ref": "DeliverabilityStatusVerdict"
+        }
+      },
+      "id": "DomainComplianceData"
+    },
+    "MetricDefinition": {
+      "description": "Defines a specific metric to query, including a user-defined name, the base metric type, and optional filters.",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Required. The user-defined name for this metric. This name will be used as the key for this metric's value in the response."
+        },
+        "filter": {
+          "type": "string",
+          "description": "Optional. Optional filters to apply to the metric."
+        },
+        "baseMetric": {
+          "description": "Required. The underlying metric to query.",
+          "$ref": "BaseMetric"
+        }
+      },
+      "type": "object",
+      "id": "MetricDefinition"
+    },
+    "BatchQueryDomainStatsResult": {
+      "description": "Represents the result of a single QueryDomainStatsRequest within a batch.",
+      "type": "object",
+      "properties": {
+        "error": {
+          "$ref": "Status",
+          "description": "The error status if the individual query failed."
+        },
+        "response": {
+          "description": "The successful response for the individual query.",
+          "$ref": "QueryDomainStatsResponse"
+        }
+      },
+      "id": "BatchQueryDomainStatsResult"
+    },
+    "CreateDomainRequest": {
+      "properties": {
+        "domainId": {
+          "description": "Required. The domain to add. e.g., \"example.com\"",
+          "type": "string"
+        }
+      },
+      "description": "[Developer Preview](https://developers.google.com/workspace/preview): Request message for CreateDomain.",
+      "type": "object",
+      "id": "CreateDomainRequest"
+    },
+    "DomainStat": {
+      "properties": {
+        "date": {
+          "$ref": "Date",
+          "description": "Optional. The specific date for these stats, if granularity is DAILY. This field is populated if the QueryDomainStatsRequest specified a DAILY aggregation granularity."
+        },
+        "metric": {
+          "type": "string",
+          "description": "The user-defined name from MetricDefinition.name in the request, used to correlate this result with the requested metric."
+        },
+        "value": {
+          "$ref": "StatisticValue",
+          "description": "The value of the corresponding metric."
+        },
+        "name": {
+          "type": "string",
+          "readOnly": true,
+          "description": "Output only. The resource name of the DomainStat resource. Format: domains/{domain}/domainStats/{domain_stat} The `{domain_stat}` segment is an opaque, server-generated ID. We recommend using the `metric` field to identify queried metrics instead of parsing the name."
+        }
+      },
+      "type": "object",
+      "id": "DomainStat",
+      "description": "Email statistics for a domain for a specified time period or date."
+    },
     "VerifyDomainRequest": {
       "description": "[Developer Preview](https://developers.google.com/workspace/preview): Request message for VerifyDomain.",
-      "id": "VerifyDomainRequest",
-      "type": "object",
       "properties": {
         "verificationMethod": {
           "description": "Required. The verification method used. Must be specified, i.e. TXT or CNAME.",
@@ -89,230 +722,111 @@
             "Generate a DNS TXT verification token.",
             "Generate a DNS CNAME verification token."
           ],
-          "type": "string",
           "enum": [
             "DOMAIN_VERIFICATION_METHOD_UNSPECIFIED",
             "TXT",
             "CNAME"
-          ]
-        }
-      }
-    },
-    "User": {
-      "description": "[Developer Preview](https://developers.google.com/workspace/preview): Information about a user's access to a domain.",
-      "type": "object",
-      "properties": {
-        "name": {
-          "type": "string",
-          "description": "Identifier. The resource name of the user. Format: users/{user} Note: {user} is the user's email address."
-        },
-        "user": {
-          "type": "string",
-          "description": "The user's email address."
-        },
-        "permission": {
-          "type": "string",
-          "enum": [
-            "PERMISSION_UNSPECIFIED",
-            "READER",
-            "ADMIN",
-            "OWNER",
-            "NONE"
           ],
-          "enumDescriptions": [
-            "Unspecified permission.",
-            "User has read access to the domain.",
-            "User has admin access to the domain.",
-            "User has owner access to the domain.",
-            "User has no access to the domain."
-          ],
-          "description": "The permission level that the user has for the specified domain."
-        },
-        "createTime": {
-          "readOnly": true,
-          "type": "string",
-          "format": "google-datetime",
-          "description": "Output only. The time the user was granted access."
-        },
-        "accessGranter": {
-          "type": "string",
-          "description": "Output only. The user that added the current user.",
-          "readOnly": true
-        }
-      },
-      "id": "User"
-    },
-    "DateList": {
-      "properties": {
-        "dates": {
-          "type": "array",
-          "items": {
-            "$ref": "Date"
-          },
-          "description": "Required. The list of specific dates for which to retrieve data."
+          "type": "string"
         }
       },
       "type": "object",
-      "description": "A set of specific dates.",
-      "id": "DateList"
-    },
-    "CreateDomainRequest": {
-      "type": "object",
-      "description": "[Developer Preview](https://developers.google.com/workspace/preview): Request message for CreateDomain.",
-      "id": "CreateDomainRequest",
-      "properties": {
-        "domainId": {
-          "type": "string",
-          "description": "Required. The domain to add. e.g., \"example.com\""
-        }
-      }
-    },
-    "OneClickUnsubscribeVerdict": {
-      "properties": {
-        "status": {
-          "description": "The compliance status.",
-          "$ref": "ComplianceStatus"
-        },
-        "reason": {
-          "description": "The specific reason for the compliance verdict. Must be empty if the status is compliant.",
-          "enumDescriptions": [
-            "Unspecified.",
-            "Sender does not support one-click unsubscribe for the majority of their messages.",
-            "Sender does not support one-click unsubscribe for most messages that are manually reported as spam.",
-            "Sender does not support one-click unsubscribe for most promotional messages that are manually reported as spam. This classification of messages is a subset of those encompassed by `NO_UNSUB_SPAM_REPORTS`."
-          ],
-          "type": "string",
-          "enum": [
-            "REASON_UNSPECIFIED",
-            "NO_UNSUB_GENERAL",
-            "NO_UNSUB_SPAM_REPORTS",
-            "NO_UNSUB_PROMO_SPAM_REPORTS"
-          ]
-        }
-      },
-      "type": "object",
-      "description": "Compliance verdict for whether a sender meets the one-click unsubscribe compliance requirement.",
-      "id": "OneClickUnsubscribeVerdict"
+      "id": "VerifyDomainRequest"
     },
     "DateRange": {
-      "description": "A single date range defined by a start and end date.",
-      "type": "object",
       "properties": {
         "start": {
-          "description": "Required. The inclusive start date of the date range.",
-          "$ref": "Date"
+          "$ref": "Date",
+          "description": "Required. The inclusive start date of the date range."
         },
         "end": {
-          "$ref": "Date",
-          "description": "Required. The inclusive end date of the date range."
-        }
-      },
-      "id": "DateRange"
-    },
-    "ListUsersResponse": {
-      "type": "object",
-      "id": "ListUsersResponse",
-      "description": "[Developer Preview](https://developers.google.com/workspace/preview): Response message for ListUsers.",
-      "properties": {
-        "nextPageToken": {
-          "type": "string",
-          "description": "Token to retrieve the next page of results, or empty if there are no more results in the list."
-        },
-        "users": {
-          "items": {
-            "$ref": "User"
-          },
-          "description": "The users that have access to the domain.",
-          "type": "array"
-        }
-      }
-    },
-    "DeliverabilityStatusVerdict": {
-      "id": "DeliverabilityStatusVerdict",
-      "properties": {
-        "reason": {
-          "enumDescriptions": [
-            "Unspecified.",
-            "Not enough outgoing email.",
-            "Many messages with delivery errors.",
-            "The sender does not meet the sender requirements.",
-            "The spam rate is above 0.1%.",
-            "Indicates users do not want to receive email messages.",
-            "Users do not take action on messages.",
-            "Users signal they want to receive email messages."
-          ],
-          "description": "Output only. The specific reason for the compliance verdict.",
-          "type": "string",
-          "enum": [
-            "REASON_UNSPECIFIED",
-            "MESSAGE_VOLUME_LOW",
-            "SMTP_ERRORS_HIGH",
-            "SENDER_NOT_COMPLIANT",
-            "SPAM_RATE_HIGH",
-            "USER_FEEDBACK_NEGATIVE",
-            "USER_FEEDBACK_LOW",
-            "USER_FEEDBACK_POSITIVE"
-          ],
-          "readOnly": true
-        },
-        "state": {
-          "description": "Output only. The compliance state.",
-          "readOnly": true,
-          "$ref": "ComplianceStatus"
+          "description": "Required. The inclusive end date of the date range.",
+          "$ref": "Date"
         }
       },
       "type": "object",
-      "description": "[Developer Preview](https://developers.google.com/workspace/preview): Verdict of domain deliverability status."
+      "id": "DateRange",
+      "description": "A single date range defined by a start and end date."
     },
-    "Empty": {
-      "description": "A generic empty message that you can re-use to avoid defining duplicated empty messages in your APIs. A typical example is to use it as the request or the response type of an API method. For instance: service Foo { rpc Bar(google.protobuf.Empty) returns (google.protobuf.Empty); }",
-      "type": "object",
-      "id": "Empty",
-      "properties": {}
-    },
-    "ListDomainsResponse": {
-      "type": "object",
-      "id": "ListDomainsResponse",
-      "description": "Response message for ListDomains.",
+    "Date": {
+      "description": "Represents a whole or partial calendar date, such as a birthday. The time of day and time zone are either specified elsewhere or are insignificant. The date is relative to the Gregorian Calendar. This can represent one of the following: * A full date, with non-zero year, month, and day values. * A month and day, with a zero year (for example, an anniversary). * A year on its own, with a zero month and a zero day. * A year and month, with a zero day (for example, a credit card expiration date). Related types: * google.type.TimeOfDay * google.type.DateTime * google.protobuf.Timestamp",
       "properties": {
-        "domains": {
-          "items": {
-            "$ref": "Domain"
-          },
-          "description": "The domains that have been registered by the user.",
-          "type": "array"
+        "year": {
+          "type": "integer",
+          "format": "int32",
+          "description": "Year of the date. Must be from 1 to 9999, or 0 to specify a date without a year."
         },
-        "nextPageToken": {
-          "type": "string",
-          "description": "Token to retrieve the next page of results, or empty if there are no more results in the list."
+        "day": {
+          "format": "int32",
+          "description": "Day of a month. Must be from 1 to 31 and valid for the year and month, or 0 to specify a year by itself or a year and month where the day isn't significant.",
+          "type": "integer"
+        },
+        "month": {
+          "format": "int32",
+          "type": "integer",
+          "description": "Month of a year. Must be from 1 to 12, or 0 to specify a year without a month and day."
         }
-      }
+      },
+      "id": "Date",
+      "type": "object"
     },
-    "BatchQueryDomainStatsRequest": {
-      "id": "BatchQueryDomainStatsRequest",
-      "type": "object",
+    "Status": {
+      "description": "The `Status` type defines a logical error model that is suitable for different programming environments, including REST APIs and RPC APIs. It is used by [gRPC](https://github.com/grpc). Each `Status` message contains three pieces of data: error code, error message, and error details. You can find out more about this error model and how to work with it in the [API Design Guide](https://cloud.google.com/apis/design/errors).",
       "properties": {
-        "requests": {
+        "message": {
+          "description": "A developer-facing error message, which should be in English. Any user-facing error message should be localized and sent in the google.rpc.Status.details field, or localized by the client.",
+          "type": "string"
+        },
+        "details": {
+          "description": "A list of messages that carry the error details. There is a common set of message types for APIs to use.",
           "type": "array",
           "items": {
-            "$ref": "QueryDomainStatsRequest"
-          },
-          "description": "Required. A list of individual query requests. Each request can be for a different domain. A maximum of 100 requests can be included in a single batch."
+            "type": "object",
+            "additionalProperties": {
+              "type": "any",
+              "description": "Properties of the object. Contains field @type with type URL."
+            }
+          }
+        },
+        "code": {
+          "description": "The status code, which should be an enum value of google.rpc.Code.",
+          "type": "integer",
+          "format": "int32"
         }
       },
-      "description": "Request message for BatchQueryDomainStats."
-    },
-    "VerifyDomainResponse": {
-      "properties": {},
-      "description": "[Developer Preview](https://developers.google.com/workspace/preview): Response message for VerifyDomain.",
-      "type": "object",
-      "id": "VerifyDomainResponse"
+      "id": "Status",
+      "type": "object"
     },
     "QueryDomainStatsRequest": {
-      "type": "object",
+      "description": "Request message for QueryDomainStats.",
       "id": "QueryDomainStatsRequest",
       "properties": {
+        "pageSize": {
+          "type": "integer",
+          "description": "Optional. The maximum number of DomainStats resources to return in the response. The server may return fewer than this value. If unspecified, a default value of 10 will be used. The maximum value is 200.",
+          "format": "int32"
+        },
+        "timeQuery": {
+          "description": "Required. The time range or specific dates for which to retrieve the metrics.",
+          "$ref": "TimeQuery"
+        },
+        "pageToken": {
+          "description": "Optional. The next_page_token value returned from a previous List request, if any. If the aggregation granularity is DAILY, the page token will be the encoded date + \"/\" + metric name. If the aggregation granularity is OVERALL, the page token will be the encoded metric name.",
+          "type": "string"
+        },
+        "parent": {
+          "description": "Required. The parent resource name where the stats are queried. Format: domains/{domain}",
+          "type": "string"
+        },
+        "metricDefinitions": {
+          "type": "array",
+          "items": {
+            "$ref": "MetricDefinition"
+          },
+          "description": "Required. The specific metrics to query. You can define a custom name for each metric, which will be used in the response."
+        },
         "aggregationGranularity": {
+          "description": "Optional. The granularity at which to aggregate the statistics. If unspecified, defaults to DAILY.",
           "type": "string",
           "enum": [
             "AGGREGATION_GRANULARITY_UNSPECIFIED",
@@ -323,370 +837,24 @@
             "Unspecified granularity. Defaults to DAILY.",
             "Statistics are aggregated on a daily basis. Each DomainStats entry in the response will correspond to a single day.",
             "Statistics are aggregated over the entire requested time period. Each DomainStats entry in the response will represent the total for the period."
-          ],
-          "description": "Optional. The granularity at which to aggregate the statistics. If unspecified, defaults to DAILY."
-        },
-        "parent": {
-          "type": "string",
-          "description": "Required. The parent resource name where the stats are queried. Format: domains/{domain}"
-        },
-        "timeQuery": {
-          "$ref": "TimeQuery",
-          "description": "Required. The time range or specific dates for which to retrieve the metrics."
-        },
-        "pageToken": {
-          "description": "Optional. The next_page_token value returned from a previous List request, if any. If the aggregation granularity is DAILY, the page token will be the encoded date + \"/\" + metric name. If the aggregation granularity is OVERALL, the page token will be the encoded metric name.",
-          "type": "string"
-        },
-        "pageSize": {
-          "description": "Optional. The maximum number of DomainStats resources to return in the response. The server may return fewer than this value. If unspecified, a default value of 10 will be used. The maximum value is 200.",
-          "type": "integer",
-          "format": "int32"
-        },
-        "metricDefinitions": {
-          "type": "array",
-          "description": "Required. The specific metrics to query. You can define a custom name for each metric, which will be used in the response.",
-          "items": {
-            "$ref": "MetricDefinition"
-          }
-        }
-      },
-      "description": "Request message for QueryDomainStats."
-    },
-    "StringList": {
-      "id": "StringList",
-      "properties": {
-        "values": {
-          "description": "The string values.",
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
-        }
-      },
-      "description": "Represents a list of strings.",
-      "type": "object"
-    },
-    "StatisticValue": {
-      "type": "object",
-      "description": "The actual value of a statistic.",
-      "id": "StatisticValue",
-      "properties": {
-        "intValue": {
-          "type": "string",
-          "format": "int64",
-          "description": "Integer value."
-        },
-        "stringList": {
-          "description": "List of string values.",
-          "$ref": "StringList"
-        },
-        "doubleValue": {
-          "type": "number",
-          "format": "double",
-          "description": "Double value."
-        },
-        "floatValue": {
-          "format": "float",
-          "type": "number",
-          "description": "Float value."
-        },
-        "stringValue": {
-          "type": "string",
-          "description": "String value."
-        }
-      }
-    },
-    "MetricDefinition": {
-      "type": "object",
-      "id": "MetricDefinition",
-      "properties": {
-        "filter": {
-          "type": "string",
-          "description": "Optional. Optional filters to apply to the metric."
-        },
-        "baseMetric": {
-          "description": "Required. The underlying metric to query.",
-          "$ref": "BaseMetric"
-        },
-        "name": {
-          "type": "string",
-          "description": "Required. The user-defined name for this metric. This name will be used as the key for this metric's value in the response."
-        }
-      },
-      "description": "Defines a specific metric to query, including a user-defined name, the base metric type, and optional filters."
-    },
-    "DomainStat": {
-      "description": "Email statistics for a domain for a specified time period or date.",
-      "properties": {
-        "name": {
-          "readOnly": true,
-          "type": "string",
-          "description": "Output only. The resource name of the DomainStat resource. Format: domains/{domain}/domainStats/{domain_stat} The `{domain_stat}` segment is an opaque, server-generated ID. We recommend using the `metric` field to identify queried metrics instead of parsing the name."
-        },
-        "date": {
-          "$ref": "Date",
-          "description": "Optional. The specific date for these stats, if granularity is DAILY. This field is populated if the QueryDomainStatsRequest specified a DAILY aggregation granularity."
-        },
-        "value": {
-          "description": "The value of the corresponding metric.",
-          "$ref": "StatisticValue"
-        },
-        "metric": {
-          "description": "The user-defined name from MetricDefinition.name in the request, used to correlate this result with the requested metric.",
-          "type": "string"
-        }
-      },
-      "type": "object",
-      "id": "DomainStat"
-    },
-    "ComplianceRowData": {
-      "description": "Data for a single row of the compliance status table.",
-      "properties": {
-        "requirement": {
-          "type": "string",
-          "enum": [
-            "COMPLIANCE_REQUIREMENT_UNSPECIFIED",
-            "SPF",
-            "DKIM",
-            "SPF_AND_DKIM",
-            "DMARC_POLICY",
-            "DMARC_ALIGNMENT",
-            "MESSAGE_FORMATTING",
-            "DNS_RECORDS",
-            "ENCRYPTION",
-            "USER_REPORTED_SPAM_RATE",
-            "ONE_CLICK_UNSUBSCRIBE",
-            "HONOR_UNSUBSCRIBE"
-          ],
-          "description": "The compliance requirement.",
-          "enumDescriptions": [
-            "Unspecified.",
-            "Whether the sender has properly configured SPF.",
-            "Whether the sender has properly configured DKIM.",
-            "Whether the sender has properly configured both SPF and DKIM.",
-            "Whether the sender has configured DMARC policy.",
-            "Whether the From: header is aligned with DKIM or SPF",
-            "Whether messages are correctly formatted according to RFC 5322.",
-            "Whether the domain has forward and reverse DNS records.",
-            "Whether messages has TLS encryption.",
-            "Whether the sender is below a threshold for user-reported spam rate.",
-            "Whether the sender sufficiently supports one-click unsubscribe. Note that the user-facing requirement is \"one-click unsubscribe\", but we require satisfaction of multiple \"unsubscribe support\" rules.",
-            "Whether the sender honors user-initiated unsubscribe requests."
-          ]
-        },
-        "status": {
-          "$ref": "ComplianceStatus",
-          "description": "The compliance status for the requirement."
-        }
-      },
-      "id": "ComplianceRowData",
-      "type": "object"
-    },
-    "TimeQuery": {
-      "description": "The date ranges or specific dates for which you want to retrieve data.",
-      "id": "TimeQuery",
-      "properties": {
-        "dateRanges": {
-          "$ref": "DateRanges",
-          "description": "A list of date ranges."
-        },
-        "dateList": {
-          "$ref": "DateList",
-          "description": "A list of specific dates."
-        }
-      },
-      "type": "object"
-    },
-    "DomainComplianceStatus": {
-      "id": "DomainComplianceStatus",
-      "description": "Compliance status for a domain.",
-      "type": "object",
-      "properties": {
-        "subdomainComplianceData": {
-          "$ref": "DomainComplianceData",
-          "description": "Compliance data calculated specifically for the subdomain in `name`. This field is only populated if the domain in `name` is a subdomain that differs from its registrable domain (e.g., `sub.example.com`), and if compliance data is available for that specific subdomain."
-        },
-        "name": {
-          "description": "Identifier. The resource name of the domain's compliance status. Format: `domains/{domain_id}/complianceStatus`.",
-          "type": "string"
-        },
-        "complianceData": {
-          "$ref": "DomainComplianceData",
-          "description": "Compliance data for the registrable domain part of the domain in `name`. For example, if `name` is `domains/example.com/complianceStatus`, this field contains compliance data for `example.com`."
-        }
-      }
-    },
-    "ComplianceStatus": {
-      "id": "ComplianceStatus",
-      "description": "The status of a sender compliance requirement.",
-      "properties": {
-        "status": {
-          "readOnly": true,
-          "description": "Output only. The compliance status.",
-          "type": "string",
-          "enum": [
-            "STATE_UNSPECIFIED",
-            "COMPLIANT",
-            "NEEDS_WORK"
-          ],
-          "enumDescriptions": [
-            "Unspecified.",
-            "The compliance requirement is met, and the sender is deemed compliant.",
-            "The compliance requirement is unmet, and the sender needs to do work to achieve compliance."
           ]
         }
       },
       "type": "object"
     },
-    "DomainVerificationToken": {
-      "id": "DomainVerificationToken",
-      "properties": {
-        "name": {
-          "description": "Identifier. The resource name of the domain verification token. Format: domains/{domain}/verificationToken",
-          "type": "string"
-        },
-        "token": {
-          "description": "The verification token.",
-          "type": "string"
-        },
-        "verificationMethod": {
-          "type": "string",
-          "enum": [
-            "DOMAIN_VERIFICATION_METHOD_UNSPECIFIED",
-            "TXT",
-            "CNAME"
-          ],
-          "description": "The verification method used.",
-          "enumDescriptions": [
-            "Unspecified.",
-            "Generate a DNS TXT verification token.",
-            "Generate a DNS CNAME verification token."
-          ]
-        }
-      },
-      "description": "[Developer Preview](https://developers.google.com/workspace/preview): The DNS token a user can use to verify ownership of a domain.",
-      "type": "object"
-    },
-    "CreateUserRequest": {
+    "Empty": {
+      "id": "Empty",
+      "description": "A generic empty message that you can re-use to avoid defining duplicated empty messages in your APIs. A typical example is to use it as the request or the response type of an API method. For instance: service Foo { rpc Bar(google.protobuf.Empty) returns (google.protobuf.Empty); }",
       "type": "object",
-      "id": "CreateUserRequest",
-      "description": "[Developer Preview](https://developers.google.com/workspace/preview): Request message for CreateUser.",
-      "properties": {
-        "userId": {
-          "description": "Required. The user to create.",
-          "type": "string"
-        },
-        "permission": {
-          "enumDescriptions": [
-            "Unspecified permission.",
-            "User has read access to the domain.",
-            "User has admin access to the domain.",
-            "User has owner access to the domain.",
-            "User has no access to the domain."
-          ],
-          "description": "Optional. Specifies the permission level to give the user for the specified domain. If not specified, the default value for this field is READER.",
-          "type": "string",
-          "enum": [
-            "PERMISSION_UNSPECIFIED",
-            "READER",
-            "ADMIN",
-            "OWNER",
-            "NONE"
-          ]
-        }
-      }
-    },
-    "Status": {
-      "type": "object",
-      "id": "Status",
-      "properties": {
-        "message": {
-          "description": "A developer-facing error message, which should be in English. Any user-facing error message should be localized and sent in the google.rpc.Status.details field, or localized by the client.",
-          "type": "string"
-        },
-        "details": {
-          "items": {
-            "additionalProperties": {
-              "description": "Properties of the object. Contains field @type with type URL.",
-              "type": "any"
-            },
-            "type": "object"
-          },
-          "type": "array",
-          "description": "A list of messages that carry the error details. There is a common set of message types for APIs to use."
-        },
-        "code": {
-          "format": "int32",
-          "type": "integer",
-          "description": "The status code, which should be an enum value of google.rpc.Code."
-        }
-      },
-      "description": "The `Status` type defines a logical error model that is suitable for different programming environments, including REST APIs and RPC APIs. It is used by [gRPC](https://github.com/grpc). Each `Status` message contains three pieces of data: error code, error message, and error details. You can find out more about this error model and how to work with it in the [API Design Guide](https://cloud.google.com/apis/design/errors)."
-    },
-    "HonorUnsubscribeVerdict": {
-      "id": "HonorUnsubscribeVerdict",
-      "type": "object",
-      "properties": {
-        "status": {
-          "$ref": "ComplianceStatus",
-          "description": "The compliance status."
-        },
-        "reason": {
-          "description": "The specific reason for the compliance verdict. Must be empty if the status is compliant.",
-          "type": "string",
-          "enum": [
-            "REASON_UNSPECIFIED",
-            "NOT_HONORING",
-            "NOT_HONORING_TOO_FEW_CAMPAIGNS",
-            "NOT_HONORING_TOO_MANY_CAMPAIGNS"
-          ],
-          "enumDescriptions": [
-            "Unspecified.",
-            "The sender does not honor unsubscribe requests.",
-            "The sender does not honor unsubscribe requests and consider to increase the number of relevant campaigns.",
-            "The sender does not honor unsubscribe requests and consider to reduce the number of relevant campaigns."
-          ]
-        }
-      },
-      "description": "Compliance verdict for whether a sender meets the unsubscribe honoring compliance requirement."
-    },
-    "QueryDomainStatsResponse": {
-      "type": "object",
-      "properties": {
-        "domainStats": {
-          "description": "The list of domain statistics. Each DomainStat object contains the value for a metric requested in the QueryDomainStatsRequest.",
-          "items": {
-            "$ref": "DomainStat"
-          },
-          "type": "array"
-        },
-        "nextPageToken": {
-          "type": "string",
-          "description": "Token to retrieve the next page of results, or empty if there are no more results in the list."
-        }
-      },
-      "id": "QueryDomainStatsResponse",
-      "description": "Response message for QueryDomainStats."
-    },
-    "BatchQueryDomainStatsResponse": {
-      "type": "object",
-      "properties": {
-        "results": {
-          "description": "A list of responses, one for each query in the BatchQueryDomainStatsRequest. The order of responses will correspond to the order of requests.",
-          "items": {
-            "$ref": "BatchQueryDomainStatsResult"
-          },
-          "type": "array"
-        }
-      },
-      "id": "BatchQueryDomainStatsResponse",
-      "description": "Response message for BatchQueryDomainStats."
+      "properties": {}
     },
     "BaseMetric": {
-      "id": "BaseMetric",
+      "description": "Specifies the base metric to query, which can be a predefined standard metric or a user-defined custom metric (if supported in the future).",
+      "type": "object",
       "properties": {
         "standardMetric": {
+          "description": "A predefined standard metric.",
+          "type": "string",
           "enumDescriptions": [
             "Unspecified standard metric. This value should not be used directly.",
             "Predefined metric for Feedback Loop (FBL) id. The `filter` field supports selecting the aggregation key type. Supported format: `aggregation_key_type` = \"\". Supported values: * `FROM_HEADER`: (Default) The metric includes messages with From: header domain matching the requested domain. * `ALL_DKIM`: The metric includes messages with one of the signed DKIM domains matching the requested domain.",
@@ -698,8 +866,6 @@
             "The total count of delivery errors encountered (temporary or permanent rejects). The `filter` field supports a limited syntax. Supported formats are: * Empty: No filter is applied. * `error_type` = \"\" * `error_type` = \"\" AND `error_reason` = \"\" If an empty filter is provided, the metric will be aggregated across all error types and reasons. If only `error_type` is specified, the metric will be aggregated across all reasons for that type. Supported values: * reject * temp_fail Supported values depend on the : * For 'reject': [bad_attachment, bad_or_missing_ptr_record, ip_in_rbls, low_domain_reputation, low_ip_reputation, spammy_content, stamp_policy_error, other] * For 'temp_fail': [anomalous_traffic_pattern, other]",
             "Delivery error rate for the specified delivery error type. The `filter` field supports a limited syntax. Supported formats are: * Empty: No filter is applied. * `error_type` = \"\" * `error_type` = \"\" AND `error_reason` = \"\" If an empty filter is provided, the metric will be aggregated across all error types and reasons. If only `error_type` is specified, the metric will be aggregated across all reasons for that type. Supported values: * reject * temp_fail Supported values depend on the : * For 'reject': [bad_attachment, bad_or_missing_ptr_record, ip_in_rbls, low_domain_reputation, low_ip_reputation, spammy_content, stamp_policy_error, other] * For 'temp_fail': [anomalous_traffic_pattern, other]"
           ],
-          "description": "A predefined standard metric.",
-          "type": "string",
           "enum": [
             "STANDARD_METRIC_UNSPECIFIED",
             "FEEDBACK_LOOP_ID",
@@ -713,81 +879,11 @@
           ]
         }
       },
-      "type": "object",
-      "description": "Specifies the base metric to query, which can be a predefined standard metric or a user-defined custom metric (if supported in the future)."
-    },
-    "Date": {
-      "description": "Represents a whole or partial calendar date, such as a birthday. The time of day and time zone are either specified elsewhere or are insignificant. The date is relative to the Gregorian Calendar. This can represent one of the following: * A full date, with non-zero year, month, and day values. * A month and day, with a zero year (for example, an anniversary). * A year on its own, with a zero month and a zero day. * A year and month, with a zero day (for example, a credit card expiration date). Related types: * google.type.TimeOfDay * google.type.DateTime * google.protobuf.Timestamp",
-      "type": "object",
-      "id": "Date",
-      "properties": {
-        "year": {
-          "format": "int32",
-          "type": "integer",
-          "description": "Year of the date. Must be from 1 to 9999, or 0 to specify a date without a year."
-        },
-        "month": {
-          "type": "integer",
-          "format": "int32",
-          "description": "Month of a year. Must be from 1 to 12, or 0 to specify a year without a month and day."
-        },
-        "day": {
-          "type": "integer",
-          "description": "Day of a month. Must be from 1 to 31 and valid for the year and month, or 0 to specify a year by itself or a year and month where the day isn't significant.",
-          "format": "int32"
-        }
-      }
-    },
-    "BatchQueryDomainStatsResult": {
-      "id": "BatchQueryDomainStatsResult",
-      "description": "Represents the result of a single QueryDomainStatsRequest within a batch.",
-      "type": "object",
-      "properties": {
-        "response": {
-          "description": "The successful response for the individual query.",
-          "$ref": "QueryDomainStatsResponse"
-        },
-        "error": {
-          "description": "The error status if the individual query failed.",
-          "$ref": "Status"
-        }
-      }
-    },
-    "DomainComplianceData": {
-      "type": "object",
-      "properties": {
-        "domainId": {
-          "description": "Domain that this data is for.",
-          "type": "string"
-        },
-        "honorUnsubscribeVerdict": {
-          "$ref": "HonorUnsubscribeVerdict",
-          "description": "Unsubscribe honoring compliance verdict."
-        },
-        "oneClickUnsubscribeVerdict": {
-          "description": "One-click unsubscribe compliance verdict.",
-          "$ref": "OneClickUnsubscribeVerdict"
-        },
-        "rowData": {
-          "description": "Data for each of the rows of the table. Each message contains all the data that backs a single row.",
-          "type": "array",
-          "items": {
-            "$ref": "ComplianceRowData"
-          }
-        },
-        "deliverabilityStatusVerdict": {
-          "readOnly": true,
-          "description": "Output only. Deliverability status verdict.",
-          "$ref": "DeliverabilityStatusVerdict"
-        }
-      },
-      "description": "Compliance data for a given domain.",
-      "id": "DomainComplianceData"
+      "id": "BaseMetric"
     },
     "DateRanges": {
-      "type": "object",
       "description": "A set of date ranges.",
-      "id": "DateRanges",
+      "type": "object",
       "properties": {
         "dateRanges": {
           "type": "array",
@@ -796,23 +892,19 @@
             "$ref": "DateRange"
           }
         }
-      }
+      },
+      "id": "DateRanges"
     },
-    "Domain": {
-      "description": "Information about a domain registered by the user.",
-      "type": "object",
+    "CreateUserRequest": {
+      "description": "[Developer Preview](https://developers.google.com/workspace/preview): Request message for CreateUser.",
       "properties": {
-        "name": {
-          "description": "Identifier. The resource name of the domain. Format: `domains/{domain_name}`, where domain_name is the fully qualified domain name (i.e., mymail.mydomain.com).",
+        "userId": {
+          "description": "Required. The user to create.",
           "type": "string"
         },
-        "lastVerifyTime": {
-          "type": "string",
-          "description": "The timestamp at which the domain was last verified by the user.",
-          "format": "google-datetime"
-        },
         "permission": {
-          "description": "Output only. User's permission of this domain.",
+          "description": "Optional. Specifies the permission level to give the user for the specified domain. If not specified, the default value for this field is READER.",
+          "type": "string",
           "enumDescriptions": [
             "Unspecified permission.",
             "User has read access to the domain.",
@@ -820,8 +912,6 @@
             "User has owner access to the domain.",
             "User has no access to the domain."
           ],
-          "readOnly": true,
-          "type": "string",
           "enum": [
             "PERMISSION_UNSPECIFIED",
             "READER",
@@ -829,454 +919,307 @@
             "OWNER",
             "NONE"
           ]
+        }
+      },
+      "type": "object",
+      "id": "CreateUserRequest"
+    },
+    "User": {
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Identifier. The resource name of the user. Format: users/{user} Note: {user} is the user's email address."
         },
         "createTime": {
+          "type": "string",
+          "description": "Output only. The time the user was granted access.",
+          "format": "google-datetime",
+          "readOnly": true
+        },
+        "accessGranter": {
           "readOnly": true,
           "type": "string",
-          "description": "Output only. Immutable. The timestamp at which the domain was added to the user's account.",
-          "format": "google-datetime"
+          "description": "Output only. The user that added the current user."
         },
-        "verificationState": {
+        "permission": {
+          "description": "The permission level that the user has for the specified domain.",
+          "enum": [
+            "PERMISSION_UNSPECIFIED",
+            "READER",
+            "ADMIN",
+            "OWNER",
+            "NONE"
+          ],
+          "enumDescriptions": [
+            "Unspecified permission.",
+            "User has read access to the domain.",
+            "User has admin access to the domain.",
+            "User has owner access to the domain.",
+            "User has no access to the domain."
+          ],
+          "type": "string"
+        },
+        "user": {
+          "description": "The user's email address.",
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "id": "User",
+      "description": "[Developer Preview](https://developers.google.com/workspace/preview): Information about a user's access to a domain."
+    },
+    "ComplianceRowData": {
+      "description": "Data for a single row of the compliance status table.",
+      "type": "object",
+      "id": "ComplianceRowData",
+      "properties": {
+        "requirement": {
+          "type": "string",
           "enumDescriptions": [
             "Unspecified.",
-            "The domain is unverified.",
-            "The domain is verified."
+            "Whether the sender has properly configured SPF.",
+            "Whether the sender has properly configured DKIM.",
+            "Whether the sender has properly configured both SPF and DKIM.",
+            "Whether the sender has configured DMARC policy.",
+            "Whether the From: header is aligned with DKIM or SPF",
+            "Whether messages are correctly formatted according to RFC 5322.",
+            "Whether the domain has forward and reverse DNS records.",
+            "Whether messages has TLS encryption.",
+            "Whether the sender is below a threshold for user-reported spam rate.",
+            "Whether the sender sufficiently supports one-click unsubscribe. Note that the user-facing requirement is \"one-click unsubscribe\", but we require satisfaction of multiple \"unsubscribe support\" rules.",
+            "Whether the sender honors user-initiated unsubscribe requests."
           ],
-          "description": "Output only. Information about a user's verification history and properties for the domain.",
-          "readOnly": true,
-          "type": "string",
+          "description": "The compliance requirement.",
           "enum": [
-            "VERIFICATION_STATE_UNSPECIFIED",
-            "UNVERIFIED",
-            "VERIFIED"
+            "COMPLIANCE_REQUIREMENT_UNSPECIFIED",
+            "SPF",
+            "DKIM",
+            "SPF_AND_DKIM",
+            "DMARC_POLICY",
+            "DMARC_ALIGNMENT",
+            "MESSAGE_FORMATTING",
+            "DNS_RECORDS",
+            "ENCRYPTION",
+            "USER_REPORTED_SPAM_RATE",
+            "ONE_CLICK_UNSUBSCRIBE",
+            "HONOR_UNSUBSCRIBE"
+          ]
+        },
+        "status": {
+          "description": "The compliance status for the requirement.",
+          "$ref": "ComplianceStatus"
+        }
+      }
+    },
+    "OneClickUnsubscribeVerdict": {
+      "id": "OneClickUnsubscribeVerdict",
+      "properties": {
+        "status": {
+          "$ref": "ComplianceStatus",
+          "description": "The compliance status."
+        },
+        "reason": {
+          "type": "string",
+          "description": "The specific reason for the compliance verdict. Must be empty if the status is compliant.",
+          "enum": [
+            "REASON_UNSPECIFIED",
+            "NO_UNSUB_GENERAL",
+            "NO_UNSUB_SPAM_REPORTS",
+            "NO_UNSUB_PROMO_SPAM_REPORTS"
+          ],
+          "enumDescriptions": [
+            "Unspecified.",
+            "Sender does not support one-click unsubscribe for the majority of their messages.",
+            "Sender does not support one-click unsubscribe for most messages that are manually reported as spam.",
+            "Sender does not support one-click unsubscribe for most promotional messages that are manually reported as spam. This classification of messages is a subset of those encompassed by `NO_UNSUB_SPAM_REPORTS`."
           ]
         }
       },
-      "id": "Domain"
-    }
-  },
-  "ownerDomain": "google.com",
-  "resources": {
-    "domains": {
-      "resources": {
-        "users": {
-          "methods": {
-            "patch": {
-              "httpMethod": "PATCH",
-              "parameterOrder": [
-                "name"
-              ],
-              "id": "gmailpostmastertools.domains.users.patch",
-              "flatPath": "v2/domains/{domainsId}/users/{usersId}",
-              "response": {
-                "$ref": "User"
-              },
-              "path": "v2/{+name}",
-              "parameters": {
-                "name": {
-                  "location": "path",
-                  "description": "Identifier. The resource name of the user. Format: users/{user} Note: {user} is the user's email address.",
-                  "pattern": "^domains/[^/]+/users/[^/]+$",
-                  "required": true,
-                  "type": "string"
-                },
-                "updateMask": {
-                  "format": "google-fieldmask",
-                  "location": "query",
-                  "description": "The list of fields to update.",
-                  "type": "string"
-                }
-              },
-              "scopes": [
-                "https://www.googleapis.com/auth/postmaster",
-                "https://www.googleapis.com/auth/postmaster.user"
-              ],
-              "description": "[Developer Preview](https://developers.google.com/workspace/preview): Updates a user for a domain. Only Owners and Admins can execute this RPC, only a user's domain permission will be allowed to be updated. Returns NOT_FOUND if the user does not exist. Returns INVALID_ARGUMENT if a permission is not provided or is PERMISSION_UNSPECIFIED, NONE, or OWNER.",
-              "request": {
-                "$ref": "User"
-              }
-            },
-            "list": {
-              "parameterOrder": [
-                "parent"
-              ],
-              "path": "v2/{+parent}/users",
-              "response": {
-                "$ref": "ListUsersResponse"
-              },
-              "scopes": [
-                "https://www.googleapis.com/auth/postmaster",
-                "https://www.googleapis.com/auth/postmaster.user"
-              ],
-              "description": "[Developer Preview](https://developers.google.com/workspace/preview): Lists the users that have access to a domain.",
-              "id": "gmailpostmastertools.domains.users.list",
-              "httpMethod": "GET",
-              "flatPath": "v2/domains/{domainsId}/users",
-              "parameters": {
-                "pageSize": {
-                  "format": "int32",
-                  "description": "Optional. Requested page size. Server may return fewer users than requested. If unspecified, the default value for this field is 10. The maximum value for this field is 200.",
-                  "type": "integer",
-                  "location": "query"
-                },
-                "parent": {
-                  "description": "Required. The parent resource name for which to list users. Format: `domains/{domain}`",
-                  "type": "string",
-                  "pattern": "^domains/[^/]+$",
-                  "location": "path",
-                  "required": true
-                },
-                "pageToken": {
-                  "description": "Optional. The next_page_token value returned from a previous List request, if any.",
-                  "location": "query",
-                  "type": "string"
-                }
-              }
-            },
-            "get": {
-              "response": {
-                "$ref": "User"
-              },
-              "parameterOrder": [
-                "name"
-              ],
-              "flatPath": "v2/domains/{domainsId}/users/{usersId}",
-              "path": "v2/{+name}",
-              "description": "[Developer Preview](https://developers.google.com/workspace/preview): Retrieves detailed information about a user that has access to a domain. Returns NOT_FOUND if the user does not exist.",
-              "httpMethod": "GET",
-              "id": "gmailpostmastertools.domains.users.get",
-              "scopes": [
-                "https://www.googleapis.com/auth/postmaster",
-                "https://www.googleapis.com/auth/postmaster.user"
-              ],
-              "parameters": {
-                "name": {
-                  "type": "string",
-                  "required": true,
-                  "pattern": "^domains/[^/]+/users/[^/]+$",
-                  "description": "Required. The resource name of the user to retrieve. Format: `domains/{domain}/users/{user}`",
-                  "location": "path"
-                }
-              }
-            },
-            "delete": {
-              "parameters": {
-                "name": {
-                  "description": "Required. The resource name of the user to delete. Format: domains/{domain}/users/{user}",
-                  "required": true,
-                  "type": "string",
-                  "location": "path",
-                  "pattern": "^domains/[^/]+/users/[^/]+$"
-                }
-              },
-              "response": {
-                "$ref": "Empty"
-              },
-              "flatPath": "v2/domains/{domainsId}/users/{usersId}",
-              "parameterOrder": [
-                "name"
-              ],
-              "id": "gmailpostmastertools.domains.users.delete",
-              "httpMethod": "DELETE",
-              "path": "v2/{+name}",
-              "description": "[Developer Preview](https://developers.google.com/workspace/preview): Deletes a user from a domain. Returns NOT_FOUND if the user does not exist.",
-              "scopes": [
-                "https://www.googleapis.com/auth/postmaster",
-                "https://www.googleapis.com/auth/postmaster.user"
-              ]
-            },
-            "create": {
-              "response": {
-                "$ref": "User"
-              },
-              "request": {
-                "$ref": "CreateUserRequest"
-              },
-              "flatPath": "v2/domains/{domainsId}/users",
-              "httpMethod": "POST",
-              "parameterOrder": [
-                "parent"
-              ],
-              "scopes": [
-                "https://www.googleapis.com/auth/postmaster",
-                "https://www.googleapis.com/auth/postmaster.user"
-              ],
-              "parameters": {
-                "parent": {
-                  "location": "path",
-                  "type": "string",
-                  "required": true,
-                  "description": "Required. The parent resource where this user will be created. Format: domains/{domain}",
-                  "pattern": "^domains/[^/]+$"
-                }
-              },
-              "id": "gmailpostmastertools.domains.users.create",
-              "description": "[Developer Preview](https://developers.google.com/workspace/preview): Creates a user, who has access to a domain. Returns INVALID_ARGUMENT if a user is not provided.",
-              "path": "v2/{+parent}/users"
-            }
-          }
-        },
-        "domainStats": {
-          "methods": {
-            "query": {
-              "id": "gmailpostmastertools.domains.domainStats.query",
-              "httpMethod": "POST",
-              "parameterOrder": [
-                "parent"
-              ],
-              "request": {
-                "$ref": "QueryDomainStatsRequest"
-              },
-              "path": "v2/{+parent}/domainStats:query",
-              "flatPath": "v2/domains/{domainsId}/domainStats:query",
-              "response": {
-                "$ref": "QueryDomainStatsResponse"
-              },
-              "scopes": [
-                "https://www.googleapis.com/auth/postmaster",
-                "https://www.googleapis.com/auth/postmaster.traffic.readonly"
-              ],
-              "description": "Retrieves a list of domain statistics for a given domain and time period. Returns statistics only for dates where data is available. Returns PERMISSION_DENIED if you don't have permission to access DomainStats for the domain.",
-              "parameters": {
-                "parent": {
-                  "required": true,
-                  "location": "path",
-                  "type": "string",
-                  "description": "Required. The parent resource name where the stats are queried. Format: domains/{domain}",
-                  "pattern": "^domains/[^/]+$"
-                }
-              }
-            }
-          }
+      "description": "Compliance verdict for whether a sender meets the one-click unsubscribe compliance requirement.",
+      "type": "object"
+    },
+    "BatchQueryDomainStatsResponse": {
+      "type": "object",
+      "properties": {
+        "results": {
+          "items": {
+            "$ref": "BatchQueryDomainStatsResult"
+          },
+          "description": "A list of responses, one for each query in the BatchQueryDomainStatsRequest. The order of responses will correspond to the order of requests.",
+          "type": "array"
         }
       },
-      "methods": {
-        "create": {
-          "id": "gmailpostmastertools.domains.create",
-          "flatPath": "v2/domains",
-          "response": {
-            "$ref": "Domain"
+      "description": "Response message for BatchQueryDomainStats.",
+      "id": "BatchQueryDomainStatsResponse"
+    },
+    "BatchQueryDomainStatsRequest": {
+      "id": "BatchQueryDomainStatsRequest",
+      "properties": {
+        "requests": {
+          "items": {
+            "$ref": "QueryDomainStatsRequest"
           },
-          "request": {
-            "$ref": "CreateDomainRequest"
-          },
-          "httpMethod": "POST",
-          "scopes": [
-            "https://www.googleapis.com/auth/postmaster",
-            "https://www.googleapis.com/auth/postmaster.domain"
-          ],
-          "path": "v2/domains",
-          "description": "[Developer Preview](https://developers.google.com/workspace/preview): Adds a domain to the user's account. Returns INVALID_ARGUMENT if a domain is not provided. Returns ALREADY_EXISTS if the domain is already registered by the user.",
-          "parameterOrder": [],
-          "parameters": {}
+          "description": "Required. A list of individual query requests. Each request can be for a different domain. A maximum of 100 requests can be included in a single batch.",
+          "type": "array"
+        }
+      },
+      "description": "Request message for BatchQueryDomainStats.",
+      "type": "object"
+    },
+    "DomainVerificationToken": {
+      "description": "[Developer Preview](https://developers.google.com/workspace/preview): The DNS token a user can use to verify ownership of a domain.",
+      "type": "object",
+      "id": "DomainVerificationToken",
+      "properties": {
+        "token": {
+          "type": "string",
+          "description": "The verification token."
         },
-        "getVerificationToken": {
-          "parameterOrder": [
-            "name"
-          ],
-          "scopes": [
-            "https://www.googleapis.com/auth/postmaster",
-            "https://www.googleapis.com/auth/postmaster.domain"
-          ],
-          "httpMethod": "GET",
-          "description": "[Developer Preview](https://developers.google.com/workspace/preview): Gets a verification token used for verifying a user's ownership over a domain.",
-          "id": "gmailpostmastertools.domains.getVerificationToken",
-          "path": "v2/{+name}",
-          "flatPath": "v2/domains/{domainsId}/verificationToken",
-          "response": {
-            "$ref": "DomainVerificationToken"
-          },
-          "parameters": {
-            "verificationMethod": {
-              "location": "query",
-              "description": "Required. The verification method used. Must be specified, i.e. TXT or CNAME.",
-              "enumDescriptions": [
-                "Unspecified.",
-                "Generate a DNS TXT verification token.",
-                "Generate a DNS CNAME verification token."
-              ],
-              "type": "string",
-              "enum": [
-                "DOMAIN_VERIFICATION_METHOD_UNSPECIFIED",
-                "TXT",
-                "CNAME"
-              ]
-            },
-            "name": {
-              "location": "path",
-              "type": "string",
-              "pattern": "^domains/[^/]+/verificationToken$",
-              "required": true,
-              "description": "Required. The resource name of the verification token to retrieve. Format: `domains/{domain}/verificationToken`"
-            }
-          }
+        "name": {
+          "type": "string",
+          "description": "Identifier. The resource name of the domain verification token. Format: domains/{domain}/verificationToken"
         },
-        "delete": {
-          "httpMethod": "DELETE",
-          "scopes": [
-            "https://www.googleapis.com/auth/postmaster",
-            "https://www.googleapis.com/auth/postmaster.domain"
+        "verificationMethod": {
+          "enum": [
+            "DOMAIN_VERIFICATION_METHOD_UNSPECIFIED",
+            "TXT",
+            "CNAME"
           ],
-          "path": "v2/{+name}",
-          "id": "gmailpostmastertools.domains.delete",
-          "parameterOrder": [
-            "name"
-          ],
-          "parameters": {
-            "name": {
-              "type": "string",
-              "description": "Required. The domain to delete.",
-              "required": true,
-              "location": "path",
-              "pattern": "^domains/[^/]+$"
-            }
-          },
-          "response": {
-            "$ref": "Empty"
-          },
-          "flatPath": "v2/domains/{domainsId}",
-          "description": "[Developer Preview](https://developers.google.com/workspace/preview): Deletes a domain from the user's account. Returns NOT_FOUND if the domain is not registered by the user."
+          "type": "string",
+          "description": "The verification method used.",
+          "enumDescriptions": [
+            "Unspecified.",
+            "Generate a DNS TXT verification token.",
+            "Generate a DNS CNAME verification token."
+          ]
+        }
+      }
+    },
+    "StatisticValue": {
+      "type": "object",
+      "description": "The actual value of a statistic.",
+      "id": "StatisticValue",
+      "properties": {
+        "intValue": {
+          "description": "Integer value.",
+          "format": "int64",
+          "type": "string"
         },
-        "get": {
-          "flatPath": "v2/domains/{domainsId}",
-          "scopes": [
-            "https://www.googleapis.com/auth/postmaster",
-            "https://www.googleapis.com/auth/postmaster.domain"
-          ],
-          "response": {
-            "$ref": "Domain"
-          },
-          "parameters": {
-            "name": {
-              "required": true,
-              "pattern": "^domains/[^/]+$",
-              "description": "Required. The resource name of the domain. Format: `domains/{domain_name}`, where domain_name is the fully qualified domain name (i.e., mymail.mydomain.com).",
-              "location": "path",
-              "type": "string"
-            }
-          },
-          "path": "v2/{+name}",
-          "parameterOrder": [
-            "name"
-          ],
-          "description": "Retrieves detailed information about a domain registered by you. Returns NOT_FOUND if the domain is not registered by you. Domain represents the metadata of a domain that has been registered within the system and linked to a user.",
-          "id": "gmailpostmastertools.domains.get",
-          "httpMethod": "GET"
+        "doubleValue": {
+          "description": "Double value.",
+          "type": "number",
+          "format": "double"
         },
-        "getComplianceStatus": {
-          "parameters": {
-            "name": {
-              "pattern": "^domains/[^/]+/complianceStatus$",
-              "location": "path",
-              "description": "Required. The resource name of the domain's compliance status to retrieve. Format: `domains/{domain_id}/complianceStatus`.",
-              "type": "string",
-              "required": true
-            }
-          },
-          "flatPath": "v2/domains/{domainsId}/complianceStatus",
-          "description": "Retrieves the compliance status for a given domain. Returns PERMISSION_DENIED if you don't have permission to access compliance status for the domain.",
-          "path": "v2/{+name}",
-          "id": "gmailpostmastertools.domains.getComplianceStatus",
-          "response": {
-            "$ref": "DomainComplianceStatus"
-          },
-          "scopes": [
-            "https://www.googleapis.com/auth/postmaster",
-            "https://www.googleapis.com/auth/postmaster.traffic.readonly"
-          ],
-          "parameterOrder": [
-            "name"
-          ],
-          "httpMethod": "GET"
+        "floatValue": {
+          "type": "number",
+          "format": "float",
+          "description": "Float value."
         },
-        "list": {
-          "scopes": [
-            "https://www.googleapis.com/auth/postmaster",
-            "https://www.googleapis.com/auth/postmaster.domain"
-          ],
-          "parameters": {
-            "pageToken": {
-              "description": "Optional. The next_page_token value returned from a previous List request, if any.",
-              "location": "query",
-              "type": "string"
-            },
-            "pageSize": {
-              "format": "int32",
-              "type": "integer",
-              "description": "Optional. Requested page size. Server may return fewer domains than requested. If unspecified, the default value for this field is 10. The maximum value for this field is 200.",
-              "location": "query"
-            }
-          },
-          "path": "v2/domains",
-          "response": {
-            "$ref": "ListDomainsResponse"
-          },
-          "flatPath": "v2/domains",
-          "parameterOrder": [],
-          "id": "gmailpostmastertools.domains.list",
-          "httpMethod": "GET",
-          "description": "Retrieves a list of all domains registered by you, along with their corresponding metadata. The order of domains in the response is unspecified and non-deterministic. Newly registered domains will not necessarily be added to the end of this list."
+        "stringList": {
+          "$ref": "StringList",
+          "description": "List of string values."
         },
-        "verify": {
-          "path": "v2/{+name}:verify",
-          "flatPath": "v2/domains/{domainsId}:verify",
-          "httpMethod": "POST",
-          "response": {
-            "$ref": "VerifyDomainResponse"
-          },
-          "id": "gmailpostmastertools.domains.verify",
-          "request": {
-            "$ref": "VerifyDomainRequest"
-          },
-          "description": "[Developer Preview](https://developers.google.com/workspace/preview): Verifies a user's ownership of a domain at the DNS level. Note that this is distinct from checking if the user has OWNER status within IRDB.",
-          "scopes": [
-            "https://www.googleapis.com/auth/postmaster",
-            "https://www.googleapis.com/auth/postmaster.domain"
-          ],
-          "parameterOrder": [
-            "name"
-          ],
-          "parameters": {
-            "name": {
-              "type": "string",
-              "required": true,
-              "description": "Required. The domain to verify.",
-              "location": "path",
-              "pattern": "^domains/[^/]+$"
-            }
+        "stringValue": {
+          "description": "String value.",
+          "type": "string"
+        }
+      }
+    },
+    "DateList": {
+      "description": "A set of specific dates.",
+      "type": "object",
+      "id": "DateList",
+      "properties": {
+        "dates": {
+          "description": "Required. The list of specific dates for which to retrieve data.",
+          "type": "array",
+          "items": {
+            "$ref": "Date"
           }
         }
       }
     },
-    "domainStats": {
-      "methods": {
-        "batchQuery": {
-          "httpMethod": "POST",
-          "flatPath": "v2/domainStats:batchQuery",
-          "parameterOrder": [],
-          "response": {
-            "$ref": "BatchQueryDomainStatsResponse"
-          },
-          "request": {
-            "$ref": "BatchQueryDomainStatsRequest"
-          },
-          "id": "gmailpostmastertools.domainStats.batchQuery",
-          "parameters": {},
-          "scopes": [
-            "https://www.googleapis.com/auth/postmaster",
-            "https://www.googleapis.com/auth/postmaster.traffic.readonly"
+    "ComplianceStatus": {
+      "properties": {
+        "status": {
+          "enum": [
+            "STATE_UNSPECIFIED",
+            "COMPLIANT",
+            "NEEDS_WORK"
           ],
-          "path": "v2/domainStats:batchQuery",
-          "description": "Executes a batch of QueryDomainStats requests for multiple domains. Returns PERMISSION_DENIED if you don't have permission to access DomainStats for any of the requested domains."
+          "readOnly": true,
+          "description": "Output only. The compliance status.",
+          "enumDescriptions": [
+            "Unspecified.",
+            "The compliance requirement is met, and the sender is deemed compliant.",
+            "The compliance requirement is unmet, and the sender needs to do work to achieve compliance."
+          ],
+          "type": "string"
         }
-      }
+      },
+      "type": "object",
+      "id": "ComplianceStatus",
+      "description": "The status of a sender compliance requirement."
+    },
+    "DeliverabilityStatusVerdict": {
+      "id": "DeliverabilityStatusVerdict",
+      "properties": {
+        "state": {
+          "readOnly": true,
+          "description": "Output only. The compliance state.",
+          "$ref": "ComplianceStatus"
+        },
+        "reason": {
+          "description": "Output only. The specific reason for the compliance verdict.",
+          "type": "string",
+          "enum": [
+            "REASON_UNSPECIFIED",
+            "MESSAGE_VOLUME_LOW",
+            "SMTP_ERRORS_HIGH",
+            "SENDER_NOT_COMPLIANT",
+            "SPAM_RATE_HIGH",
+            "USER_FEEDBACK_NEGATIVE",
+            "USER_FEEDBACK_LOW",
+            "USER_FEEDBACK_POSITIVE"
+          ],
+          "enumDescriptions": [
+            "Unspecified.",
+            "Not enough outgoing email.",
+            "Many messages with delivery errors.",
+            "The sender does not meet the sender requirements.",
+            "The spam rate is above 0.1%.",
+            "Indicates users do not want to receive email messages.",
+            "Users do not take action on messages.",
+            "Users signal they want to receive email messages."
+          ],
+          "readOnly": true
+        }
+      },
+      "description": "[Developer Preview](https://developers.google.com/workspace/preview): Verdict of domain deliverability status.",
+      "type": "object"
+    },
+    "VerifyDomainResponse": {
+      "type": "object",
+      "id": "VerifyDomainResponse",
+      "description": "[Developer Preview](https://developers.google.com/workspace/preview): Response message for VerifyDomain.",
+      "properties": {}
     }
   },
-  "version": "v2",
-  "rootUrl": "https://gmailpostmastertools.googleapis.com/",
+  "servicePath": "",
+  "icons": {
+    "x16": "http://www.google.com/images/icons/product/search-16.gif",
+    "x32": "http://www.google.com/images/icons/product/search-32.gif"
+  },
+  "basePath": "",
+  "batchPath": "batch",
+  "documentationLink": "https://developers.google.com/workspace/gmail/postmaster",
+  "canonicalName": "Postmaster Tools",
   "auth": {
     "oauth2": {
       "scopes": {
+        "https://www.googleapis.com/auth/postmaster.traffic.readonly": {
+          "description": "Get email traffic metrics for the domains you have registered with Postmaster Tools"
+        },
         "https://www.googleapis.com/auth/postmaster": {
           "description": "Get email traffic metrics, manage domains, and manage domain users for the domains you have registered with Postmaster Tools"
         },
@@ -1285,33 +1228,90 @@
         },
         "https://www.googleapis.com/auth/postmaster.user": {
           "description": "View and manage users for the domains you have registered with Postmaster Tools"
-        },
-        "https://www.googleapis.com/auth/postmaster.traffic.readonly": {
-          "description": "Get email traffic metrics for the domains you have registered with Postmaster Tools"
         }
       }
     }
   },
-  "servicePath": "",
-  "protocol": "rest",
-  "canonicalName": "Postmaster Tools",
-  "fullyEncodeReservedExpansion": true,
-  "discoveryVersion": "v1",
-  "revision": "20260924",
-  "mtlsRootUrl": "https://gmailpostmastertools.mtls.googleapis.com/",
-  "baseUrl": "https://gmailpostmastertools.googleapis.com/",
-  "kind": "discovery#restDescription",
-  "title": "Gmail Postmaster Tools API",
-  "basePath": "",
-  "description": "The Postmaster Tools API is a RESTful API that provides programmatic access to email traffic metrics (like spam reports, delivery errors etc) otherwise available through the Gmail Postmaster Tools UI currently.",
-  "name": "gmailpostmastertools",
-  "batchPath": "batch",
   "ownerName": "Google",
+  "description": "The Postmaster Tools API is a RESTful API that provides programmatic access to email traffic metrics (like spam reports, delivery errors etc) otherwise available through the Gmail Postmaster Tools UI currently.",
   "version_module": true,
-  "id": "gmailpostmastertools:v2",
-  "documentationLink": "https://developers.google.com/workspace/gmail/postmaster",
-  "icons": {
-    "x16": "http://www.google.com/images/icons/product/search-16.gif",
-    "x32": "http://www.google.com/images/icons/product/search-32.gif"
+  "revision": "20260924",
+  "discoveryVersion": "v1",
+  "parameters": {
+    "uploadType": {
+      "type": "string",
+      "location": "query",
+      "description": "Legacy upload protocol for media (e.g. \"media\", \"multipart\")."
+    },
+    "$.xgafv": {
+      "location": "query",
+      "description": "V1 error format.",
+      "enumDescriptions": [
+        "v1 error format",
+        "v2 error format"
+      ],
+      "enum": [
+        "1",
+        "2"
+      ],
+      "type": "string"
+    },
+    "key": {
+      "location": "query",
+      "type": "string",
+      "description": "API key. Your API key identifies your project and provides you with API access, quota, and reports. Required unless you provide an OAuth 2.0 token."
+    },
+    "quotaUser": {
+      "location": "query",
+      "description": "Available to use for quota purposes for server-side applications. Can be any arbitrary string assigned to a user, but should not exceed 40 characters.",
+      "type": "string"
+    },
+    "prettyPrint": {
+      "type": "boolean",
+      "location": "query",
+      "description": "Returns response with indentations and line breaks.",
+      "default": "true"
+    },
+    "upload_protocol": {
+      "description": "Upload protocol for media (e.g. \"raw\", \"multipart\").",
+      "type": "string",
+      "location": "query"
+    },
+    "alt": {
+      "type": "string",
+      "enumDescriptions": [
+        "Responses with Content-Type of application/json",
+        "Media download with context-dependent Content-Type",
+        "Responses with Content-Type of application/x-protobuf"
+      ],
+      "description": "Data format for response.",
+      "default": "json",
+      "location": "query",
+      "enum": [
+        "json",
+        "media",
+        "proto"
+      ]
+    },
+    "callback": {
+      "description": "JSONP",
+      "type": "string",
+      "location": "query"
+    },
+    "access_token": {
+      "location": "query",
+      "description": "OAuth access token.",
+      "type": "string"
+    },
+    "fields": {
+      "type": "string",
+      "location": "query",
+      "description": "Selector specifying which fields to include in a partial response."
+    },
+    "oauth_token": {
+      "description": "OAuth 2.0 token for the current user.",
+      "location": "query",
+      "type": "string"
+    }
   }
 }
