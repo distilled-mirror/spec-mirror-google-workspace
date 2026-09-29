@@ -1,1692 +1,6 @@
 {
-  "documentationLink": "https://developers.google.com/workspace/meet/api",
   "ownerDomain": "google.com",
-  "title": "Google Meet API",
-  "id": "meet:v2",
-  "schemas": {
-    "GatewaySipAccess": {
-      "id": "GatewaySipAccess",
-      "description": "Details how to join the conference through a SIP gateway.",
-      "type": "object",
-      "properties": {
-        "sipAccessCode": {
-          "type": "string",
-          "description": "The permanent numeric code for manual entry on specially configured devices."
-        },
-        "uri": {
-          "description": "The Session Initiation Protocol (SIP) URI the conference can be reached through. The string is in one of these formats: * \"sip:USER_ID@GATEWAY_ADDRESS\" * \"sips:USER_ID@GATEWAY_ADDRESS\" where USER_ID is the 13-digit universal pin (with the future option to support using a Meet meeting code as well), and GATEWAY_ADDRESS is a valid address to be resolved using a DNS SRV lookup, or a dotted quad.",
-          "type": "string"
-        }
-      }
-    },
-    "SpaceConfig": {
-      "id": "SpaceConfig",
-      "type": "object",
-      "description": "The configuration pertaining to a meeting space.",
-      "properties": {
-        "artifactConfig": {
-          "description": "Configuration pertaining to the auto-generated artifacts that the meeting supports.",
-          "$ref": "ArtifactConfig"
-        },
-        "attendanceReportGenerationType": {
-          "enum": [
-            "ATTENDANCE_REPORT_GENERATION_TYPE_UNSPECIFIED",
-            "GENERATE_REPORT",
-            "DO_NOT_GENERATE"
-          ],
-          "type": "string",
-          "enumDescriptions": [
-            "Default value specified by user policy. This should never be returned.",
-            "Attendance report will be generated and sent to drive/email.",
-            "Attendance report will not be generated."
-          ],
-          "description": "Whether attendance report is enabled for the meeting space."
-        },
-        "entryPointAccess": {
-          "enumDescriptions": [
-            "Unused.",
-            "All entry points are allowed.",
-            "Only entry points owned by the Google Cloud project that created the space can be used to join meetings in this space. Apps can use the Meet Embed SDK Web or mobile Meet SDKs to create owned entry points."
-          ],
-          "enum": [
-            "ENTRY_POINT_ACCESS_UNSPECIFIED",
-            "ALL",
-            "CREATOR_APP_ONLY"
-          ],
-          "type": "string",
-          "description": "Defines the entry points that can be used to join meetings hosted in this meeting space. Default: EntryPointAccess.ALL"
-        },
-        "moderationRestrictions": {
-          "$ref": "ModerationRestrictions",
-          "description": "When moderation.ON, these restrictions go into effect for the meeting. When moderation.OFF, will be reset to default ModerationRestrictions."
-        },
-        "accessType": {
-          "enum": [
-            "ACCESS_TYPE_UNSPECIFIED",
-            "OPEN",
-            "TRUSTED",
-            "RESTRICTED"
-          ],
-          "enumDescriptions": [
-            "Default value specified by the user's organization. Note: This is never returned, as the configured access type is returned instead.",
-            "Anyone with the join information (for example, the URL or phone access information) can join without knocking.",
-            "Members of the host's organization, invited external users, and dial-in users can join without knocking. Everyone else must knock.",
-            "Only invitees can join without knocking. Everyone else must knock."
-          ],
-          "type": "string",
-          "description": "Access type of the meeting space that determines who can join without knocking. Default: The user's default access settings. Controlled by the user's admin for enterprise users or RESTRICTED."
-        },
-        "moderation": {
-          "enum": [
-            "MODERATION_UNSPECIFIED",
-            "OFF",
-            "ON"
-          ],
-          "description": "The pre-configured moderation mode for the Meeting. Default: Controlled by the user's policies.",
-          "type": "string",
-          "enumDescriptions": [
-            "Moderation type is not specified. This is used to indicate the user hasn't specified any value as the user does not intend to update the state. Users are not allowed to set the value as unspecified.",
-            "Moderation is off.",
-            "Moderation is on."
-          ]
-        }
-      }
-    },
-    "ModerationRestrictions": {
-      "type": "object",
-      "properties": {
-        "presentRestriction": {
-          "enum": [
-            "RESTRICTION_TYPE_UNSPECIFIED",
-            "HOSTS_ONLY",
-            "NO_RESTRICTION"
-          ],
-          "description": "Defines who has permission to share their screen in the meeting space.",
-          "enumDescriptions": [
-            "Default value specified by user policy. This should never be returned.",
-            "Meeting owner and co-host have the permission.",
-            "All Participants have permissions."
-          ],
-          "type": "string"
-        },
-        "defaultJoinAsViewerType": {
-          "enumDescriptions": [
-            "Default value specified by user policy. This should never be returned.",
-            "Users will by default join as viewers.",
-            "Users will by default join as contributors."
-          ],
-          "type": "string",
-          "description": "Defines whether to restrict the default role assigned to users as viewer.",
-          "enum": [
-            "DEFAULT_JOIN_AS_VIEWER_TYPE_UNSPECIFIED",
-            "ON",
-            "OFF"
-          ]
-        },
-        "chatRestriction": {
-          "enumDescriptions": [
-            "Default value specified by user policy. This should never be returned.",
-            "Meeting owner and co-host have the permission.",
-            "All Participants have permissions."
-          ],
-          "description": "Defines who has permission to send chat messages in the meeting space.",
-          "type": "string",
-          "enum": [
-            "RESTRICTION_TYPE_UNSPECIFIED",
-            "HOSTS_ONLY",
-            "NO_RESTRICTION"
-          ]
-        },
-        "reactionRestriction": {
-          "type": "string",
-          "description": "Defines who has permission to send reactions in the meeting space.",
-          "enum": [
-            "RESTRICTION_TYPE_UNSPECIFIED",
-            "HOSTS_ONLY",
-            "NO_RESTRICTION"
-          ],
-          "enumDescriptions": [
-            "Default value specified by user policy. This should never be returned.",
-            "Meeting owner and co-host have the permission.",
-            "All Participants have permissions."
-          ]
-        }
-      },
-      "id": "ModerationRestrictions",
-      "description": "Defines restrictions for features when the meeting is moderated."
-    },
-    "Empty": {
-      "type": "object",
-      "id": "Empty",
-      "properties": {},
-      "description": "A generic empty message that you can re-use to avoid defining duplicated empty messages in your APIs. A typical example is to use it as the request or the response type of an API method. For instance: service Foo { rpc Bar(google.protobuf.Empty) returns (google.protobuf.Empty); }"
-    },
-    "ListTranscriptsResponse": {
-      "type": "object",
-      "id": "ListTranscriptsResponse",
-      "properties": {
-        "transcripts": {
-          "type": "array",
-          "description": "List of transcripts in one page.",
-          "items": {
-            "$ref": "Transcript"
-          }
-        },
-        "nextPageToken": {
-          "description": "Token to be circulated back for further List call if current List doesn't include all the transcripts. Unset if all transcripts are returned.",
-          "type": "string"
-        }
-      },
-      "description": "Response for ListTranscripts method."
-    },
-    "RecordingConfig": {
-      "properties": {
-        "autoRecordingGeneration": {
-          "type": "string",
-          "enumDescriptions": [
-            "Default value specified by user policy. This should never be returned.",
-            "The artifact is generated automatically.",
-            "The artifact is not generated automatically."
-          ],
-          "description": "Defines whether a meeting space is automatically recorded when someone with the privilege to record joins the meeting.",
-          "enum": [
-            "AUTO_GENERATION_TYPE_UNSPECIFIED",
-            "ON",
-            "OFF"
-          ]
-        }
-      },
-      "id": "RecordingConfig",
-      "description": "Configuration related to recording in a meeting space.",
-      "type": "object"
-    },
-    "ConferenceRecord": {
-      "id": "ConferenceRecord",
-      "properties": {
-        "space": {
-          "readOnly": true,
-          "type": "string",
-          "description": "Output only. The space where the conference was held."
-        },
-        "name": {
-          "type": "string",
-          "description": "Identifier. Resource name of the conference record. Format: `conferenceRecords/{conference_record}` where `{conference_record}` is a unique ID for each instance of a call within a space."
-        },
-        "startTime": {
-          "format": "google-datetime",
-          "readOnly": true,
-          "description": "Output only. Timestamp when the conference started. Always set.",
-          "type": "string"
-        },
-        "expireTime": {
-          "type": "string",
-          "readOnly": true,
-          "description": "Output only. Server enforced expiration time for when this conference record resource is deleted. The resource is deleted 30 days after the conference ends.",
-          "format": "google-datetime"
-        },
-        "endTime": {
-          "format": "google-datetime",
-          "readOnly": true,
-          "description": "Output only. Timestamp when the conference ended. Set for past conferences. Unset if the conference is ongoing.",
-          "type": "string"
-        }
-      },
-      "description": "Single instance of a meeting held in a space.",
-      "type": "object"
-    },
-    "PhoneAccess": {
-      "type": "object",
-      "id": "PhoneAccess",
-      "properties": {
-        "languageCode": {
-          "description": "The BCP 47/LDML language code for the language associated with this phone access. To be parsed by the i18n LanguageCode utility. Examples: \"es-419\" for Latin American Spanish, \"fr-CA\" for Canadian French.",
-          "type": "string"
-        },
-        "regionCode": {
-          "description": "The CLDR/ISO 3166 region code for the country associated with this phone access. To be parsed by the i18n RegionCode utility. Example: \"SE\" for Sweden.",
-          "type": "string"
-        },
-        "pin": {
-          "type": "string",
-          "description": "The PIN that users must enter after dialing the given number. The PIN consists of only decimal digits and the length may vary."
-        },
-        "phoneNumber": {
-          "type": "string",
-          "description": "The phone number to dial for this meeting space in E.164 format. Full phone number with a leading '+' character."
-        }
-      },
-      "description": "Phone access contains information required to dial into a conference using a regional phone number and a PIN that is specific to that phone number."
-    },
-    "BatchUpdateMembersRequest": {
-      "properties": {
-        "requests": {
-          "items": {
-            "$ref": "UpdateMemberRequest"
-          },
-          "type": "array",
-          "description": "Required. The request message specifying the resources to update. A maximum of 500 members can be modified in a batch."
-        },
-        "updateMask": {
-          "format": "google-fieldmask",
-          "description": "Optional. Top-level field mask used to specify the fields to be updated in the member for all UpdateMemberRequests. There are 4 possible scenarios for top-level and child field mask: 1. top-level and child field mask is absent: All fields provided in the requests are updated, including deleting fields not set in the requests. 2. top-level field mask is present but child field mask is absent: The fields specified in the top-level field mask are updated. 3. top-level and child field mask is present: The child field mask must be the same as the top-level field mask. 4. top-level field mask is absent but child field mask is present: It isn't supported and will return an error.",
-          "type": "string"
-        }
-      },
-      "id": "BatchUpdateMembersRequest",
-      "type": "object",
-      "description": "Request to update members of one space within a batch."
-    },
-    "DriveDestination": {
-      "id": "DriveDestination",
-      "type": "object",
-      "properties": {
-        "exportUri": {
-          "type": "string",
-          "description": "Output only. Link used to play back the recording file in the browser. For example, `https://drive.google.com/file/d/{$fileId}/view`.",
-          "readOnly": true
-        },
-        "file": {
-          "description": "Output only. The `fileId` for the underlying MP4 file. For example, \"1kuceFZohVoCh6FulBHxwy6I15Ogpc4hP\". Use `$ GET https://www.googleapis.com/drive/v3/files/{$fileId}?alt=media` to download the blob. For more information, see https://developers.google.com/drive/api/v3/reference/files/get.",
-          "readOnly": true,
-          "type": "string"
-        }
-      },
-      "description": "Export location where a recording file is saved in Google Drive."
-    },
-    "ListTranscriptEntriesResponse": {
-      "id": "ListTranscriptEntriesResponse",
-      "properties": {
-        "nextPageToken": {
-          "description": "Token to be circulated back for further List call if current List doesn't include all the transcript entries. Unset if all entries are returned.",
-          "type": "string"
-        },
-        "transcriptEntries": {
-          "description": "List of TranscriptEntries in one page.",
-          "items": {
-            "$ref": "TranscriptEntry"
-          },
-          "type": "array"
-        }
-      },
-      "type": "object",
-      "description": "Response for ListTranscriptEntries method."
-    },
-    "ListConferenceRecordsResponse": {
-      "type": "object",
-      "properties": {
-        "nextPageToken": {
-          "description": "Token to be circulated back for further List call if current List does NOT include all the Conferences. Unset if all conferences have been returned.",
-          "type": "string"
-        },
-        "conferenceRecords": {
-          "type": "array",
-          "description": "List of conferences in one page.",
-          "items": {
-            "$ref": "ConferenceRecord"
-          }
-        }
-      },
-      "id": "ListConferenceRecordsResponse",
-      "description": "Response of ListConferenceRecords method."
-    },
-    "BatchUpdateMembersResponse": {
-      "properties": {
-        "members": {
-          "items": {
-            "$ref": "Member"
-          },
-          "type": "array",
-          "description": "Members updated."
-        }
-      },
-      "type": "object",
-      "id": "BatchUpdateMembersResponse",
-      "description": "Response of batch update members."
-    },
-    "EndActiveConferenceRequest": {
-      "properties": {},
-      "type": "object",
-      "description": "Request to end an ongoing conference of a space.",
-      "id": "EndActiveConferenceRequest"
-    },
-    "ListParticipantsResponse": {
-      "id": "ListParticipantsResponse",
-      "properties": {
-        "nextPageToken": {
-          "type": "string",
-          "description": "Token to be circulated back for further List call if current List doesn't include all the participants. Unset if all participants are returned."
-        },
-        "participants": {
-          "type": "array",
-          "items": {
-            "$ref": "Participant"
-          },
-          "description": "List of participants in one page."
-        },
-        "totalSize": {
-          "description": "Total, exact number of `participants`. By default, this field isn't included in the response. Set the field mask in [SystemParameterContext](https://cloud.google.com/apis/docs/system-parameters) to receive this field in the response.",
-          "type": "integer",
-          "format": "int32"
-        }
-      },
-      "type": "object",
-      "description": "Response of ListParticipants method."
-    },
-    "ArtifactConfig": {
-      "description": "Configuration related to meeting artifacts potentially generated by this meeting space.",
-      "type": "object",
-      "id": "ArtifactConfig",
-      "properties": {
-        "transcriptionConfig": {
-          "$ref": "TranscriptionConfig",
-          "description": "Configuration for auto-transcript."
-        },
-        "recordingConfig": {
-          "description": "Configuration for recording.",
-          "$ref": "RecordingConfig"
-        },
-        "smartNotesConfig": {
-          "description": "Configuration for auto-smart-notes.",
-          "$ref": "SmartNotesConfig"
-        }
-      }
-    },
-    "Recording": {
-      "type": "object",
-      "properties": {
-        "endTime": {
-          "description": "Output only. Timestamp when the recording ended.",
-          "readOnly": true,
-          "format": "google-datetime",
-          "type": "string"
-        },
-        "state": {
-          "readOnly": true,
-          "enum": [
-            "STATE_UNSPECIFIED",
-            "STARTED",
-            "ENDED",
-            "FILE_GENERATED"
-          ],
-          "enumDescriptions": [
-            "Default, never used.",
-            "An active recording session has started.",
-            "This recording session has ended, but the recording file hasn't been generated yet.",
-            "Recording file is generated and ready to download."
-          ],
-          "type": "string",
-          "description": "Output only. Current state."
-        },
-        "driveDestination": {
-          "$ref": "DriveDestination",
-          "description": "Output only. Recording is saved to Google Drive as an MP4 file. The `drive_destination` includes the Drive `fileId` that can be used to download the file using the `files.get` method of the Drive API.",
-          "readOnly": true
-        },
-        "startTime": {
-          "description": "Output only. Timestamp when the recording started.",
-          "readOnly": true,
-          "format": "google-datetime",
-          "type": "string"
-        },
-        "name": {
-          "type": "string",
-          "readOnly": true,
-          "description": "Output only. Resource name of the recording. Format: `conferenceRecords/{conference_record}/recordings/{recording}` where `{recording}` is a 1:1 mapping to each unique recording session during the conference."
-        }
-      },
-      "description": "Metadata about a recording created during a conference.",
-      "id": "Recording"
-    },
-    "ListMembersResponse": {
-      "description": "Response of list members.",
-      "properties": {
-        "members": {
-          "description": "The list of members for the current page.",
-          "items": {
-            "$ref": "Member"
-          },
-          "type": "array"
-        },
-        "nextPageToken": {
-          "description": "Token to be circulated back for further list call if current list doesn't include all the members. Unset if all members are returned.",
-          "type": "string"
-        }
-      },
-      "id": "ListMembersResponse",
-      "type": "object"
-    },
-    "Member": {
-      "type": "object",
-      "properties": {
-        "role": {
-          "type": "string",
-          "description": "The meeting role assigned to the member.",
-          "enumDescriptions": [
-            "This is used to indicate the user hasn't specified any value and the user’s role will be determined upon joining the meetings between 'contributor' and 'viewer' role depending on meeting configuration. For more information about the viewer role, see [Assign View only roles in Google Meet](https://support.google.com/meet/answer/13658394).",
-            "Co-host role."
-          ],
-          "enum": [
-            "ROLE_UNSPECIFIED",
-            "COHOST"
-          ]
-        },
-        "name": {
-          "description": "Identifier. Resource name of the member. Format: spaces/{space}/members/{member}",
-          "type": "string"
-        },
-        "email": {
-          "description": "Email for the member. This is required for creating the member.",
-          "type": "string"
-        }
-      },
-      "id": "Member",
-      "description": "Users who are configured to have a role in the space. These users can join the space without knocking."
-    },
-    "TranscriptEntry": {
-      "type": "object",
-      "id": "TranscriptEntry",
-      "properties": {
-        "text": {
-          "type": "string",
-          "readOnly": true,
-          "description": "Output only. The transcribed text of the participant's voice, at maximum 10K words. Note that the limit is subject to change."
-        },
-        "startTime": {
-          "type": "string",
-          "format": "google-datetime",
-          "description": "Output only. Timestamp when the transcript entry started.",
-          "readOnly": true
-        },
-        "languageCode": {
-          "description": "Output only. Language of spoken text, such as \"en-US\". IETF BCP 47 syntax (https://tools.ietf.org/html/bcp47)",
-          "type": "string",
-          "readOnly": true
-        },
-        "participant": {
-          "type": "string",
-          "readOnly": true,
-          "description": "Output only. Refers to the participant who speaks."
-        },
-        "endTime": {
-          "readOnly": true,
-          "format": "google-datetime",
-          "description": "Output only. Timestamp when the transcript entry ended.",
-          "type": "string"
-        },
-        "name": {
-          "type": "string",
-          "description": "Output only. Resource name of the entry. Format: \"conferenceRecords/{conference_record}/transcripts/{transcript}/entries/{entry}\"",
-          "readOnly": true
-        }
-      },
-      "description": "Single entry for one user’s speech during a transcript session."
-    },
-    "ListRecordingsResponse": {
-      "properties": {
-        "recordings": {
-          "description": "List of recordings in one page.",
-          "items": {
-            "$ref": "Recording"
-          },
-          "type": "array"
-        },
-        "nextPageToken": {
-          "description": "Token to be circulated back for further List call if current List doesn't include all the recordings. Unset if all recordings are returned.",
-          "type": "string"
-        }
-      },
-      "type": "object",
-      "description": "Response for ListRecordings method.",
-      "id": "ListRecordingsResponse"
-    },
-    "UpdateMemberRequest": {
-      "description": "Request to update a member.",
-      "id": "UpdateMemberRequest",
-      "properties": {
-        "member": {
-          "description": "Required. The Member to update. Format: spaces/{space}/members/{member}",
-          "$ref": "Member"
-        },
-        "updateMask": {
-          "description": "Optional. Field mask used to specify the fields to be updated in the member. If update_mask isn't provided(not set, set with empty paths, or only has \"\" as paths), it defaults to update all fields provided with values in the request. Using \"*\" as update_mask will update all fields, including deleting fields not set in the request. In case of BatchUpdate, it must be absent or the same as the update_mask in BatchUpdateMembersRequest when UpdateMemberRequest is built as a child request of BatchUpdateMembersRequest.",
-          "format": "google-fieldmask",
-          "type": "string"
-        }
-      },
-      "type": "object"
-    },
-    "ActiveConference": {
-      "properties": {
-        "conferenceRecord": {
-          "readOnly": true,
-          "type": "string",
-          "description": "Output only. Reference to 'ConferenceRecord' resource. Format: `conferenceRecords/{conference_record}` where `{conference_record}` is a unique ID for each instance of a call within a space."
-        }
-      },
-      "type": "object",
-      "id": "ActiveConference",
-      "description": "Active conference."
-    },
-    "SignedinUser": {
-      "type": "object",
-      "properties": {
-        "displayName": {
-          "description": "Output only. For a personal device, it's the user's first name and last name. For a robot account, it's the administrator-specified device name. For example, \"Altostrat Room\".",
-          "readOnly": true,
-          "type": "string"
-        },
-        "user": {
-          "readOnly": true,
-          "type": "string",
-          "description": "Output only. Unique ID for the user. Interoperable with Admin SDK API and People API. Format: `users/{user}`"
-        }
-      },
-      "description": "A signed-in user can be: a) An individual joining from a personal computer, mobile device, or through companion mode. b) A robot account used by conference room devices.",
-      "id": "SignedinUser"
-    },
-    "AnonymousUser": {
-      "properties": {
-        "displayName": {
-          "description": "Output only. User provided name when they join a conference anonymously.",
-          "readOnly": true,
-          "type": "string"
-        }
-      },
-      "type": "object",
-      "description": "User who joins anonymously (meaning not signed into a Google Account).",
-      "id": "AnonymousUser"
-    },
-    "TranscriptionConfig": {
-      "type": "object",
-      "properties": {
-        "autoTranscriptionGeneration": {
-          "enumDescriptions": [
-            "Default value specified by user policy. This should never be returned.",
-            "The artifact is generated automatically.",
-            "The artifact is not generated automatically."
-          ],
-          "enum": [
-            "AUTO_GENERATION_TYPE_UNSPECIFIED",
-            "ON",
-            "OFF"
-          ],
-          "description": "Defines whether the content of a meeting is automatically transcribed when someone with the privilege to transcribe joins the meeting.",
-          "type": "string"
-        }
-      },
-      "description": "Configuration related to transcription in a meeting space.",
-      "id": "TranscriptionConfig"
-    },
-    "Space": {
-      "description": "Virtual place where conferences are held. Only one active conference can be held in one space at any given time.",
-      "type": "object",
-      "id": "Space",
-      "properties": {
-        "gatewaySipAccess": {
-          "readOnly": true,
-          "type": "array",
-          "description": "Output only. The SIP-based access methods that can be used to join the conference. Can be empty.",
-          "items": {
-            "$ref": "GatewaySipAccess"
-          }
-        },
-        "meetingCode": {
-          "type": "string",
-          "readOnly": true,
-          "description": "Output only. Type friendly unique string used to join the meeting. Format: `[a-z]+-[a-z]+-[a-z]+`. For example, `abc-mnop-xyz`. The maximum length is 128 characters. Can only be used as an alias of the space name to get the space."
-        },
-        "name": {
-          "description": "Immutable. Resource name of the space. Format: `spaces/{space}`. `{space}` is the resource identifier for the space. It's a unique, server-generated ID and is case sensitive. For example, `jQCFfuBOdN5z`. For more information, see [How Meet identifies a meeting space](https://developers.google.com/workspace/meet/api/guides/meeting-spaces#identify-meeting-space).",
-          "type": "string"
-        },
-        "meetingUri": {
-          "type": "string",
-          "description": "Output only. URI used to join meetings consisting of `https://meet.google.com/` followed by the `meeting_code`. For example, `https://meet.google.com/abc-mnop-xyz`.",
-          "readOnly": true
-        },
-        "config": {
-          "description": "Configuration pertaining to the meeting space.",
-          "$ref": "SpaceConfig"
-        },
-        "activeConference": {
-          "description": "Active conference, if it exists.",
-          "$ref": "ActiveConference"
-        },
-        "phoneAccess": {
-          "items": {
-            "$ref": "PhoneAccess"
-          },
-          "description": "Output only. All regional phone access methods for this meeting space. Can be empty.",
-          "type": "array",
-          "readOnly": true
-        }
-      }
-    },
-    "DocsDestination": {
-      "type": "object",
-      "properties": {
-        "exportUri": {
-          "readOnly": true,
-          "description": "Output only. URI for the Google Docs transcript file. Use `https://docs.google.com/document/d/{$DocumentId}/view` to browse the transcript in the browser.",
-          "type": "string"
-        },
-        "document": {
-          "type": "string",
-          "description": "Output only. The document ID for the underlying Google Docs transcript file. For example, \"1kuceFZohVoCh6FulBHxwy6I15Ogpc4hP\". Use the `documents.get` method of the Google Docs API (https://developers.google.com/docs/api/reference/rest/v1/documents/get) to fetch the content.",
-          "readOnly": true
-        }
-      },
-      "description": "Google Docs location where the transcript file is saved.",
-      "id": "DocsDestination"
-    },
-    "Transcript": {
-      "type": "object",
-      "properties": {
-        "startTime": {
-          "format": "google-datetime",
-          "type": "string",
-          "description": "Output only. Timestamp when the transcript started.",
-          "readOnly": true
-        },
-        "name": {
-          "description": "Output only. Resource name of the transcript. Format: `conferenceRecords/{conference_record}/transcripts/{transcript}`, where `{transcript}` is a 1:1 mapping to each unique transcription session of the conference.",
-          "readOnly": true,
-          "type": "string"
-        },
-        "state": {
-          "description": "Output only. Current state.",
-          "enum": [
-            "STATE_UNSPECIFIED",
-            "STARTED",
-            "ENDED",
-            "FILE_GENERATED"
-          ],
-          "type": "string",
-          "readOnly": true,
-          "enumDescriptions": [
-            "Default, never used.",
-            "An active transcript session has started.",
-            "This transcript session has ended, but the transcript file hasn't been generated yet.",
-            "Transcript file is generated and ready to download."
-          ]
-        },
-        "docsDestination": {
-          "description": "Output only. Where the Google Docs transcript is saved.",
-          "$ref": "DocsDestination",
-          "readOnly": true
-        },
-        "endTime": {
-          "type": "string",
-          "readOnly": true,
-          "format": "google-datetime",
-          "description": "Output only. Timestamp when the transcript stopped."
-        }
-      },
-      "id": "Transcript",
-      "description": "Metadata for a transcript generated from a conference. It refers to the ASR (Automatic Speech Recognition) result of user's speech during the conference."
-    },
-    "SmartNote": {
-      "type": "object",
-      "properties": {
-        "docsDestination": {
-          "readOnly": true,
-          "$ref": "DocsDestination",
-          "description": "Output only. The Google Doc destination where the smart notes are saved."
-        },
-        "startTime": {
-          "format": "google-datetime",
-          "description": "Output only. Timestamp when the smart notes started.",
-          "readOnly": true,
-          "type": "string"
-        },
-        "state": {
-          "type": "string",
-          "enum": [
-            "STATE_UNSPECIFIED",
-            "STARTED",
-            "ENDED",
-            "FILE_GENERATED"
-          ],
-          "description": "Output only. Current state.",
-          "enumDescriptions": [
-            "Default, never used.",
-            "An active smart notes session has started.",
-            "This smart notes session has ended, but the smart notes file hasn't been generated yet.",
-            "Smart notes file is generated and ready to download."
-          ],
-          "readOnly": true
-        },
-        "endTime": {
-          "readOnly": true,
-          "type": "string",
-          "description": "Output only. Timestamp when the smart notes stopped.",
-          "format": "google-datetime"
-        },
-        "name": {
-          "description": "Output only. Identifier. Resource name of the smart notes. Format: `conferenceRecords/{conference_record}/smartNotes/{smart_note}`, where `{smart_note}` is a 1:1 mapping to each unique smart notes session of the conference.",
-          "readOnly": true,
-          "type": "string"
-        }
-      },
-      "id": "SmartNote",
-      "description": "Metadata for a smart note generated from a conference. It refers to the notes generated from Take Notes with Gemini during the conference."
-    },
-    "ParticipantSession": {
-      "properties": {
-        "name": {
-          "description": "Identifier. Session id.",
-          "type": "string"
-        },
-        "startTime": {
-          "readOnly": true,
-          "format": "google-datetime",
-          "description": "Output only. Timestamp when the user session starts.",
-          "type": "string"
-        },
-        "endTime": {
-          "type": "string",
-          "format": "google-datetime",
-          "readOnly": true,
-          "description": "Output only. Timestamp when the user session ends. Unset if the user session hasn’t ended."
-        }
-      },
-      "type": "object",
-      "description": "Refers to each unique join or leave session when a user joins a conference from a device. Note that any time a user joins the conference a new unique ID is assigned. That means if a user joins a space multiple times from the same device, they're assigned different IDs, and are also be treated as different participant sessions.",
-      "id": "ParticipantSession"
-    },
-    "ListSmartNotesResponse": {
-      "type": "object",
-      "properties": {
-        "smartNotes": {
-          "items": {
-            "$ref": "SmartNote"
-          },
-          "description": "List of smart notes in one page.",
-          "type": "array"
-        },
-        "nextPageToken": {
-          "description": "Token to be circulated back for further List call if current List doesn't include all the smart notes. Unset if all smart notes are returned.",
-          "type": "string"
-        }
-      },
-      "id": "ListSmartNotesResponse",
-      "description": "Response for ListSmartNotes method."
-    },
-    "ListParticipantSessionsResponse": {
-      "id": "ListParticipantSessionsResponse",
-      "type": "object",
-      "description": "Response of ListParticipants method.",
-      "properties": {
-        "participantSessions": {
-          "items": {
-            "$ref": "ParticipantSession"
-          },
-          "description": "List of participants in one page.",
-          "type": "array"
-        },
-        "nextPageToken": {
-          "type": "string",
-          "description": "Token to be circulated back for further List call if current List doesn't include all the participants. Unset if all participants are returned."
-        }
-      }
-    },
-    "PhoneUser": {
-      "properties": {
-        "displayName": {
-          "readOnly": true,
-          "description": "Output only. Partially redacted user's phone number when calling.",
-          "type": "string"
-        }
-      },
-      "id": "PhoneUser",
-      "type": "object",
-      "description": "User dialing in from a phone where the user's identity is unknown because they haven't signed in with a Google Account."
-    },
-    "Participant": {
-      "description": "User who attended or is attending a conference.",
-      "type": "object",
-      "id": "Participant",
-      "properties": {
-        "anonymousUser": {
-          "$ref": "AnonymousUser",
-          "description": "Anonymous user."
-        },
-        "name": {
-          "readOnly": true,
-          "type": "string",
-          "description": "Output only. Resource name of the participant. Format: `conferenceRecords/{conference_record}/participants/{participant}`"
-        },
-        "earliestStartTime": {
-          "type": "string",
-          "readOnly": true,
-          "description": "Output only. Time when the participant first joined the meeting.",
-          "format": "google-datetime"
-        },
-        "signedinUser": {
-          "description": "Signed-in user.",
-          "$ref": "SignedinUser"
-        },
-        "phoneUser": {
-          "description": "User calling from their phone.",
-          "$ref": "PhoneUser"
-        },
-        "latestEndTime": {
-          "readOnly": true,
-          "format": "google-datetime",
-          "description": "Output only. Time when the participant left the meeting for the last time. This can be null if it's an active meeting.",
-          "type": "string"
-        }
-      }
-    },
-    "SmartNotesConfig": {
-      "id": "SmartNotesConfig",
-      "type": "object",
-      "properties": {
-        "autoSmartNotesGeneration": {
-          "enumDescriptions": [
-            "Default value specified by user policy. This should never be returned.",
-            "The artifact is generated automatically.",
-            "The artifact is not generated automatically."
-          ],
-          "type": "string",
-          "enum": [
-            "AUTO_GENERATION_TYPE_UNSPECIFIED",
-            "ON",
-            "OFF"
-          ],
-          "description": "Defines whether to automatically generate a summary and recap of the meeting for all invitees in the organization when someone with the privilege to enable smart notes joins the meeting."
-        }
-      },
-      "description": "Configuration related to smart notes in a meeting space. For more information about smart notes, see [\"Take notes for me\" in Google Meet](https://support.google.com/meet/answer/14754931)."
-    }
-  },
-  "rootUrl": "https://meet.googleapis.com/",
-  "resources": {
-    "conferenceRecords": {
-      "resources": {
-        "transcripts": {
-          "resources": {
-            "entries": {
-              "methods": {
-                "list": {
-                  "path": "v2/{+parent}/entries",
-                  "parameterOrder": [
-                    "parent"
-                  ],
-                  "description": "Lists the structured transcript entries per transcript. By default, ordered by start time and in ascending order. For more information, see [Work with artifacts](https://developers.google.com/workspace/meet/api/guides/artifacts). Note: The transcript entries returned by the Google Meet API might not match the transcription found in the Google Docs transcript file. This can occur when 1) we have interleaved speakers within milliseconds, or 2) the Google Docs transcript file is modified after generation.",
-                  "flatPath": "v2/conferenceRecords/{conferenceRecordsId}/transcripts/{transcriptsId}/entries",
-                  "id": "meet.conferenceRecords.transcripts.entries.list",
-                  "response": {
-                    "$ref": "ListTranscriptEntriesResponse"
-                  },
-                  "parameters": {
-                    "pageToken": {
-                      "location": "query",
-                      "type": "string",
-                      "description": "Page token returned from previous List Call."
-                    },
-                    "parent": {
-                      "description": "Required. Format: `conferenceRecords/{conference_record}/transcripts/{transcript}`",
-                      "pattern": "^conferenceRecords/[^/]+/transcripts/[^/]+$",
-                      "location": "path",
-                      "type": "string",
-                      "required": true
-                    },
-                    "pageSize": {
-                      "type": "integer",
-                      "format": "int32",
-                      "description": "Maximum number of entries to return. The service might return fewer than this value. If unspecified, at most 10 entries are returned. The maximum value is 100; values above 100 are coerced to 100. Maximum might change in the future.",
-                      "location": "query"
-                    }
-                  },
-                  "httpMethod": "GET",
-                  "scopes": [
-                    "https://www.googleapis.com/auth/meetings.space.created",
-                    "https://www.googleapis.com/auth/meetings.space.readonly"
-                  ]
-                },
-                "get": {
-                  "parameterOrder": [
-                    "name"
-                  ],
-                  "response": {
-                    "$ref": "TranscriptEntry"
-                  },
-                  "id": "meet.conferenceRecords.transcripts.entries.get",
-                  "path": "v2/{+name}",
-                  "description": "Gets a `TranscriptEntry` resource by entry ID. For more information, see [Work with artifacts](https://developers.google.com/workspace/meet/api/guides/artifacts). Note: The transcript entries returned by the Google Meet API might not match the transcription found in the Google Docs transcript file. This can occur when 1) we have interleaved speakers within milliseconds, or 2) the Google Docs transcript file is modified after generation.",
-                  "parameters": {
-                    "name": {
-                      "type": "string",
-                      "description": "Required. Resource name of the `TranscriptEntry`.",
-                      "pattern": "^conferenceRecords/[^/]+/transcripts/[^/]+/entries/[^/]+$",
-                      "required": true,
-                      "location": "path"
-                    }
-                  },
-                  "scopes": [
-                    "https://www.googleapis.com/auth/meetings.space.created",
-                    "https://www.googleapis.com/auth/meetings.space.readonly"
-                  ],
-                  "httpMethod": "GET",
-                  "flatPath": "v2/conferenceRecords/{conferenceRecordsId}/transcripts/{transcriptsId}/entries/{entriesId}"
-                }
-              }
-            }
-          },
-          "methods": {
-            "list": {
-              "description": "Lists the set of transcripts from the conference record. By default, ordered by start time and in ascending order. For more information, see [Work with artifacts](https://developers.google.com/workspace/meet/api/guides/artifacts).",
-              "parameterOrder": [
-                "parent"
-              ],
-              "response": {
-                "$ref": "ListTranscriptsResponse"
-              },
-              "id": "meet.conferenceRecords.transcripts.list",
-              "path": "v2/{+parent}/transcripts",
-              "httpMethod": "GET",
-              "parameters": {
-                "pageToken": {
-                  "location": "query",
-                  "type": "string",
-                  "description": "Page token returned from previous List Call."
-                },
-                "pageSize": {
-                  "description": "Maximum number of transcripts to return. The service might return fewer than this value. If unspecified, at most 10 transcripts are returned. The maximum value is 100; values above 100 are coerced to 100. Maximum might change in the future.",
-                  "format": "int32",
-                  "location": "query",
-                  "type": "integer"
-                },
-                "parent": {
-                  "required": true,
-                  "description": "Required. Format: `conferenceRecords/{conference_record}`",
-                  "location": "path",
-                  "pattern": "^conferenceRecords/[^/]+$",
-                  "type": "string"
-                }
-              },
-              "scopes": [
-                "https://www.googleapis.com/auth/meetings.space.created",
-                "https://www.googleapis.com/auth/meetings.space.readonly"
-              ],
-              "flatPath": "v2/conferenceRecords/{conferenceRecordsId}/transcripts"
-            },
-            "get": {
-              "parameterOrder": [
-                "name"
-              ],
-              "response": {
-                "$ref": "Transcript"
-              },
-              "description": "Gets a transcript by transcript ID. For more information, see [Work with artifacts](https://developers.google.com/workspace/meet/api/guides/artifacts).",
-              "path": "v2/{+name}",
-              "id": "meet.conferenceRecords.transcripts.get",
-              "scopes": [
-                "https://www.googleapis.com/auth/meetings.space.created",
-                "https://www.googleapis.com/auth/meetings.space.readonly"
-              ],
-              "flatPath": "v2/conferenceRecords/{conferenceRecordsId}/transcripts/{transcriptsId}",
-              "parameters": {
-                "name": {
-                  "location": "path",
-                  "required": true,
-                  "pattern": "^conferenceRecords/[^/]+/transcripts/[^/]+$",
-                  "description": "Required. Resource name of the transcript.",
-                  "type": "string"
-                }
-              },
-              "httpMethod": "GET"
-            }
-          }
-        },
-        "participants": {
-          "resources": {
-            "participantSessions": {
-              "methods": {
-                "get": {
-                  "httpMethod": "GET",
-                  "parameters": {
-                    "name": {
-                      "type": "string",
-                      "description": "Required. Resource name of the participant.",
-                      "pattern": "^conferenceRecords/[^/]+/participants/[^/]+/participantSessions/[^/]+$",
-                      "required": true,
-                      "location": "path"
-                    }
-                  },
-                  "description": "Gets a participant session by participant session ID. For more information, see [Work with participants](https://developers.google.com/workspace/meet/api/guides/participants).",
-                  "flatPath": "v2/conferenceRecords/{conferenceRecordsId}/participants/{participantsId}/participantSessions/{participantSessionsId}",
-                  "response": {
-                    "$ref": "ParticipantSession"
-                  },
-                  "scopes": [
-                    "https://www.googleapis.com/auth/meetings.space.created",
-                    "https://www.googleapis.com/auth/meetings.space.readonly"
-                  ],
-                  "path": "v2/{+name}",
-                  "id": "meet.conferenceRecords.participants.participantSessions.get",
-                  "parameterOrder": [
-                    "name"
-                  ]
-                },
-                "list": {
-                  "id": "meet.conferenceRecords.participants.participantSessions.list",
-                  "scopes": [
-                    "https://www.googleapis.com/auth/meetings.space.created",
-                    "https://www.googleapis.com/auth/meetings.space.readonly"
-                  ],
-                  "parameters": {
-                    "pageSize": {
-                      "format": "int32",
-                      "type": "integer",
-                      "description": "Optional. Maximum number of participant sessions to return. The service might return fewer than this value. If unspecified, at most 100 participants are returned. The maximum value is 250; values above 250 are coerced to 250. Maximum might change in the future.",
-                      "location": "query"
-                    },
-                    "parent": {
-                      "type": "string",
-                      "location": "path",
-                      "required": true,
-                      "description": "Required. Format: `conferenceRecords/{conference_record}/participants/{participant}`",
-                      "pattern": "^conferenceRecords/[^/]+/participants/[^/]+$"
-                    },
-                    "pageToken": {
-                      "location": "query",
-                      "type": "string",
-                      "description": "Optional. Page token returned from previous List Call."
-                    },
-                    "filter": {
-                      "description": "Optional. User specified filtering condition in [EBNF format](https://en.wikipedia.org/wiki/Extended_Backus%E2%80%93Naur_form). The following are the filterable fields: * `start_time` * `end_time` For example, `end_time IS NULL` returns active participant sessions in the conference record.",
-                      "location": "query",
-                      "type": "string"
-                    }
-                  },
-                  "description": "Lists the participant sessions of a participant in a conference record. By default, ordered by join time and in descending order. This API supports `fields` as standard parameters like every other API. However, when the `fields` request parameter is omitted this API defaults to `'participantsessions/*, next_page_token'`. For more information, see [Work with participants](https://developers.google.com/workspace/meet/api/guides/participants).",
-                  "httpMethod": "GET",
-                  "flatPath": "v2/conferenceRecords/{conferenceRecordsId}/participants/{participantsId}/participantSessions",
-                  "path": "v2/{+parent}/participantSessions",
-                  "parameterOrder": [
-                    "parent"
-                  ],
-                  "response": {
-                    "$ref": "ListParticipantSessionsResponse"
-                  }
-                }
-              }
-            }
-          },
-          "methods": {
-            "list": {
-              "response": {
-                "$ref": "ListParticipantsResponse"
-              },
-              "parameterOrder": [
-                "parent"
-              ],
-              "httpMethod": "GET",
-              "scopes": [
-                "https://www.googleapis.com/auth/meetings.space.created",
-                "https://www.googleapis.com/auth/meetings.space.readonly"
-              ],
-              "description": "Lists the participants in a conference record. By default, ordered by join time and in descending order. This API supports `fields` as standard parameters like every other API. However, when the `fields` request parameter is omitted, this API defaults to `'participants/*, next_page_token'`. For more information, see [Work with participants](https://developers.google.com/workspace/meet/api/guides/participants).",
-              "parameters": {
-                "parent": {
-                  "description": "Required. Format: `conferenceRecords/{conference_record}`",
-                  "required": true,
-                  "pattern": "^conferenceRecords/[^/]+$",
-                  "location": "path",
-                  "type": "string"
-                },
-                "pageSize": {
-                  "type": "integer",
-                  "description": "Maximum number of participants to return. The service might return fewer than this value. If unspecified, at most 100 participants are returned. The maximum value is 250; values above 250 are coerced to 250. Maximum might change in the future.",
-                  "location": "query",
-                  "format": "int32"
-                },
-                "pageToken": {
-                  "description": "Page token returned from previous List Call.",
-                  "type": "string",
-                  "location": "query"
-                },
-                "filter": {
-                  "location": "query",
-                  "type": "string",
-                  "description": "Optional. User specified filtering condition in [EBNF format](https://en.wikipedia.org/wiki/Extended_Backus%E2%80%93Naur_form). The following are the filterable fields: * `earliest_start_time` * `latest_end_time` For example, `latest_end_time IS NULL` returns active participants in the conference."
-                }
-              },
-              "path": "v2/{+parent}/participants",
-              "id": "meet.conferenceRecords.participants.list",
-              "flatPath": "v2/conferenceRecords/{conferenceRecordsId}/participants"
-            },
-            "get": {
-              "path": "v2/{+name}",
-              "id": "meet.conferenceRecords.participants.get",
-              "response": {
-                "$ref": "Participant"
-              },
-              "parameterOrder": [
-                "name"
-              ],
-              "parameters": {
-                "name": {
-                  "description": "Required. Resource name of the participant.",
-                  "required": true,
-                  "type": "string",
-                  "location": "path",
-                  "pattern": "^conferenceRecords/[^/]+/participants/[^/]+$"
-                }
-              },
-              "scopes": [
-                "https://www.googleapis.com/auth/meetings.space.created",
-                "https://www.googleapis.com/auth/meetings.space.readonly"
-              ],
-              "description": "Gets a participant by participant ID. For more information, see [Work with participants](https://developers.google.com/workspace/meet/api/guides/participants).",
-              "flatPath": "v2/conferenceRecords/{conferenceRecordsId}/participants/{participantsId}",
-              "httpMethod": "GET"
-            }
-          }
-        },
-        "smartNotes": {
-          "methods": {
-            "get": {
-              "parameters": {
-                "name": {
-                  "required": true,
-                  "location": "path",
-                  "description": "Required. Resource name of the smart note. Format: conferenceRecords/{conference_record}/smartNotes/{smart_note}",
-                  "type": "string",
-                  "pattern": "^conferenceRecords/[^/]+/smartNotes/[^/]+$"
-                }
-              },
-              "httpMethod": "GET",
-              "description": "Gets smart notes by smart note ID. For more information, see [Work with artifacts](https://developers.google.com/workspace/meet/api/guides/artifacts).",
-              "flatPath": "v2/conferenceRecords/{conferenceRecordsId}/smartNotes/{smartNotesId}",
-              "scopes": [
-                "https://www.googleapis.com/auth/meetings.space.created",
-                "https://www.googleapis.com/auth/meetings.space.readonly"
-              ],
-              "id": "meet.conferenceRecords.smartNotes.get",
-              "path": "v2/{+name}",
-              "parameterOrder": [
-                "name"
-              ],
-              "response": {
-                "$ref": "SmartNote"
-              }
-            },
-            "list": {
-              "response": {
-                "$ref": "ListSmartNotesResponse"
-              },
-              "description": "Lists the set of smart notes from the conference record. By default, ordered by start time and in ascending order. For more information, see [Work with artifacts](https://developers.google.com/workspace/meet/api/guides/artifacts).",
-              "parameters": {
-                "pageToken": {
-                  "type": "string",
-                  "description": "Optional. Page token returned from previous List Call.",
-                  "location": "query"
-                },
-                "pageSize": {
-                  "description": "Optional. Maximum number of smart notes to return. The service might return fewer than this value. If unspecified, at most 10 smart notes are returned. The maximum value is 100; values above 100 are coerced to 100. Maximum might change in the future.",
-                  "location": "query",
-                  "type": "integer",
-                  "format": "int32"
-                },
-                "parent": {
-                  "pattern": "^conferenceRecords/[^/]+$",
-                  "required": true,
-                  "location": "path",
-                  "type": "string",
-                  "description": "Required. Format: `conferenceRecords/{conference_record}`"
-                }
-              },
-              "flatPath": "v2/conferenceRecords/{conferenceRecordsId}/smartNotes",
-              "httpMethod": "GET",
-              "scopes": [
-                "https://www.googleapis.com/auth/meetings.space.created",
-                "https://www.googleapis.com/auth/meetings.space.readonly"
-              ],
-              "path": "v2/{+parent}/smartNotes",
-              "id": "meet.conferenceRecords.smartNotes.list",
-              "parameterOrder": [
-                "parent"
-              ]
-            }
-          }
-        },
-        "recordings": {
-          "methods": {
-            "list": {
-              "flatPath": "v2/conferenceRecords/{conferenceRecordsId}/recordings",
-              "description": "Lists the recording resources from the conference record. By default, ordered by start time and in ascending order. For more information, see [Work with artifacts](https://developers.google.com/workspace/meet/api/guides/artifacts).",
-              "scopes": [
-                "https://www.googleapis.com/auth/meetings.space.created",
-                "https://www.googleapis.com/auth/meetings.space.readonly"
-              ],
-              "parameterOrder": [
-                "parent"
-              ],
-              "id": "meet.conferenceRecords.recordings.list",
-              "parameters": {
-                "pageSize": {
-                  "description": "Maximum number of recordings to return. The service might return fewer than this value. If unspecified, at most 10 recordings are returned. The maximum value is 100; values above 100 are coerced to 100. Maximum might change in the future.",
-                  "location": "query",
-                  "type": "integer",
-                  "format": "int32"
-                },
-                "parent": {
-                  "description": "Required. Format: `conferenceRecords/{conference_record}`",
-                  "type": "string",
-                  "location": "path",
-                  "pattern": "^conferenceRecords/[^/]+$",
-                  "required": true
-                },
-                "pageToken": {
-                  "location": "query",
-                  "type": "string",
-                  "description": "Page token returned from previous List Call."
-                }
-              },
-              "response": {
-                "$ref": "ListRecordingsResponse"
-              },
-              "path": "v2/{+parent}/recordings",
-              "httpMethod": "GET"
-            },
-            "get": {
-              "scopes": [
-                "https://www.googleapis.com/auth/meetings.space.created",
-                "https://www.googleapis.com/auth/meetings.space.readonly"
-              ],
-              "httpMethod": "GET",
-              "flatPath": "v2/conferenceRecords/{conferenceRecordsId}/recordings/{recordingsId}",
-              "parameters": {
-                "name": {
-                  "pattern": "^conferenceRecords/[^/]+/recordings/[^/]+$",
-                  "description": "Required. Resource name of the recording.",
-                  "required": true,
-                  "type": "string",
-                  "location": "path"
-                }
-              },
-              "response": {
-                "$ref": "Recording"
-              },
-              "parameterOrder": [
-                "name"
-              ],
-              "path": "v2/{+name}",
-              "description": "Gets a recording by recording ID. For more information, see [Work with artifacts](https://developers.google.com/workspace/meet/api/guides/artifacts).",
-              "id": "meet.conferenceRecords.recordings.get"
-            }
-          }
-        }
-      },
-      "methods": {
-        "get": {
-          "parameterOrder": [
-            "name"
-          ],
-          "flatPath": "v2/conferenceRecords/{conferenceRecordsId}",
-          "description": "Gets a conference record by conference ID. For more information, see [Work with conferences](https://developers.google.com/workspace/meet/api/guides/conferences).",
-          "id": "meet.conferenceRecords.get",
-          "scopes": [
-            "https://www.googleapis.com/auth/meetings.space.created",
-            "https://www.googleapis.com/auth/meetings.space.readonly"
-          ],
-          "response": {
-            "$ref": "ConferenceRecord"
-          },
-          "httpMethod": "GET",
-          "path": "v2/{+name}",
-          "parameters": {
-            "name": {
-              "required": true,
-              "location": "path",
-              "description": "Required. Resource name of the conference.",
-              "type": "string",
-              "pattern": "^conferenceRecords/[^/]+$"
-            }
-          }
-        },
-        "list": {
-          "path": "v2/conferenceRecords",
-          "parameters": {
-            "filter": {
-              "type": "string",
-              "location": "query",
-              "description": "Optional. User specified filtering condition in [EBNF format](https://en.wikipedia.org/wiki/Extended_Backus%E2%80%93Naur_form). The following are the filterable fields: * `space.meeting_code` * `space.name` * `start_time` * `end_time` For example, consider the following filters: * `space.name = \"spaces/NAME\"` * `space.meeting_code = \"abc-mnop-xyz\"` * `start_time>=\"2024-01-01T00:00:00.000Z\" AND start_time<=\"2024-01-02T00:00:00.000Z\"` * `end_time IS NULL`"
-            },
-            "pageToken": {
-              "location": "query",
-              "description": "Optional. Page token returned from previous List Call.",
-              "type": "string"
-            },
-            "pageSize": {
-              "description": "Optional. Maximum number of conference records to return. The service might return fewer than this value. If unspecified, at most 25 conference records are returned. The maximum value is 100; values above 100 are coerced to 100. Maximum might change in the future.",
-              "format": "int32",
-              "type": "integer",
-              "location": "query"
-            }
-          },
-          "flatPath": "v2/conferenceRecords",
-          "description": "Lists the conference records. By default, ordered by start time and in descending order. For more information, see [Work with conferences](https://developers.google.com/workspace/meet/api/guides/conferences).",
-          "httpMethod": "GET",
-          "scopes": [
-            "https://www.googleapis.com/auth/meetings.space.created",
-            "https://www.googleapis.com/auth/meetings.space.readonly"
-          ],
-          "parameterOrder": [],
-          "response": {
-            "$ref": "ListConferenceRecordsResponse"
-          },
-          "id": "meet.conferenceRecords.list"
-        }
-      }
-    },
-    "spaces": {
-      "methods": {
-        "create": {
-          "scopes": [
-            "https://www.googleapis.com/auth/meetings.space.created"
-          ],
-          "description": "Creates a space. For more information, see [Manage meeting spaces](https://developers.google.com/workspace/meet/api/guides/manage-meeting-spaces).",
-          "flatPath": "v2/spaces",
-          "parameters": {},
-          "path": "v2/spaces",
-          "id": "meet.spaces.create",
-          "httpMethod": "POST",
-          "parameterOrder": [],
-          "request": {
-            "$ref": "Space"
-          },
-          "response": {
-            "$ref": "Space"
-          }
-        },
-        "get": {
-          "path": "v2/{+name}",
-          "parameterOrder": [
-            "name"
-          ],
-          "response": {
-            "$ref": "Space"
-          },
-          "scopes": [
-            "https://www.googleapis.com/auth/meetings.space.created",
-            "https://www.googleapis.com/auth/meetings.space.readonly",
-            "https://www.googleapis.com/auth/meetings.space.settings"
-          ],
-          "description": "Gets details about a meeting space. For more information, see [Manage meeting spaces](https://developers.google.com/workspace/meet/api/guides/manage-meeting-spaces). For an example, see [Get a meeting space](https://developers.google.com/workspace/meet/api/guides/meeting-spaces#get-meeting-space).",
-          "parameters": {
-            "name": {
-              "required": true,
-              "description": "Required. Resource name of the space. Format: `spaces/{space}` or `spaces/{meetingCode}`. `{space}` is the resource identifier for the space. It's a unique, server-generated ID and is case sensitive. For example, `jQCFfuBOdN5z`. `{meetingCode}` is an alias for the space. It's a typeable, unique character string and is non-case sensitive. For example, `abc-mnop-xyz`. The maximum length is 128 characters. A `meetingCode` shouldn't be stored long term as it can become dissociated from a meeting space and can be reused for different meeting spaces in the future. Generally, a `meetingCode` expires 365 days after last use. For more information, see [Learn about meeting codes in Google Meet](https://support.google.com/meet/answer/10710509). For more information, see [How Meet identifies a meeting space](https://developers.google.com/workspace/meet/api/guides/meeting-spaces#identify-meeting-space).",
-              "type": "string",
-              "location": "path",
-              "pattern": "^spaces/[^/]+$"
-            }
-          },
-          "id": "meet.spaces.get",
-          "httpMethod": "GET",
-          "flatPath": "v2/spaces/{spacesId}"
-        },
-        "patch": {
-          "flatPath": "v2/spaces/{spacesId}",
-          "parameterOrder": [
-            "name"
-          ],
-          "id": "meet.spaces.patch",
-          "path": "v2/{+name}",
-          "request": {
-            "$ref": "Space"
-          },
-          "description": "Updates details about a meeting space. For more information, see [Manage meeting spaces](https://developers.google.com/workspace/meet/api/guides/manage-meeting-spaces).",
-          "httpMethod": "PATCH",
-          "scopes": [
-            "https://www.googleapis.com/auth/meetings.space.created",
-            "https://www.googleapis.com/auth/meetings.space.settings"
-          ],
-          "response": {
-            "$ref": "Space"
-          },
-          "parameters": {
-            "updateMask": {
-              "format": "google-fieldmask",
-              "type": "string",
-              "location": "query",
-              "description": "Optional. Field mask used to specify the fields to be updated in the space. If update_mask isn't provided(not set, set with empty paths, or only has \"\" as paths), it defaults to update all fields provided with values in the request. Using \"*\" as update_mask will update all fields, including deleting fields not set in the request."
-            },
-            "name": {
-              "required": true,
-              "description": "Immutable. Resource name of the space. Format: `spaces/{space}`. `{space}` is the resource identifier for the space. It's a unique, server-generated ID and is case sensitive. For example, `jQCFfuBOdN5z`. For more information, see [How Meet identifies a meeting space](https://developers.google.com/workspace/meet/api/guides/meeting-spaces#identify-meeting-space).",
-              "location": "path",
-              "pattern": "^spaces/[^/]+$",
-              "type": "string"
-            }
-          }
-        },
-        "endActiveConference": {
-          "id": "meet.spaces.endActiveConference",
-          "description": "Ends an active conference (if there's one). For more information, see [Manage meeting spaces](https://developers.google.com/workspace/meet/api/guides/manage-meeting-spaces).",
-          "scopes": [
-            "https://www.googleapis.com/auth/meetings.space.created"
-          ],
-          "path": "v2/{+name}:endActiveConference",
-          "response": {
-            "$ref": "Empty"
-          },
-          "flatPath": "v2/spaces/{spacesId}:endActiveConference",
-          "parameters": {
-            "name": {
-              "pattern": "^spaces/[^/]+$",
-              "required": true,
-              "description": "Required. Resource name of the space. Format: `spaces/{space}`. `{space}` is the resource identifier for the space. It's a unique, server-generated ID and is case sensitive. For example, `jQCFfuBOdN5z`. For more information, see [How Meet identifies a meeting space](https://developers.google.com/workspace/meet/api/guides/meeting-spaces#identify-meeting-space).",
-              "location": "path",
-              "type": "string"
-            }
-          },
-          "httpMethod": "POST",
-          "parameterOrder": [
-            "name"
-          ],
-          "request": {
-            "$ref": "EndActiveConferenceRequest"
-          }
-        }
-      },
-      "resources": {
-        "members": {
-          "methods": {
-            "create": {
-              "description": "Creates a member. For more information, see [Manage meeting space members](https://developers.google.com/workspace/meet/api/guides/meeting-space-members). This API supports the `fields` parameter in [SystemParameterContext](https://cloud.google.com/apis/docs/system-parameters). When the `fields` parameter is omitted, this API response will default to \"name,email,role,user\".",
-              "scopes": [
-                "https://www.googleapis.com/auth/meetings.space.created"
-              ],
-              "parameters": {
-                "parent": {
-                  "required": true,
-                  "type": "string",
-                  "location": "path",
-                  "description": "Required. Format: spaces/{space}",
-                  "pattern": "^spaces/[^/]+$"
-                }
-              },
-              "httpMethod": "POST",
-              "response": {
-                "$ref": "Member"
-              },
-              "path": "v2/{+parent}/members",
-              "parameterOrder": [
-                "parent"
-              ],
-              "flatPath": "v2/spaces/{spacesId}/members",
-              "request": {
-                "$ref": "Member"
-              },
-              "id": "meet.spaces.members.create"
-            },
-            "delete": {
-              "flatPath": "v2/spaces/{spacesId}/members/{membersId}",
-              "path": "v2/{+name}",
-              "httpMethod": "DELETE",
-              "parameters": {
-                "name": {
-                  "pattern": "^spaces/[^/]+/members/[^/]+$",
-                  "location": "path",
-                  "required": true,
-                  "type": "string",
-                  "description": "Required. Format: “spaces/{space}/members/{member}”"
-                }
-              },
-              "description": "Deletes the member who was previously assigned roles in the space. For more information, see [Manage meeting space members](https://developers.google.com/workspace/meet/api/guides/meeting-space-members).",
-              "scopes": [
-                "https://www.googleapis.com/auth/meetings.space.created"
-              ],
-              "parameterOrder": [
-                "name"
-              ],
-              "id": "meet.spaces.members.delete",
-              "response": {
-                "$ref": "Empty"
-              }
-            },
-            "list": {
-              "description": "Lists members. For more information, see [Manage meeting space members](https://developers.google.com/workspace/meet/api/guides/meeting-space-members). This API supports the `fields` parameter in [SystemParameterContext](https://cloud.google.com/apis/docs/system-parameters). When the `fields` parameter is omitted this API response will default to \"name,email,role,user\".",
-              "response": {
-                "$ref": "ListMembersResponse"
-              },
-              "id": "meet.spaces.members.list",
-              "parameterOrder": [
-                "parent"
-              ],
-              "parameters": {
-                "pageToken": {
-                  "description": "Optional. Page token returned from previous List Call.",
-                  "type": "string",
-                  "location": "query"
-                },
-                "parent": {
-                  "location": "path",
-                  "type": "string",
-                  "required": true,
-                  "pattern": "^spaces/[^/]+$",
-                  "description": "Required. Format: spaces/{space}"
-                },
-                "pageSize": {
-                  "type": "integer",
-                  "format": "int32",
-                  "description": "Optional. Maximum number of members to return. The service might return fewer than this value. If unspecified or set to 0, at most 250 members are returned. The maximum value is 500; values above 500 are coerced to 500. Maximum might change in the future.",
-                  "location": "query"
-                }
-              },
-              "httpMethod": "GET",
-              "path": "v2/{+parent}/members",
-              "flatPath": "v2/spaces/{spacesId}/members",
-              "scopes": [
-                "https://www.googleapis.com/auth/meetings.space.created",
-                "https://www.googleapis.com/auth/meetings.space.readonly"
-              ]
-            },
-            "get": {
-              "httpMethod": "GET",
-              "description": "Gets a member. For more information, see [Manage meeting space members](https://developers.google.com/workspace/meet/api/guides/meeting-space-members). This API supports the `fields` parameter in [SystemParameterContext](https://cloud.google.com/apis/docs/system-parameters). When the `fields` parameter is omitted, this API response will default to \"name,email,role,user\".",
-              "parameters": {
-                "name": {
-                  "required": true,
-                  "location": "path",
-                  "description": "Required. Format: “spaces/{space}/members/{member}”",
-                  "pattern": "^spaces/[^/]+/members/[^/]+$",
-                  "type": "string"
-                }
-              },
-              "path": "v2/{+name}",
-              "id": "meet.spaces.members.get",
-              "flatPath": "v2/spaces/{spacesId}/members/{membersId}",
-              "parameterOrder": [
-                "name"
-              ],
-              "response": {
-                "$ref": "Member"
-              },
-              "scopes": [
-                "https://www.googleapis.com/auth/meetings.space.created",
-                "https://www.googleapis.com/auth/meetings.space.readonly"
-              ]
-            },
-            "batchUpdate": {
-              "request": {
-                "$ref": "BatchUpdateMembersRequest"
-              },
-              "description": "Updates members of one space within a batch. For more information, see [Manage meeting space members](https://developers.google.com/workspace/meet/api/guides/meeting-space-members).",
-              "parameterOrder": [
-                "parent"
-              ],
-              "flatPath": "v2/spaces/{spacesId}/members:batchUpdate",
-              "id": "meet.spaces.members.batchUpdate",
-              "response": {
-                "$ref": "BatchUpdateMembersResponse"
-              },
-              "path": "v2/{+parent}/members:batchUpdate",
-              "httpMethod": "POST",
-              "scopes": [
-                "https://www.googleapis.com/auth/meetings.space.created"
-              ],
-              "parameters": {
-                "parent": {
-                  "description": "Required. The parent resource shared by all Members being updated. Format: spaces/{space}",
-                  "pattern": "^spaces/[^/]+$",
-                  "required": true,
-                  "type": "string",
-                  "location": "path"
-                }
-              }
-            },
-            "patch": {
-              "request": {
-                "$ref": "Member"
-              },
-              "flatPath": "v2/spaces/{spacesId}/members/{membersId}",
-              "parameterOrder": [
-                "name"
-              ],
-              "id": "meet.spaces.members.patch",
-              "path": "v2/{+name}",
-              "scopes": [
-                "https://www.googleapis.com/auth/meetings.space.created"
-              ],
-              "description": "Updates a member. For more information, see [Manage meeting space members](https://developers.google.com/workspace/meet/api/guides/meeting-space-members).",
-              "httpMethod": "PATCH",
-              "parameters": {
-                "updateMask": {
-                  "type": "string",
-                  "format": "google-fieldmask",
-                  "location": "query",
-                  "description": "Optional. Field mask used to specify the fields to be updated in the member. If update_mask isn't provided(not set, set with empty paths, or only has \"\" as paths), it defaults to update all fields provided with values in the request. Using \"*\" as update_mask will update all fields, including deleting fields not set in the request. In case of BatchUpdate, it must be absent or the same as the update_mask in BatchUpdateMembersRequest when UpdateMemberRequest is built as a child request of BatchUpdateMembersRequest."
-                },
-                "name": {
-                  "description": "Identifier. Resource name of the member. Format: spaces/{space}/members/{member}",
-                  "pattern": "^spaces/[^/]+/members/[^/]+$",
-                  "type": "string",
-                  "location": "path",
-                  "required": true
-                }
-              },
-              "response": {
-                "$ref": "Member"
-              }
-            }
-          }
-        }
-      }
-    }
-  },
-  "icons": {
-    "x16": "http://www.google.com/images/icons/product/search-16.gif",
-    "x32": "http://www.google.com/images/icons/product/search-32.gif"
-  },
-  "version": "v2",
-  "protocol": "rest",
-  "ownerName": "Google",
+  "baseUrl": "https://meet.googleapis.com/",
   "auth": {
     "oauth2": {
       "scopes": {
@@ -1702,94 +16,1780 @@
       }
     }
   },
-  "mtlsRootUrl": "https://meet.mtls.googleapis.com/",
-  "servicePath": "",
-  "revision": "20260922",
-  "name": "meet",
-  "parameters": {
-    "upload_protocol": {
-      "location": "query",
-      "type": "string",
-      "description": "Upload protocol for media (e.g. \"raw\", \"multipart\")."
+  "canonicalName": "Meet",
+  "resources": {
+    "spaces": {
+      "methods": {
+        "get": {
+          "httpMethod": "GET",
+          "id": "meet.spaces.get",
+          "description": "Gets details about a meeting space. For more information, see [Manage meeting spaces](https://developers.google.com/workspace/meet/api/guides/manage-meeting-spaces). For an example, see [Get a meeting space](https://developers.google.com/workspace/meet/api/guides/meeting-spaces#get-meeting-space).",
+          "parameters": {
+            "name": {
+              "location": "path",
+              "pattern": "^spaces/[^/]+$",
+              "type": "string",
+              "description": "Required. Resource name of the space. Format: `spaces/{space}` or `spaces/{meetingCode}`. `{space}` is the resource identifier for the space. It's a unique, server-generated ID and is case sensitive. For example, `jQCFfuBOdN5z`. `{meetingCode}` is an alias for the space. It's a typeable, unique character string and is non-case sensitive. For example, `abc-mnop-xyz`. The maximum length is 128 characters. A `meetingCode` shouldn't be stored long term as it can become dissociated from a meeting space and can be reused for different meeting spaces in the future. Generally, a `meetingCode` expires 365 days after last use. For more information, see [Learn about meeting codes in Google Meet](https://support.google.com/meet/answer/10710509). For more information, see [How Meet identifies a meeting space](https://developers.google.com/workspace/meet/api/guides/meeting-spaces#identify-meeting-space).",
+              "required": true
+            }
+          },
+          "parameterOrder": [
+            "name"
+          ],
+          "flatPath": "v2/spaces/{spacesId}",
+          "response": {
+            "$ref": "Space"
+          },
+          "path": "v2/{+name}",
+          "scopes": [
+            "https://www.googleapis.com/auth/meetings.space.created",
+            "https://www.googleapis.com/auth/meetings.space.readonly",
+            "https://www.googleapis.com/auth/meetings.space.settings"
+          ]
+        },
+        "create": {
+          "parameters": {},
+          "request": {
+            "$ref": "Space"
+          },
+          "response": {
+            "$ref": "Space"
+          },
+          "path": "v2/spaces",
+          "scopes": [
+            "https://www.googleapis.com/auth/meetings.space.created"
+          ],
+          "flatPath": "v2/spaces",
+          "httpMethod": "POST",
+          "description": "Creates a space. For more information, see [Manage meeting spaces](https://developers.google.com/workspace/meet/api/guides/manage-meeting-spaces).",
+          "id": "meet.spaces.create",
+          "parameterOrder": []
+        },
+        "patch": {
+          "response": {
+            "$ref": "Space"
+          },
+          "request": {
+            "$ref": "Space"
+          },
+          "description": "Updates details about a meeting space. For more information, see [Manage meeting spaces](https://developers.google.com/workspace/meet/api/guides/manage-meeting-spaces).",
+          "path": "v2/{+name}",
+          "flatPath": "v2/spaces/{spacesId}",
+          "httpMethod": "PATCH",
+          "id": "meet.spaces.patch",
+          "scopes": [
+            "https://www.googleapis.com/auth/meetings.space.created",
+            "https://www.googleapis.com/auth/meetings.space.settings"
+          ],
+          "parameterOrder": [
+            "name"
+          ],
+          "parameters": {
+            "name": {
+              "required": true,
+              "pattern": "^spaces/[^/]+$",
+              "location": "path",
+              "description": "Immutable. Resource name of the space. Format: `spaces/{space}`. `{space}` is the resource identifier for the space. It's a unique, server-generated ID and is case sensitive. For example, `jQCFfuBOdN5z`. For more information, see [How Meet identifies a meeting space](https://developers.google.com/workspace/meet/api/guides/meeting-spaces#identify-meeting-space).",
+              "type": "string"
+            },
+            "updateMask": {
+              "location": "query",
+              "type": "string",
+              "description": "Optional. Field mask used to specify the fields to be updated in the space. If update_mask isn't provided(not set, set with empty paths, or only has \"\" as paths), it defaults to update all fields provided with values in the request. Using \"*\" as update_mask will update all fields, including deleting fields not set in the request.",
+              "format": "google-fieldmask"
+            }
+          }
+        },
+        "endActiveConference": {
+          "request": {
+            "$ref": "EndActiveConferenceRequest"
+          },
+          "parameterOrder": [
+            "name"
+          ],
+          "id": "meet.spaces.endActiveConference",
+          "path": "v2/{+name}:endActiveConference",
+          "httpMethod": "POST",
+          "flatPath": "v2/spaces/{spacesId}:endActiveConference",
+          "scopes": [
+            "https://www.googleapis.com/auth/meetings.space.created"
+          ],
+          "response": {
+            "$ref": "Empty"
+          },
+          "parameters": {
+            "name": {
+              "type": "string",
+              "required": true,
+              "description": "Required. Resource name of the space. Format: `spaces/{space}`. `{space}` is the resource identifier for the space. It's a unique, server-generated ID and is case sensitive. For example, `jQCFfuBOdN5z`. For more information, see [How Meet identifies a meeting space](https://developers.google.com/workspace/meet/api/guides/meeting-spaces#identify-meeting-space).",
+              "pattern": "^spaces/[^/]+$",
+              "location": "path"
+            }
+          },
+          "description": "Ends an active conference (if there's one). For more information, see [Manage meeting spaces](https://developers.google.com/workspace/meet/api/guides/manage-meeting-spaces)."
+        }
+      },
+      "resources": {
+        "members": {
+          "methods": {
+            "patch": {
+              "parameters": {
+                "updateMask": {
+                  "description": "Optional. Field mask used to specify the fields to be updated in the member. If update_mask isn't provided(not set, set with empty paths, or only has \"\" as paths), it defaults to update all fields provided with values in the request. Using \"*\" as update_mask will update all fields, including deleting fields not set in the request. In case of BatchUpdate, it must be absent or the same as the update_mask in BatchUpdateMembersRequest when UpdateMemberRequest is built as a child request of BatchUpdateMembersRequest.",
+                  "location": "query",
+                  "type": "string",
+                  "format": "google-fieldmask"
+                },
+                "name": {
+                  "description": "Identifier. Resource name of the member. Format: spaces/{space}/members/{member}",
+                  "required": true,
+                  "pattern": "^spaces/[^/]+/members/[^/]+$",
+                  "type": "string",
+                  "location": "path"
+                }
+              },
+              "parameterOrder": [
+                "name"
+              ],
+              "id": "meet.spaces.members.patch",
+              "request": {
+                "$ref": "Member"
+              },
+              "httpMethod": "PATCH",
+              "description": "Updates a member. For more information, see [Manage meeting space members](https://developers.google.com/workspace/meet/api/guides/meeting-space-members).",
+              "scopes": [
+                "https://www.googleapis.com/auth/meetings.space.created"
+              ],
+              "response": {
+                "$ref": "Member"
+              },
+              "flatPath": "v2/spaces/{spacesId}/members/{membersId}",
+              "path": "v2/{+name}"
+            },
+            "list": {
+              "scopes": [
+                "https://www.googleapis.com/auth/meetings.space.created",
+                "https://www.googleapis.com/auth/meetings.space.readonly"
+              ],
+              "path": "v2/{+parent}/members",
+              "parameters": {
+                "parent": {
+                  "description": "Required. Format: spaces/{space}",
+                  "required": true,
+                  "type": "string",
+                  "pattern": "^spaces/[^/]+$",
+                  "location": "path"
+                },
+                "pageToken": {
+                  "type": "string",
+                  "description": "Optional. Page token returned from previous List Call.",
+                  "location": "query"
+                },
+                "pageSize": {
+                  "description": "Optional. Maximum number of members to return. The service might return fewer than this value. If unspecified or set to 0, at most 250 members are returned. The maximum value is 500; values above 500 are coerced to 500. Maximum might change in the future.",
+                  "type": "integer",
+                  "format": "int32",
+                  "location": "query"
+                }
+              },
+              "description": "Lists members. For more information, see [Manage meeting space members](https://developers.google.com/workspace/meet/api/guides/meeting-space-members). This API supports the `fields` parameter in [SystemParameterContext](https://cloud.google.com/apis/docs/system-parameters). When the `fields` parameter is omitted this API response will default to \"name,email,role,user\".",
+              "parameterOrder": [
+                "parent"
+              ],
+              "id": "meet.spaces.members.list",
+              "httpMethod": "GET",
+              "response": {
+                "$ref": "ListMembersResponse"
+              },
+              "flatPath": "v2/spaces/{spacesId}/members"
+            },
+            "batchUpdate": {
+              "flatPath": "v2/spaces/{spacesId}/members:batchUpdate",
+              "description": "Updates members of one space within a batch. For more information, see [Manage meeting space members](https://developers.google.com/workspace/meet/api/guides/meeting-space-members).",
+              "parameters": {
+                "parent": {
+                  "pattern": "^spaces/[^/]+$",
+                  "type": "string",
+                  "description": "Required. The parent resource shared by all Members being updated. Format: spaces/{space}",
+                  "location": "path",
+                  "required": true
+                }
+              },
+              "id": "meet.spaces.members.batchUpdate",
+              "response": {
+                "$ref": "BatchUpdateMembersResponse"
+              },
+              "scopes": [
+                "https://www.googleapis.com/auth/meetings.space.created"
+              ],
+              "request": {
+                "$ref": "BatchUpdateMembersRequest"
+              },
+              "parameterOrder": [
+                "parent"
+              ],
+              "httpMethod": "POST",
+              "path": "v2/{+parent}/members:batchUpdate"
+            },
+            "get": {
+              "path": "v2/{+name}",
+              "description": "Gets a member. For more information, see [Manage meeting space members](https://developers.google.com/workspace/meet/api/guides/meeting-space-members). This API supports the `fields` parameter in [SystemParameterContext](https://cloud.google.com/apis/docs/system-parameters). When the `fields` parameter is omitted, this API response will default to \"name,email,role,user\".",
+              "id": "meet.spaces.members.get",
+              "parameters": {
+                "name": {
+                  "type": "string",
+                  "required": true,
+                  "description": "Required. Format: “spaces/{space}/members/{member}”",
+                  "pattern": "^spaces/[^/]+/members/[^/]+$",
+                  "location": "path"
+                }
+              },
+              "parameterOrder": [
+                "name"
+              ],
+              "scopes": [
+                "https://www.googleapis.com/auth/meetings.space.created",
+                "https://www.googleapis.com/auth/meetings.space.readonly"
+              ],
+              "response": {
+                "$ref": "Member"
+              },
+              "flatPath": "v2/spaces/{spacesId}/members/{membersId}",
+              "httpMethod": "GET"
+            },
+            "create": {
+              "scopes": [
+                "https://www.googleapis.com/auth/meetings.space.created"
+              ],
+              "flatPath": "v2/spaces/{spacesId}/members",
+              "id": "meet.spaces.members.create",
+              "parameters": {
+                "parent": {
+                  "required": true,
+                  "description": "Required. Format: spaces/{space}",
+                  "type": "string",
+                  "location": "path",
+                  "pattern": "^spaces/[^/]+$"
+                }
+              },
+              "request": {
+                "$ref": "Member"
+              },
+              "response": {
+                "$ref": "Member"
+              },
+              "path": "v2/{+parent}/members",
+              "httpMethod": "POST",
+              "description": "Creates a member. For more information, see [Manage meeting space members](https://developers.google.com/workspace/meet/api/guides/meeting-space-members). This API supports the `fields` parameter in [SystemParameterContext](https://cloud.google.com/apis/docs/system-parameters). When the `fields` parameter is omitted, this API response will default to \"name,email,role,user\".",
+              "parameterOrder": [
+                "parent"
+              ]
+            },
+            "delete": {
+              "parameters": {
+                "name": {
+                  "location": "path",
+                  "pattern": "^spaces/[^/]+/members/[^/]+$",
+                  "required": true,
+                  "description": "Required. Format: “spaces/{space}/members/{member}”",
+                  "type": "string"
+                }
+              },
+              "description": "Deletes the member who was previously assigned roles in the space. For more information, see [Manage meeting space members](https://developers.google.com/workspace/meet/api/guides/meeting-space-members).",
+              "parameterOrder": [
+                "name"
+              ],
+              "id": "meet.spaces.members.delete",
+              "path": "v2/{+name}",
+              "scopes": [
+                "https://www.googleapis.com/auth/meetings.space.created"
+              ],
+              "response": {
+                "$ref": "Empty"
+              },
+              "httpMethod": "DELETE",
+              "flatPath": "v2/spaces/{spacesId}/members/{membersId}"
+            }
+          }
+        }
+      }
     },
-    "access_token": {
+    "conferenceRecords": {
+      "methods": {
+        "get": {
+          "path": "v2/{+name}",
+          "id": "meet.conferenceRecords.get",
+          "httpMethod": "GET",
+          "parameterOrder": [
+            "name"
+          ],
+          "scopes": [
+            "https://www.googleapis.com/auth/meetings.space.created",
+            "https://www.googleapis.com/auth/meetings.space.readonly"
+          ],
+          "flatPath": "v2/conferenceRecords/{conferenceRecordsId}",
+          "description": "Gets a conference record by conference ID. For more information, see [Work with conferences](https://developers.google.com/workspace/meet/api/guides/conferences).",
+          "parameters": {
+            "name": {
+              "required": true,
+              "description": "Required. Resource name of the conference.",
+              "type": "string",
+              "location": "path",
+              "pattern": "^conferenceRecords/[^/]+$"
+            }
+          },
+          "response": {
+            "$ref": "ConferenceRecord"
+          }
+        },
+        "list": {
+          "path": "v2/conferenceRecords",
+          "httpMethod": "GET",
+          "parameterOrder": [],
+          "scopes": [
+            "https://www.googleapis.com/auth/meetings.space.created",
+            "https://www.googleapis.com/auth/meetings.space.readonly"
+          ],
+          "response": {
+            "$ref": "ListConferenceRecordsResponse"
+          },
+          "parameters": {
+            "filter": {
+              "description": "Optional. User specified filtering condition in [EBNF format](https://en.wikipedia.org/wiki/Extended_Backus%E2%80%93Naur_form). The following are the filterable fields: * `space.meeting_code` * `space.name` * `start_time` * `end_time` For example, consider the following filters: * `space.name = \"spaces/NAME\"` * `space.meeting_code = \"abc-mnop-xyz\"` * `start_time>=\"2024-01-01T00:00:00.000Z\" AND start_time<=\"2024-01-02T00:00:00.000Z\"` * `end_time IS NULL`",
+              "type": "string",
+              "location": "query"
+            },
+            "pageSize": {
+              "description": "Optional. Maximum number of conference records to return. The service might return fewer than this value. If unspecified, at most 25 conference records are returned. The maximum value is 100; values above 100 are coerced to 100. Maximum might change in the future.",
+              "format": "int32",
+              "location": "query",
+              "type": "integer"
+            },
+            "pageToken": {
+              "type": "string",
+              "location": "query",
+              "description": "Optional. Page token returned from previous List Call."
+            }
+          },
+          "description": "Lists the conference records. By default, ordered by start time and in descending order. For more information, see [Work with conferences](https://developers.google.com/workspace/meet/api/guides/conferences).",
+          "id": "meet.conferenceRecords.list",
+          "flatPath": "v2/conferenceRecords"
+        }
+      },
+      "resources": {
+        "recordings": {
+          "methods": {
+            "get": {
+              "response": {
+                "$ref": "Recording"
+              },
+              "httpMethod": "GET",
+              "description": "Gets a recording by recording ID. For more information, see [Work with artifacts](https://developers.google.com/workspace/meet/api/guides/artifacts).",
+              "flatPath": "v2/conferenceRecords/{conferenceRecordsId}/recordings/{recordingsId}",
+              "scopes": [
+                "https://www.googleapis.com/auth/meetings.space.created",
+                "https://www.googleapis.com/auth/meetings.space.readonly"
+              ],
+              "path": "v2/{+name}",
+              "id": "meet.conferenceRecords.recordings.get",
+              "parameters": {
+                "name": {
+                  "type": "string",
+                  "location": "path",
+                  "description": "Required. Resource name of the recording.",
+                  "pattern": "^conferenceRecords/[^/]+/recordings/[^/]+$",
+                  "required": true
+                }
+              },
+              "parameterOrder": [
+                "name"
+              ]
+            },
+            "list": {
+              "parameters": {
+                "pageToken": {
+                  "location": "query",
+                  "type": "string",
+                  "description": "Page token returned from previous List Call."
+                },
+                "parent": {
+                  "type": "string",
+                  "required": true,
+                  "pattern": "^conferenceRecords/[^/]+$",
+                  "description": "Required. Format: `conferenceRecords/{conference_record}`",
+                  "location": "path"
+                },
+                "pageSize": {
+                  "format": "int32",
+                  "description": "Maximum number of recordings to return. The service might return fewer than this value. If unspecified, at most 10 recordings are returned. The maximum value is 100; values above 100 are coerced to 100. Maximum might change in the future.",
+                  "type": "integer",
+                  "location": "query"
+                }
+              },
+              "flatPath": "v2/conferenceRecords/{conferenceRecordsId}/recordings",
+              "path": "v2/{+parent}/recordings",
+              "response": {
+                "$ref": "ListRecordingsResponse"
+              },
+              "parameterOrder": [
+                "parent"
+              ],
+              "httpMethod": "GET",
+              "id": "meet.conferenceRecords.recordings.list",
+              "scopes": [
+                "https://www.googleapis.com/auth/meetings.space.created",
+                "https://www.googleapis.com/auth/meetings.space.readonly"
+              ],
+              "description": "Lists the recording resources from the conference record. By default, ordered by start time and in ascending order. For more information, see [Work with artifacts](https://developers.google.com/workspace/meet/api/guides/artifacts)."
+            }
+          }
+        },
+        "transcripts": {
+          "methods": {
+            "get": {
+              "description": "Gets a transcript by transcript ID. For more information, see [Work with artifacts](https://developers.google.com/workspace/meet/api/guides/artifacts).",
+              "parameters": {
+                "name": {
+                  "location": "path",
+                  "pattern": "^conferenceRecords/[^/]+/transcripts/[^/]+$",
+                  "required": true,
+                  "type": "string",
+                  "description": "Required. Resource name of the transcript."
+                }
+              },
+              "id": "meet.conferenceRecords.transcripts.get",
+              "scopes": [
+                "https://www.googleapis.com/auth/meetings.space.created",
+                "https://www.googleapis.com/auth/meetings.space.readonly"
+              ],
+              "parameterOrder": [
+                "name"
+              ],
+              "response": {
+                "$ref": "Transcript"
+              },
+              "httpMethod": "GET",
+              "path": "v2/{+name}",
+              "flatPath": "v2/conferenceRecords/{conferenceRecordsId}/transcripts/{transcriptsId}"
+            },
+            "list": {
+              "response": {
+                "$ref": "ListTranscriptsResponse"
+              },
+              "parameters": {
+                "pageSize": {
+                  "format": "int32",
+                  "description": "Maximum number of transcripts to return. The service might return fewer than this value. If unspecified, at most 10 transcripts are returned. The maximum value is 100; values above 100 are coerced to 100. Maximum might change in the future.",
+                  "type": "integer",
+                  "location": "query"
+                },
+                "parent": {
+                  "location": "path",
+                  "type": "string",
+                  "description": "Required. Format: `conferenceRecords/{conference_record}`",
+                  "pattern": "^conferenceRecords/[^/]+$",
+                  "required": true
+                },
+                "pageToken": {
+                  "location": "query",
+                  "description": "Page token returned from previous List Call.",
+                  "type": "string"
+                }
+              },
+              "flatPath": "v2/conferenceRecords/{conferenceRecordsId}/transcripts",
+              "parameterOrder": [
+                "parent"
+              ],
+              "path": "v2/{+parent}/transcripts",
+              "httpMethod": "GET",
+              "scopes": [
+                "https://www.googleapis.com/auth/meetings.space.created",
+                "https://www.googleapis.com/auth/meetings.space.readonly"
+              ],
+              "id": "meet.conferenceRecords.transcripts.list",
+              "description": "Lists the set of transcripts from the conference record. By default, ordered by start time and in ascending order. For more information, see [Work with artifacts](https://developers.google.com/workspace/meet/api/guides/artifacts)."
+            }
+          },
+          "resources": {
+            "entries": {
+              "methods": {
+                "list": {
+                  "path": "v2/{+parent}/entries",
+                  "parameterOrder": [
+                    "parent"
+                  ],
+                  "id": "meet.conferenceRecords.transcripts.entries.list",
+                  "httpMethod": "GET",
+                  "flatPath": "v2/conferenceRecords/{conferenceRecordsId}/transcripts/{transcriptsId}/entries",
+                  "response": {
+                    "$ref": "ListTranscriptEntriesResponse"
+                  },
+                  "description": "Lists the structured transcript entries per transcript. By default, ordered by start time and in ascending order. For more information, see [Work with artifacts](https://developers.google.com/workspace/meet/api/guides/artifacts). Note: The transcript entries returned by the Google Meet API might not match the transcription found in the Google Docs transcript file. This can occur when 1) we have interleaved speakers within milliseconds, or 2) the Google Docs transcript file is modified after generation.",
+                  "parameters": {
+                    "pageToken": {
+                      "type": "string",
+                      "location": "query",
+                      "description": "Page token returned from previous List Call."
+                    },
+                    "pageSize": {
+                      "format": "int32",
+                      "description": "Maximum number of entries to return. The service might return fewer than this value. If unspecified, at most 10 entries are returned. The maximum value is 100; values above 100 are coerced to 100. Maximum might change in the future.",
+                      "location": "query",
+                      "type": "integer"
+                    },
+                    "parent": {
+                      "type": "string",
+                      "location": "path",
+                      "pattern": "^conferenceRecords/[^/]+/transcripts/[^/]+$",
+                      "required": true,
+                      "description": "Required. Format: `conferenceRecords/{conference_record}/transcripts/{transcript}`"
+                    }
+                  },
+                  "scopes": [
+                    "https://www.googleapis.com/auth/meetings.space.created",
+                    "https://www.googleapis.com/auth/meetings.space.readonly"
+                  ]
+                },
+                "get": {
+                  "scopes": [
+                    "https://www.googleapis.com/auth/meetings.space.created",
+                    "https://www.googleapis.com/auth/meetings.space.readonly"
+                  ],
+                  "response": {
+                    "$ref": "TranscriptEntry"
+                  },
+                  "id": "meet.conferenceRecords.transcripts.entries.get",
+                  "parameterOrder": [
+                    "name"
+                  ],
+                  "description": "Gets a `TranscriptEntry` resource by entry ID. For more information, see [Work with artifacts](https://developers.google.com/workspace/meet/api/guides/artifacts). Note: The transcript entries returned by the Google Meet API might not match the transcription found in the Google Docs transcript file. This can occur when 1) we have interleaved speakers within milliseconds, or 2) the Google Docs transcript file is modified after generation.",
+                  "parameters": {
+                    "name": {
+                      "required": true,
+                      "pattern": "^conferenceRecords/[^/]+/transcripts/[^/]+/entries/[^/]+$",
+                      "description": "Required. Resource name of the `TranscriptEntry`.",
+                      "location": "path",
+                      "type": "string"
+                    }
+                  },
+                  "flatPath": "v2/conferenceRecords/{conferenceRecordsId}/transcripts/{transcriptsId}/entries/{entriesId}",
+                  "path": "v2/{+name}",
+                  "httpMethod": "GET"
+                }
+              }
+            }
+          }
+        },
+        "smartNotes": {
+          "methods": {
+            "list": {
+              "response": {
+                "$ref": "ListSmartNotesResponse"
+              },
+              "parameters": {
+                "parent": {
+                  "type": "string",
+                  "required": true,
+                  "pattern": "^conferenceRecords/[^/]+$",
+                  "location": "path",
+                  "description": "Required. Format: `conferenceRecords/{conference_record}`"
+                },
+                "pageToken": {
+                  "type": "string",
+                  "location": "query",
+                  "description": "Optional. Page token returned from previous List Call."
+                },
+                "pageSize": {
+                  "description": "Optional. Maximum number of smart notes to return. The service might return fewer than this value. If unspecified, at most 10 smart notes are returned. The maximum value is 100; values above 100 are coerced to 100. Maximum might change in the future.",
+                  "format": "int32",
+                  "type": "integer",
+                  "location": "query"
+                }
+              },
+              "flatPath": "v2/conferenceRecords/{conferenceRecordsId}/smartNotes",
+              "description": "Lists the set of smart notes from the conference record. By default, ordered by start time and in ascending order. For more information, see [Work with artifacts](https://developers.google.com/workspace/meet/api/guides/artifacts).",
+              "scopes": [
+                "https://www.googleapis.com/auth/meetings.space.created",
+                "https://www.googleapis.com/auth/meetings.space.readonly"
+              ],
+              "path": "v2/{+parent}/smartNotes",
+              "id": "meet.conferenceRecords.smartNotes.list",
+              "httpMethod": "GET",
+              "parameterOrder": [
+                "parent"
+              ]
+            },
+            "get": {
+              "parameterOrder": [
+                "name"
+              ],
+              "response": {
+                "$ref": "SmartNote"
+              },
+              "flatPath": "v2/conferenceRecords/{conferenceRecordsId}/smartNotes/{smartNotesId}",
+              "httpMethod": "GET",
+              "scopes": [
+                "https://www.googleapis.com/auth/meetings.space.created",
+                "https://www.googleapis.com/auth/meetings.space.readonly"
+              ],
+              "path": "v2/{+name}",
+              "description": "Gets smart notes by smart note ID. For more information, see [Work with artifacts](https://developers.google.com/workspace/meet/api/guides/artifacts).",
+              "parameters": {
+                "name": {
+                  "location": "path",
+                  "pattern": "^conferenceRecords/[^/]+/smartNotes/[^/]+$",
+                  "type": "string",
+                  "required": true,
+                  "description": "Required. Resource name of the smart note. Format: conferenceRecords/{conference_record}/smartNotes/{smart_note}"
+                }
+              },
+              "id": "meet.conferenceRecords.smartNotes.get"
+            }
+          }
+        },
+        "participants": {
+          "resources": {
+            "participantSessions": {
+              "methods": {
+                "list": {
+                  "httpMethod": "GET",
+                  "path": "v2/{+parent}/participantSessions",
+                  "description": "Lists the participant sessions of a participant in a conference record. By default, ordered by join time and in descending order. This API supports `fields` as standard parameters like every other API. However, when the `fields` request parameter is omitted this API defaults to `'participantsessions/*, next_page_token'`. For more information, see [Work with participants](https://developers.google.com/workspace/meet/api/guides/participants).",
+                  "scopes": [
+                    "https://www.googleapis.com/auth/meetings.space.created",
+                    "https://www.googleapis.com/auth/meetings.space.readonly"
+                  ],
+                  "response": {
+                    "$ref": "ListParticipantSessionsResponse"
+                  },
+                  "parameters": {
+                    "filter": {
+                      "location": "query",
+                      "description": "Optional. User specified filtering condition in [EBNF format](https://en.wikipedia.org/wiki/Extended_Backus%E2%80%93Naur_form). The following are the filterable fields: * `start_time` * `end_time` For example, `end_time IS NULL` returns active participant sessions in the conference record.",
+                      "type": "string"
+                    },
+                    "pageSize": {
+                      "format": "int32",
+                      "type": "integer",
+                      "description": "Optional. Maximum number of participant sessions to return. The service might return fewer than this value. If unspecified, at most 100 participants are returned. The maximum value is 250; values above 250 are coerced to 250. Maximum might change in the future.",
+                      "location": "query"
+                    },
+                    "pageToken": {
+                      "type": "string",
+                      "description": "Optional. Page token returned from previous List Call.",
+                      "location": "query"
+                    },
+                    "parent": {
+                      "required": true,
+                      "pattern": "^conferenceRecords/[^/]+/participants/[^/]+$",
+                      "description": "Required. Format: `conferenceRecords/{conference_record}/participants/{participant}`",
+                      "location": "path",
+                      "type": "string"
+                    }
+                  },
+                  "id": "meet.conferenceRecords.participants.participantSessions.list",
+                  "parameterOrder": [
+                    "parent"
+                  ],
+                  "flatPath": "v2/conferenceRecords/{conferenceRecordsId}/participants/{participantsId}/participantSessions"
+                },
+                "get": {
+                  "parameterOrder": [
+                    "name"
+                  ],
+                  "path": "v2/{+name}",
+                  "flatPath": "v2/conferenceRecords/{conferenceRecordsId}/participants/{participantsId}/participantSessions/{participantSessionsId}",
+                  "parameters": {
+                    "name": {
+                      "required": true,
+                      "description": "Required. Resource name of the participant.",
+                      "pattern": "^conferenceRecords/[^/]+/participants/[^/]+/participantSessions/[^/]+$",
+                      "type": "string",
+                      "location": "path"
+                    }
+                  },
+                  "description": "Gets a participant session by participant session ID. For more information, see [Work with participants](https://developers.google.com/workspace/meet/api/guides/participants).",
+                  "response": {
+                    "$ref": "ParticipantSession"
+                  },
+                  "id": "meet.conferenceRecords.participants.participantSessions.get",
+                  "httpMethod": "GET",
+                  "scopes": [
+                    "https://www.googleapis.com/auth/meetings.space.created",
+                    "https://www.googleapis.com/auth/meetings.space.readonly"
+                  ]
+                }
+              }
+            }
+          },
+          "methods": {
+            "list": {
+              "httpMethod": "GET",
+              "response": {
+                "$ref": "ListParticipantsResponse"
+              },
+              "description": "Lists the participants in a conference record. By default, ordered by join time and in descending order. This API supports `fields` as standard parameters like every other API. However, when the `fields` request parameter is omitted, this API defaults to `'participants/*, next_page_token'`. For more information, see [Work with participants](https://developers.google.com/workspace/meet/api/guides/participants).",
+              "flatPath": "v2/conferenceRecords/{conferenceRecordsId}/participants",
+              "path": "v2/{+parent}/participants",
+              "scopes": [
+                "https://www.googleapis.com/auth/meetings.space.created",
+                "https://www.googleapis.com/auth/meetings.space.readonly"
+              ],
+              "parameters": {
+                "filter": {
+                  "location": "query",
+                  "type": "string",
+                  "description": "Optional. User specified filtering condition in [EBNF format](https://en.wikipedia.org/wiki/Extended_Backus%E2%80%93Naur_form). The following are the filterable fields: * `earliest_start_time` * `latest_end_time` For example, `latest_end_time IS NULL` returns active participants in the conference."
+                },
+                "parent": {
+                  "required": true,
+                  "pattern": "^conferenceRecords/[^/]+$",
+                  "location": "path",
+                  "description": "Required. Format: `conferenceRecords/{conference_record}`",
+                  "type": "string"
+                },
+                "pageSize": {
+                  "type": "integer",
+                  "format": "int32",
+                  "description": "Maximum number of participants to return. The service might return fewer than this value. If unspecified, at most 100 participants are returned. The maximum value is 250; values above 250 are coerced to 250. Maximum might change in the future.",
+                  "location": "query"
+                },
+                "pageToken": {
+                  "description": "Page token returned from previous List Call.",
+                  "location": "query",
+                  "type": "string"
+                }
+              },
+              "parameterOrder": [
+                "parent"
+              ],
+              "id": "meet.conferenceRecords.participants.list"
+            },
+            "get": {
+              "path": "v2/{+name}",
+              "response": {
+                "$ref": "Participant"
+              },
+              "httpMethod": "GET",
+              "scopes": [
+                "https://www.googleapis.com/auth/meetings.space.created",
+                "https://www.googleapis.com/auth/meetings.space.readonly"
+              ],
+              "flatPath": "v2/conferenceRecords/{conferenceRecordsId}/participants/{participantsId}",
+              "description": "Gets a participant by participant ID. For more information, see [Work with participants](https://developers.google.com/workspace/meet/api/guides/participants).",
+              "parameters": {
+                "name": {
+                  "location": "path",
+                  "pattern": "^conferenceRecords/[^/]+/participants/[^/]+$",
+                  "type": "string",
+                  "required": true,
+                  "description": "Required. Resource name of the participant."
+                }
+              },
+              "id": "meet.conferenceRecords.participants.get",
+              "parameterOrder": [
+                "name"
+              ]
+            }
+          }
+        }
+      }
+    }
+  },
+  "mtlsRootUrl": "https://meet.mtls.googleapis.com/",
+  "title": "Google Meet API",
+  "protocol": "rest",
+  "icons": {
+    "x32": "http://www.google.com/images/icons/product/search-32.gif",
+    "x16": "http://www.google.com/images/icons/product/search-16.gif"
+  },
+  "name": "meet",
+  "batchPath": "batch",
+  "revision": "20260923",
+  "fullyEncodeReservedExpansion": true,
+  "schemas": {
+    "ConferenceRecord": {
+      "description": "Single instance of a meeting held in a space.",
+      "type": "object",
+      "id": "ConferenceRecord",
+      "properties": {
+        "expireTime": {
+          "type": "string",
+          "format": "google-datetime",
+          "readOnly": true,
+          "description": "Output only. Server enforced expiration time for when this conference record resource is deleted. The resource is deleted 30 days after the conference ends."
+        },
+        "startTime": {
+          "type": "string",
+          "format": "google-datetime",
+          "description": "Output only. Timestamp when the conference started. Always set.",
+          "readOnly": true
+        },
+        "space": {
+          "readOnly": true,
+          "description": "Output only. The space where the conference was held.",
+          "type": "string"
+        },
+        "name": {
+          "type": "string",
+          "description": "Identifier. Resource name of the conference record. Format: `conferenceRecords/{conference_record}` where `{conference_record}` is a unique ID for each instance of a call within a space."
+        },
+        "endTime": {
+          "type": "string",
+          "readOnly": true,
+          "format": "google-datetime",
+          "description": "Output only. Timestamp when the conference ended. Set for past conferences. Unset if the conference is ongoing."
+        }
+      }
+    },
+    "TranscriptionConfig": {
+      "description": "Configuration related to transcription in a meeting space.",
+      "id": "TranscriptionConfig",
+      "properties": {
+        "autoTranscriptionGeneration": {
+          "enum": [
+            "AUTO_GENERATION_TYPE_UNSPECIFIED",
+            "ON",
+            "OFF"
+          ],
+          "type": "string",
+          "description": "Defines whether the content of a meeting is automatically transcribed when someone with the privilege to transcribe joins the meeting.",
+          "enumDescriptions": [
+            "Default value specified by user policy. This should never be returned.",
+            "The artifact is generated automatically.",
+            "The artifact is not generated automatically."
+          ]
+        }
+      },
+      "type": "object"
+    },
+    "Participant": {
+      "description": "User who attended or is attending a conference.",
+      "properties": {
+        "phoneUser": {
+          "description": "User calling from their phone.",
+          "$ref": "PhoneUser"
+        },
+        "name": {
+          "type": "string",
+          "description": "Output only. Resource name of the participant. Format: `conferenceRecords/{conference_record}/participants/{participant}`",
+          "readOnly": true
+        },
+        "latestEndTime": {
+          "description": "Output only. Time when the participant left the meeting for the last time. This can be null if it's an active meeting.",
+          "readOnly": true,
+          "format": "google-datetime",
+          "type": "string"
+        },
+        "anonymousUser": {
+          "$ref": "AnonymousUser",
+          "description": "Anonymous user."
+        },
+        "signedinUser": {
+          "$ref": "SignedinUser",
+          "description": "Signed-in user."
+        },
+        "earliestStartTime": {
+          "description": "Output only. Time when the participant first joined the meeting.",
+          "readOnly": true,
+          "type": "string",
+          "format": "google-datetime"
+        }
+      },
+      "id": "Participant",
+      "type": "object"
+    },
+    "ListSmartNotesResponse": {
+      "id": "ListSmartNotesResponse",
+      "properties": {
+        "nextPageToken": {
+          "description": "Token to be circulated back for further List call if current List doesn't include all the smart notes. Unset if all smart notes are returned.",
+          "type": "string"
+        },
+        "smartNotes": {
+          "items": {
+            "$ref": "SmartNote"
+          },
+          "type": "array",
+          "description": "List of smart notes in one page."
+        }
+      },
+      "description": "Response for ListSmartNotes method.",
+      "type": "object"
+    },
+    "SmartNotesConfig": {
+      "id": "SmartNotesConfig",
+      "properties": {
+        "autoSmartNotesGeneration": {
+          "description": "Defines whether to automatically generate a summary and recap of the meeting for all invitees in the organization when someone with the privilege to enable smart notes joins the meeting.",
+          "type": "string",
+          "enumDescriptions": [
+            "Default value specified by user policy. This should never be returned.",
+            "The artifact is generated automatically.",
+            "The artifact is not generated automatically."
+          ],
+          "enum": [
+            "AUTO_GENERATION_TYPE_UNSPECIFIED",
+            "ON",
+            "OFF"
+          ]
+        }
+      },
+      "type": "object",
+      "description": "Configuration related to smart notes in a meeting space. For more information about smart notes, see [\"Take notes for me\" in Google Meet](https://support.google.com/meet/answer/14754931)."
+    },
+    "BatchUpdateMembersResponse": {
+      "id": "BatchUpdateMembersResponse",
+      "type": "object",
+      "properties": {
+        "members": {
+          "items": {
+            "$ref": "Member"
+          },
+          "type": "array",
+          "description": "Members updated."
+        }
+      },
+      "description": "Response of batch update members."
+    },
+    "ListConferenceRecordsResponse": {
+      "id": "ListConferenceRecordsResponse",
+      "properties": {
+        "conferenceRecords": {
+          "description": "List of conferences in one page.",
+          "type": "array",
+          "items": {
+            "$ref": "ConferenceRecord"
+          }
+        },
+        "nextPageToken": {
+          "description": "Token to be circulated back for further List call if current List does NOT include all the Conferences. Unset if all conferences have been returned.",
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "description": "Response of ListConferenceRecords method."
+    },
+    "SpaceConfig": {
+      "id": "SpaceConfig",
+      "type": "object",
+      "properties": {
+        "accessType": {
+          "type": "string",
+          "description": "Access type of the meeting space that determines who can join without knocking. Default: The user's default access settings. Controlled by the user's admin for enterprise users or RESTRICTED.",
+          "enumDescriptions": [
+            "Default value specified by the user's organization. Note: This is never returned, as the configured access type is returned instead.",
+            "Anyone with the join information (for example, the URL or phone access information) can join without knocking.",
+            "Members of the host's organization, invited external users, and dial-in users can join without knocking. Everyone else must knock.",
+            "Only invitees can join without knocking. Everyone else must knock."
+          ],
+          "enum": [
+            "ACCESS_TYPE_UNSPECIFIED",
+            "OPEN",
+            "TRUSTED",
+            "RESTRICTED"
+          ]
+        },
+        "entryPointAccess": {
+          "type": "string",
+          "enumDescriptions": [
+            "Unused.",
+            "All entry points are allowed.",
+            "Only entry points owned by the Google Cloud project that created the space can be used to join meetings in this space. Apps can use the Meet Embed SDK Web or mobile Meet SDKs to create owned entry points."
+          ],
+          "description": "Defines the entry points that can be used to join meetings hosted in this meeting space. Default: EntryPointAccess.ALL",
+          "enum": [
+            "ENTRY_POINT_ACCESS_UNSPECIFIED",
+            "ALL",
+            "CREATOR_APP_ONLY"
+          ]
+        },
+        "moderation": {
+          "description": "The pre-configured moderation mode for the Meeting. Default: Controlled by the user's policies.",
+          "enumDescriptions": [
+            "Moderation type is not specified. This is used to indicate the user hasn't specified any value as the user does not intend to update the state. Users are not allowed to set the value as unspecified.",
+            "Moderation is off.",
+            "Moderation is on."
+          ],
+          "enum": [
+            "MODERATION_UNSPECIFIED",
+            "OFF",
+            "ON"
+          ],
+          "type": "string"
+        },
+        "attendanceReportGenerationType": {
+          "enumDescriptions": [
+            "Default value specified by user policy. This should never be returned.",
+            "Attendance report will be generated and sent to drive/email.",
+            "Attendance report will not be generated."
+          ],
+          "type": "string",
+          "description": "Whether attendance report is enabled for the meeting space.",
+          "enum": [
+            "ATTENDANCE_REPORT_GENERATION_TYPE_UNSPECIFIED",
+            "GENERATE_REPORT",
+            "DO_NOT_GENERATE"
+          ]
+        },
+        "artifactConfig": {
+          "$ref": "ArtifactConfig",
+          "description": "Configuration pertaining to the auto-generated artifacts that the meeting supports."
+        },
+        "moderationRestrictions": {
+          "description": "When moderation.ON, these restrictions go into effect for the meeting. When moderation.OFF, will be reset to default ModerationRestrictions.",
+          "$ref": "ModerationRestrictions"
+        }
+      },
+      "description": "The configuration pertaining to a meeting space."
+    },
+    "RecordingConfig": {
+      "properties": {
+        "autoRecordingGeneration": {
+          "description": "Defines whether a meeting space is automatically recorded when someone with the privilege to record joins the meeting.",
+          "enumDescriptions": [
+            "Default value specified by user policy. This should never be returned.",
+            "The artifact is generated automatically.",
+            "The artifact is not generated automatically."
+          ],
+          "enum": [
+            "AUTO_GENERATION_TYPE_UNSPECIFIED",
+            "ON",
+            "OFF"
+          ],
+          "type": "string"
+        }
+      },
+      "description": "Configuration related to recording in a meeting space.",
+      "id": "RecordingConfig",
+      "type": "object"
+    },
+    "UpdateMemberRequest": {
+      "description": "Request to update a member.",
+      "type": "object",
+      "id": "UpdateMemberRequest",
+      "properties": {
+        "updateMask": {
+          "description": "Optional. Field mask used to specify the fields to be updated in the member. If update_mask isn't provided(not set, set with empty paths, or only has \"\" as paths), it defaults to update all fields provided with values in the request. Using \"*\" as update_mask will update all fields, including deleting fields not set in the request. In case of BatchUpdate, it must be absent or the same as the update_mask in BatchUpdateMembersRequest when UpdateMemberRequest is built as a child request of BatchUpdateMembersRequest.",
+          "format": "google-fieldmask",
+          "type": "string"
+        },
+        "member": {
+          "description": "Required. The Member to update. Format: spaces/{space}/members/{member}",
+          "$ref": "Member"
+        }
+      }
+    },
+    "Space": {
+      "properties": {
+        "phoneAccess": {
+          "items": {
+            "$ref": "PhoneAccess"
+          },
+          "readOnly": true,
+          "description": "Output only. All regional phone access methods for this meeting space. Can be empty.",
+          "type": "array"
+        },
+        "gatewaySipAccess": {
+          "readOnly": true,
+          "type": "array",
+          "items": {
+            "$ref": "GatewaySipAccess"
+          },
+          "description": "Output only. The SIP-based access methods that can be used to join the conference. Can be empty."
+        },
+        "name": {
+          "type": "string",
+          "description": "Immutable. Resource name of the space. Format: `spaces/{space}`. `{space}` is the resource identifier for the space. It's a unique, server-generated ID and is case sensitive. For example, `jQCFfuBOdN5z`. For more information, see [How Meet identifies a meeting space](https://developers.google.com/workspace/meet/api/guides/meeting-spaces#identify-meeting-space)."
+        },
+        "activeConference": {
+          "$ref": "ActiveConference",
+          "description": "Active conference, if it exists."
+        },
+        "meetingUri": {
+          "readOnly": true,
+          "type": "string",
+          "description": "Output only. URI used to join meetings consisting of `https://meet.google.com/` followed by the `meeting_code`. For example, `https://meet.google.com/abc-mnop-xyz`."
+        },
+        "config": {
+          "description": "Configuration pertaining to the meeting space.",
+          "$ref": "SpaceConfig"
+        },
+        "meetingCode": {
+          "type": "string",
+          "readOnly": true,
+          "description": "Output only. Type friendly unique string used to join the meeting. Format: `[a-z]+-[a-z]+-[a-z]+`. For example, `abc-mnop-xyz`. The maximum length is 128 characters. Can only be used as an alias of the space name to get the space."
+        }
+      },
+      "description": "Virtual place where conferences are held. Only one active conference can be held in one space at any given time.",
+      "type": "object",
+      "id": "Space"
+    },
+    "DriveDestination": {
+      "type": "object",
+      "id": "DriveDestination",
+      "description": "Export location where a recording file is saved in Google Drive.",
+      "properties": {
+        "exportUri": {
+          "type": "string",
+          "description": "Output only. Link used to play back the recording file in the browser. For example, `https://drive.google.com/file/d/{$fileId}/view`.",
+          "readOnly": true
+        },
+        "file": {
+          "readOnly": true,
+          "type": "string",
+          "description": "Output only. The `fileId` for the underlying MP4 file. For example, \"1kuceFZohVoCh6FulBHxwy6I15Ogpc4hP\". Use `$ GET https://www.googleapis.com/drive/v3/files/{$fileId}?alt=media` to download the blob. For more information, see https://developers.google.com/drive/api/v3/reference/files/get."
+        }
+      }
+    },
+    "EndActiveConferenceRequest": {
+      "type": "object",
+      "description": "Request to end an ongoing conference of a space.",
+      "id": "EndActiveConferenceRequest",
+      "properties": {}
+    },
+    "ParticipantSession": {
+      "description": "Refers to each unique join or leave session when a user joins a conference from a device. Note that any time a user joins the conference a new unique ID is assigned. That means if a user joins a space multiple times from the same device, they're assigned different IDs, and are also be treated as different participant sessions.",
+      "type": "object",
+      "id": "ParticipantSession",
+      "properties": {
+        "name": {
+          "description": "Identifier. Session id.",
+          "type": "string"
+        },
+        "startTime": {
+          "description": "Output only. Timestamp when the user session starts.",
+          "readOnly": true,
+          "type": "string",
+          "format": "google-datetime"
+        },
+        "endTime": {
+          "type": "string",
+          "format": "google-datetime",
+          "readOnly": true,
+          "description": "Output only. Timestamp when the user session ends. Unset if the user session hasn’t ended."
+        }
+      }
+    },
+    "Empty": {
+      "type": "object",
+      "properties": {},
+      "id": "Empty",
+      "description": "A generic empty message that you can re-use to avoid defining duplicated empty messages in your APIs. A typical example is to use it as the request or the response type of an API method. For instance: service Foo { rpc Bar(google.protobuf.Empty) returns (google.protobuf.Empty); }"
+    },
+    "ListParticipantsResponse": {
+      "description": "Response of ListParticipants method.",
+      "properties": {
+        "totalSize": {
+          "description": "Total, exact number of `participants`. By default, this field isn't included in the response. Set the field mask in [SystemParameterContext](https://cloud.google.com/apis/docs/system-parameters) to receive this field in the response.",
+          "format": "int32",
+          "type": "integer"
+        },
+        "nextPageToken": {
+          "type": "string",
+          "description": "Token to be circulated back for further List call if current List doesn't include all the participants. Unset if all participants are returned."
+        },
+        "participants": {
+          "type": "array",
+          "items": {
+            "$ref": "Participant"
+          },
+          "description": "List of participants in one page."
+        }
+      },
+      "id": "ListParticipantsResponse",
+      "type": "object"
+    },
+    "AnonymousUser": {
+      "type": "object",
+      "description": "User who joins anonymously (meaning not signed into a Google Account).",
+      "properties": {
+        "displayName": {
+          "readOnly": true,
+          "description": "Output only. User provided name when they join a conference anonymously.",
+          "type": "string"
+        }
+      },
+      "id": "AnonymousUser"
+    },
+    "TranscriptEntry": {
+      "properties": {
+        "startTime": {
+          "readOnly": true,
+          "format": "google-datetime",
+          "description": "Output only. Timestamp when the transcript entry started.",
+          "type": "string"
+        },
+        "name": {
+          "description": "Output only. Resource name of the entry. Format: \"conferenceRecords/{conference_record}/transcripts/{transcript}/entries/{entry}\"",
+          "type": "string",
+          "readOnly": true
+        },
+        "participant": {
+          "description": "Output only. Refers to the participant who speaks.",
+          "readOnly": true,
+          "type": "string"
+        },
+        "languageCode": {
+          "readOnly": true,
+          "description": "Output only. Language of spoken text, such as \"en-US\". IETF BCP 47 syntax (https://tools.ietf.org/html/bcp47)",
+          "type": "string"
+        },
+        "text": {
+          "type": "string",
+          "description": "Output only. The transcribed text of the participant's voice, at maximum 10K words. Note that the limit is subject to change.",
+          "readOnly": true
+        },
+        "endTime": {
+          "type": "string",
+          "format": "google-datetime",
+          "description": "Output only. Timestamp when the transcript entry ended.",
+          "readOnly": true
+        }
+      },
+      "description": "Single entry for one user’s speech during a transcript session.",
+      "type": "object",
+      "id": "TranscriptEntry"
+    },
+    "DocsDestination": {
+      "type": "object",
+      "id": "DocsDestination",
+      "properties": {
+        "exportUri": {
+          "type": "string",
+          "description": "Output only. URI for the Google Docs transcript file. Use `https://docs.google.com/document/d/{$DocumentId}/view` to browse the transcript in the browser.",
+          "readOnly": true
+        },
+        "document": {
+          "type": "string",
+          "description": "Output only. The document ID for the underlying Google Docs transcript file. For example, \"1kuceFZohVoCh6FulBHxwy6I15Ogpc4hP\". Use the `documents.get` method of the Google Docs API (https://developers.google.com/docs/api/reference/rest/v1/documents/get) to fetch the content.",
+          "readOnly": true
+        }
+      },
+      "description": "Google Docs location where the transcript file is saved."
+    },
+    "ListMembersResponse": {
+      "type": "object",
+      "description": "Response of list members.",
+      "properties": {
+        "nextPageToken": {
+          "description": "Token to be circulated back for further list call if current list doesn't include all the members. Unset if all members are returned.",
+          "type": "string"
+        },
+        "members": {
+          "type": "array",
+          "description": "The list of members for the current page.",
+          "items": {
+            "$ref": "Member"
+          }
+        }
+      },
+      "id": "ListMembersResponse"
+    },
+    "ActiveConference": {
+      "type": "object",
+      "description": "Active conference.",
+      "id": "ActiveConference",
+      "properties": {
+        "conferenceRecord": {
+          "description": "Output only. Reference to 'ConferenceRecord' resource. Format: `conferenceRecords/{conference_record}` where `{conference_record}` is a unique ID for each instance of a call within a space.",
+          "type": "string",
+          "readOnly": true
+        }
+      }
+    },
+    "ModerationRestrictions": {
+      "description": "Defines restrictions for features when the meeting is moderated.",
+      "type": "object",
+      "properties": {
+        "defaultJoinAsViewerType": {
+          "enum": [
+            "DEFAULT_JOIN_AS_VIEWER_TYPE_UNSPECIFIED",
+            "ON",
+            "OFF"
+          ],
+          "description": "Defines whether to restrict the default role assigned to users as viewer.",
+          "enumDescriptions": [
+            "Default value specified by user policy. This should never be returned.",
+            "Users will by default join as viewers.",
+            "Users will by default join as contributors."
+          ],
+          "type": "string"
+        },
+        "reactionRestriction": {
+          "enum": [
+            "RESTRICTION_TYPE_UNSPECIFIED",
+            "HOSTS_ONLY",
+            "NO_RESTRICTION"
+          ],
+          "enumDescriptions": [
+            "Default value specified by user policy. This should never be returned.",
+            "Meeting owner and co-host have the permission.",
+            "All Participants have permissions."
+          ],
+          "description": "Defines who has permission to send reactions in the meeting space.",
+          "type": "string"
+        },
+        "chatRestriction": {
+          "enumDescriptions": [
+            "Default value specified by user policy. This should never be returned.",
+            "Meeting owner and co-host have the permission.",
+            "All Participants have permissions."
+          ],
+          "enum": [
+            "RESTRICTION_TYPE_UNSPECIFIED",
+            "HOSTS_ONLY",
+            "NO_RESTRICTION"
+          ],
+          "description": "Defines who has permission to send chat messages in the meeting space.",
+          "type": "string"
+        },
+        "presentRestriction": {
+          "enumDescriptions": [
+            "Default value specified by user policy. This should never be returned.",
+            "Meeting owner and co-host have the permission.",
+            "All Participants have permissions."
+          ],
+          "description": "Defines who has permission to share their screen in the meeting space.",
+          "enum": [
+            "RESTRICTION_TYPE_UNSPECIFIED",
+            "HOSTS_ONLY",
+            "NO_RESTRICTION"
+          ],
+          "type": "string"
+        }
+      },
+      "id": "ModerationRestrictions"
+    },
+    "PhoneUser": {
+      "id": "PhoneUser",
+      "type": "object",
+      "description": "User dialing in from a phone where the user's identity is unknown because they haven't signed in with a Google Account.",
+      "properties": {
+        "displayName": {
+          "readOnly": true,
+          "type": "string",
+          "description": "Output only. Partially redacted user's phone number when calling."
+        }
+      }
+    },
+    "ListTranscriptEntriesResponse": {
+      "properties": {
+        "nextPageToken": {
+          "description": "Token to be circulated back for further List call if current List doesn't include all the transcript entries. Unset if all entries are returned.",
+          "type": "string"
+        },
+        "transcriptEntries": {
+          "description": "List of TranscriptEntries in one page.",
+          "items": {
+            "$ref": "TranscriptEntry"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object",
+      "description": "Response for ListTranscriptEntries method.",
+      "id": "ListTranscriptEntriesResponse"
+    },
+    "GatewaySipAccess": {
+      "type": "object",
+      "properties": {
+        "sipAccessCode": {
+          "description": "The permanent numeric code for manual entry on specially configured devices.",
+          "type": "string"
+        },
+        "uri": {
+          "type": "string",
+          "description": "The Session Initiation Protocol (SIP) URI the conference can be reached through. The string is in one of these formats: * \"sip:USER_ID@GATEWAY_ADDRESS\" * \"sips:USER_ID@GATEWAY_ADDRESS\" where USER_ID is the 13-digit universal pin (with the future option to support using a Meet meeting code as well), and GATEWAY_ADDRESS is a valid address to be resolved using a DNS SRV lookup, or a dotted quad."
+        }
+      },
+      "description": "Details how to join the conference through a SIP gateway.",
+      "id": "GatewaySipAccess"
+    },
+    "Member": {
+      "id": "Member",
+      "description": "Users who are configured to have a role in the space. These users can join the space without knocking.",
+      "properties": {
+        "name": {
+          "description": "Identifier. Resource name of the member. Format: spaces/{space}/members/{member}",
+          "type": "string"
+        },
+        "email": {
+          "type": "string",
+          "description": "Email for the member. This is required for creating the member."
+        },
+        "role": {
+          "enum": [
+            "ROLE_UNSPECIFIED",
+            "COHOST"
+          ],
+          "enumDescriptions": [
+            "This is used to indicate the user hasn't specified any value and the user’s role will be determined upon joining the meetings between 'contributor' and 'viewer' role depending on meeting configuration. For more information about the viewer role, see [Assign View only roles in Google Meet](https://support.google.com/meet/answer/13658394).",
+            "Co-host role."
+          ],
+          "type": "string",
+          "description": "The meeting role assigned to the member."
+        }
+      },
+      "type": "object"
+    },
+    "ListTranscriptsResponse": {
+      "description": "Response for ListTranscripts method.",
+      "properties": {
+        "transcripts": {
+          "items": {
+            "$ref": "Transcript"
+          },
+          "description": "List of transcripts in one page.",
+          "type": "array"
+        },
+        "nextPageToken": {
+          "type": "string",
+          "description": "Token to be circulated back for further List call if current List doesn't include all the transcripts. Unset if all transcripts are returned."
+        }
+      },
+      "id": "ListTranscriptsResponse",
+      "type": "object"
+    },
+    "PhoneAccess": {
+      "properties": {
+        "phoneNumber": {
+          "type": "string",
+          "description": "The phone number to dial for this meeting space in E.164 format. Full phone number with a leading '+' character."
+        },
+        "pin": {
+          "description": "The PIN that users must enter after dialing the given number. The PIN consists of only decimal digits and the length may vary.",
+          "type": "string"
+        },
+        "regionCode": {
+          "description": "The CLDR/ISO 3166 region code for the country associated with this phone access. To be parsed by the i18n RegionCode utility. Example: \"SE\" for Sweden.",
+          "type": "string"
+        },
+        "languageCode": {
+          "description": "The BCP 47/LDML language code for the language associated with this phone access. To be parsed by the i18n LanguageCode utility. Examples: \"es-419\" for Latin American Spanish, \"fr-CA\" for Canadian French.",
+          "type": "string"
+        }
+      },
+      "id": "PhoneAccess",
+      "description": "Phone access contains information required to dial into a conference using a regional phone number and a PIN that is specific to that phone number.",
+      "type": "object"
+    },
+    "Transcript": {
+      "description": "Metadata for a transcript generated from a conference. It refers to the ASR (Automatic Speech Recognition) result of user's speech during the conference.",
+      "properties": {
+        "state": {
+          "readOnly": true,
+          "enum": [
+            "STATE_UNSPECIFIED",
+            "STARTED",
+            "ENDED",
+            "FILE_GENERATED"
+          ],
+          "enumDescriptions": [
+            "Default, never used.",
+            "An active transcript session has started.",
+            "This transcript session has ended, but the transcript file hasn't been generated yet.",
+            "Transcript file is generated and ready to download."
+          ],
+          "description": "Output only. Current state.",
+          "type": "string"
+        },
+        "endTime": {
+          "readOnly": true,
+          "format": "google-datetime",
+          "description": "Output only. Timestamp when the transcript stopped.",
+          "type": "string"
+        },
+        "name": {
+          "description": "Output only. Resource name of the transcript. Format: `conferenceRecords/{conference_record}/transcripts/{transcript}`, where `{transcript}` is a 1:1 mapping to each unique transcription session of the conference.",
+          "type": "string",
+          "readOnly": true
+        },
+        "docsDestination": {
+          "readOnly": true,
+          "$ref": "DocsDestination",
+          "description": "Output only. Where the Google Docs transcript is saved."
+        },
+        "startTime": {
+          "description": "Output only. Timestamp when the transcript started.",
+          "type": "string",
+          "format": "google-datetime",
+          "readOnly": true
+        }
+      },
+      "type": "object",
+      "id": "Transcript"
+    },
+    "Recording": {
+      "type": "object",
+      "description": "Metadata about a recording created during a conference.",
+      "properties": {
+        "startTime": {
+          "description": "Output only. Timestamp when the recording started.",
+          "format": "google-datetime",
+          "readOnly": true,
+          "type": "string"
+        },
+        "endTime": {
+          "type": "string",
+          "description": "Output only. Timestamp when the recording ended.",
+          "format": "google-datetime",
+          "readOnly": true
+        },
+        "name": {
+          "description": "Output only. Resource name of the recording. Format: `conferenceRecords/{conference_record}/recordings/{recording}` where `{recording}` is a 1:1 mapping to each unique recording session during the conference.",
+          "type": "string",
+          "readOnly": true
+        },
+        "state": {
+          "description": "Output only. Current state.",
+          "type": "string",
+          "readOnly": true,
+          "enumDescriptions": [
+            "Default, never used.",
+            "An active recording session has started.",
+            "This recording session has ended, but the recording file hasn't been generated yet.",
+            "Recording file is generated and ready to download."
+          ],
+          "enum": [
+            "STATE_UNSPECIFIED",
+            "STARTED",
+            "ENDED",
+            "FILE_GENERATED"
+          ]
+        },
+        "driveDestination": {
+          "readOnly": true,
+          "description": "Output only. Recording is saved to Google Drive as an MP4 file. The `drive_destination` includes the Drive `fileId` that can be used to download the file using the `files.get` method of the Drive API.",
+          "$ref": "DriveDestination"
+        }
+      },
+      "id": "Recording"
+    },
+    "SmartNote": {
+      "description": "Metadata for a smart note generated from a conference. It refers to the notes generated from Take Notes with Gemini during the conference.",
+      "type": "object",
+      "properties": {
+        "docsDestination": {
+          "$ref": "DocsDestination",
+          "description": "Output only. The Google Doc destination where the smart notes are saved.",
+          "readOnly": true
+        },
+        "endTime": {
+          "readOnly": true,
+          "format": "google-datetime",
+          "description": "Output only. Timestamp when the smart notes stopped.",
+          "type": "string"
+        },
+        "name": {
+          "description": "Output only. Identifier. Resource name of the smart notes. Format: `conferenceRecords/{conference_record}/smartNotes/{smart_note}`, where `{smart_note}` is a 1:1 mapping to each unique smart notes session of the conference.",
+          "type": "string",
+          "readOnly": true
+        },
+        "state": {
+          "description": "Output only. Current state.",
+          "readOnly": true,
+          "enumDescriptions": [
+            "Default, never used.",
+            "An active smart notes session has started.",
+            "This smart notes session has ended, but the smart notes file hasn't been generated yet.",
+            "Smart notes file is generated and ready to download."
+          ],
+          "type": "string",
+          "enum": [
+            "STATE_UNSPECIFIED",
+            "STARTED",
+            "ENDED",
+            "FILE_GENERATED"
+          ]
+        },
+        "startTime": {
+          "type": "string",
+          "format": "google-datetime",
+          "readOnly": true,
+          "description": "Output only. Timestamp when the smart notes started."
+        }
+      },
+      "id": "SmartNote"
+    },
+    "BatchUpdateMembersRequest": {
+      "description": "Request to update members of one space within a batch.",
+      "properties": {
+        "updateMask": {
+          "format": "google-fieldmask",
+          "type": "string",
+          "description": "Optional. Top-level field mask used to specify the fields to be updated in the member for all UpdateMemberRequests. There are 4 possible scenarios for top-level and child field mask: 1. top-level and child field mask is absent: All fields provided in the requests are updated, including deleting fields not set in the requests. 2. top-level field mask is present but child field mask is absent: The fields specified in the top-level field mask are updated. 3. top-level and child field mask is present: The child field mask must be the same as the top-level field mask. 4. top-level field mask is absent but child field mask is present: It isn't supported and will return an error."
+        },
+        "requests": {
+          "type": "array",
+          "items": {
+            "$ref": "UpdateMemberRequest"
+          },
+          "description": "Required. The request message specifying the resources to update. A maximum of 500 members can be modified in a batch."
+        }
+      },
+      "id": "BatchUpdateMembersRequest",
+      "type": "object"
+    },
+    "ArtifactConfig": {
+      "type": "object",
+      "properties": {
+        "transcriptionConfig": {
+          "description": "Configuration for auto-transcript.",
+          "$ref": "TranscriptionConfig"
+        },
+        "recordingConfig": {
+          "description": "Configuration for recording.",
+          "$ref": "RecordingConfig"
+        },
+        "smartNotesConfig": {
+          "description": "Configuration for auto-smart-notes.",
+          "$ref": "SmartNotesConfig"
+        }
+      },
+      "id": "ArtifactConfig",
+      "description": "Configuration related to meeting artifacts potentially generated by this meeting space."
+    },
+    "SignedinUser": {
+      "properties": {
+        "user": {
+          "description": "Output only. Unique ID for the user. Interoperable with Admin SDK API and People API. Format: `users/{user}`",
+          "type": "string",
+          "readOnly": true
+        },
+        "displayName": {
+          "type": "string",
+          "description": "Output only. For a personal device, it's the user's first name and last name. For a robot account, it's the administrator-specified device name. For example, \"Altostrat Room\".",
+          "readOnly": true
+        }
+      },
+      "description": "A signed-in user can be: a) An individual joining from a personal computer, mobile device, or through companion mode. b) A robot account used by conference room devices.",
+      "type": "object",
+      "id": "SignedinUser"
+    },
+    "ListRecordingsResponse": {
+      "id": "ListRecordingsResponse",
+      "description": "Response for ListRecordings method.",
+      "type": "object",
+      "properties": {
+        "nextPageToken": {
+          "description": "Token to be circulated back for further List call if current List doesn't include all the recordings. Unset if all recordings are returned.",
+          "type": "string"
+        },
+        "recordings": {
+          "type": "array",
+          "description": "List of recordings in one page.",
+          "items": {
+            "$ref": "Recording"
+          }
+        }
+      }
+    },
+    "ListParticipantSessionsResponse": {
+      "type": "object",
+      "id": "ListParticipantSessionsResponse",
+      "properties": {
+        "participantSessions": {
+          "description": "List of participants in one page.",
+          "items": {
+            "$ref": "ParticipantSession"
+          },
+          "type": "array"
+        },
+        "nextPageToken": {
+          "type": "string",
+          "description": "Token to be circulated back for further List call if current List doesn't include all the participants. Unset if all participants are returned."
+        }
+      },
+      "description": "Response of ListParticipants method."
+    }
+  },
+  "id": "meet:v2",
+  "parameters": {
+    "callback": {
       "location": "query",
-      "description": "OAuth access token.",
+      "description": "JSONP",
       "type": "string"
     },
-    "key": {
-      "type": "string",
-      "description": "API key. Your API key identifies your project and provides you with API access, quota, and reports. Required unless you provide an OAuth 2.0 token.",
-      "location": "query"
-    },
-    "prettyPrint": {
-      "type": "boolean",
+    "access_token": {
+      "description": "OAuth access token.",
       "location": "query",
-      "default": "true",
-      "description": "Returns response with indentations and line breaks."
+      "type": "string"
     },
-    "quotaUser": {
-      "description": "Available to use for quota purposes for server-side applications. Can be any arbitrary string assigned to a user, but should not exceed 40 characters.",
+    "oauth_token": {
       "type": "string",
-      "location": "query"
+      "location": "query",
+      "description": "OAuth 2.0 token for the current user."
+    },
+    "key": {
+      "location": "query",
+      "description": "API key. Your API key identifies your project and provides you with API access, quota, and reports. Required unless you provide an OAuth 2.0 token.",
+      "type": "string"
     },
     "$.xgafv": {
       "location": "query",
-      "enum": [
-        "1",
-        "2"
-      ],
-      "type": "string",
+      "description": "V1 error format.",
       "enumDescriptions": [
         "v1 error format",
         "v2 error format"
       ],
-      "description": "V1 error format."
+      "enum": [
+        "1",
+        "2"
+      ],
+      "type": "string"
     },
-    "fields": {
-      "type": "string",
-      "description": "Selector specifying which fields to include in a partial response.",
-      "location": "query"
-    },
-    "callback": {
-      "description": "JSONP",
-      "type": "string",
-      "location": "query"
-    },
-    "uploadType": {
+    "quotaUser": {
+      "description": "Available to use for quota purposes for server-side applications. Can be any arbitrary string assigned to a user, but should not exceed 40 characters.",
       "location": "query",
-      "description": "Legacy upload protocol for media (e.g. \"media\", \"multipart\").",
       "type": "string"
     },
     "alt": {
+      "description": "Data format for response.",
+      "type": "string",
       "location": "query",
-      "enumDescriptions": [
-        "Responses with Content-Type of application/json",
-        "Media download with context-dependent Content-Type",
-        "Responses with Content-Type of application/x-protobuf"
-      ],
       "enum": [
         "json",
         "media",
         "proto"
       ],
-      "default": "json",
-      "description": "Data format for response.",
-      "type": "string"
+      "enumDescriptions": [
+        "Responses with Content-Type of application/json",
+        "Media download with context-dependent Content-Type",
+        "Responses with Content-Type of application/x-protobuf"
+      ],
+      "default": "json"
     },
-    "oauth_token": {
-      "description": "OAuth 2.0 token for the current user.",
+    "upload_protocol": {
+      "location": "query",
+      "type": "string",
+      "description": "Upload protocol for media (e.g. \"raw\", \"multipart\")."
+    },
+    "fields": {
+      "location": "query",
+      "type": "string",
+      "description": "Selector specifying which fields to include in a partial response."
+    },
+    "uploadType": {
+      "description": "Legacy upload protocol for media (e.g. \"media\", \"multipart\").",
       "type": "string",
       "location": "query"
+    },
+    "prettyPrint": {
+      "type": "boolean",
+      "default": "true",
+      "location": "query",
+      "description": "Returns response with indentations and line breaks."
     }
   },
+  "servicePath": "",
+  "version": "v2",
   "kind": "discovery#restDescription",
-  "discoveryVersion": "v1",
-  "batchPath": "batch",
-  "description": "Create and manage meetings in Google Meet.",
-  "canonicalName": "Meet",
-  "fullyEncodeReservedExpansion": true,
   "basePath": "",
-  "baseUrl": "https://meet.googleapis.com/",
-  "version_module": true
+  "version_module": true,
+  "documentationLink": "https://developers.google.com/workspace/meet/api",
+  "rootUrl": "https://meet.googleapis.com/",
+  "ownerName": "Google",
+  "discoveryVersion": "v1",
+  "description": "Create and manage meetings in Google Meet."
 }
