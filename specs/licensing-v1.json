@@ -1,68 +1,425 @@
 {
-  "schemas": {
-    "LicenseAssignmentInsert": {
-      "description": "Representation of a license assignment.",
-      "type": "object",
-      "properties": {
-        "userId": {
-          "type": "string",
-          "description": "Email id of the user",
-          "annotations": {
-            "required": [
-              "licensing.licenseAssignments.insert"
-            ]
-          }
+  "auth": {
+    "oauth2": {
+      "scopes": {
+        "https://www.googleapis.com/auth/apps.licensing": {
+          "description": "View and manage Google Workspace licenses for your domain"
         }
-      },
-      "id": "LicenseAssignmentInsert"
+      }
+    }
+  },
+  "ownerDomain": "google.com",
+  "fullyEncodeReservedExpansion": true,
+  "title": "Enterprise License Manager API",
+  "basePath": "",
+  "mtlsRootUrl": "https://licensing.mtls.googleapis.com/",
+  "kind": "discovery#restDescription",
+  "parameters": {
+    "oauth_token": {
+      "type": "string",
+      "location": "query",
+      "description": "OAuth 2.0 token for the current user."
     },
-    "Empty": {
-      "id": "Empty",
-      "properties": {},
-      "type": "object",
-      "description": "A generic empty message that you can re-use to avoid defining duplicated empty messages in your APIs. A typical example is to use it as the request or the response type of an API method. For instance: service Foo { rpc Bar(google.protobuf.Empty) returns (google.protobuf.Empty); }"
+    "$.xgafv": {
+      "enumDescriptions": [
+        "v1 error format",
+        "v2 error format"
+      ],
+      "location": "query",
+      "description": "V1 error format.",
+      "type": "string",
+      "enum": [
+        "1",
+        "2"
+      ]
     },
-    "LicenseAssignment": {
-      "id": "LicenseAssignment",
-      "properties": {
-        "selfLink": {
-          "type": "string",
-          "description": "Link to this page."
+    "callback": {
+      "description": "JSONP",
+      "type": "string",
+      "location": "query"
+    },
+    "uploadType": {
+      "description": "Legacy upload protocol for media (e.g. \"media\", \"multipart\").",
+      "type": "string",
+      "location": "query"
+    },
+    "access_token": {
+      "description": "OAuth access token.",
+      "location": "query",
+      "type": "string"
+    },
+    "quotaUser": {
+      "location": "query",
+      "type": "string",
+      "description": "Available to use for quota purposes for server-side applications. Can be any arbitrary string assigned to a user, but should not exceed 40 characters."
+    },
+    "fields": {
+      "type": "string",
+      "description": "Selector specifying which fields to include in a partial response.",
+      "location": "query"
+    },
+    "alt": {
+      "enumDescriptions": [
+        "Responses with Content-Type of application/json",
+        "Media download with context-dependent Content-Type",
+        "Responses with Content-Type of application/x-protobuf"
+      ],
+      "description": "Data format for response.",
+      "enum": [
+        "json",
+        "media",
+        "proto"
+      ],
+      "default": "json",
+      "type": "string",
+      "location": "query"
+    },
+    "upload_protocol": {
+      "description": "Upload protocol for media (e.g. \"raw\", \"multipart\").",
+      "location": "query",
+      "type": "string"
+    },
+    "prettyPrint": {
+      "type": "boolean",
+      "default": "true",
+      "description": "Returns response with indentations and line breaks.",
+      "location": "query"
+    },
+    "key": {
+      "description": "API key. Your API key identifies your project and provides you with API access, quota, and reports. Required unless you provide an OAuth 2.0 token.",
+      "type": "string",
+      "location": "query"
+    }
+  },
+  "resources": {
+    "licenseAssignments": {
+      "methods": {
+        "patch": {
+          "request": {
+            "$ref": "LicenseAssignment"
+          },
+          "parameters": {
+            "userId": {
+              "description": "The user's current primary email address. If the user's email address changes, use the new email address in your API requests. Since a `userId` is subject to change, do not use a `userId` value as a key for persistent data. This key could break if the current user's email address changes. If the `userId` is suspended, the license status changes.",
+              "location": "path",
+              "required": true,
+              "type": "string"
+            },
+            "skuId": {
+              "type": "string",
+              "description": "A product SKU's unique identifier. For more information about available SKUs in this version of the API, see Products and SKUs.",
+              "location": "path",
+              "required": true
+            },
+            "productId": {
+              "description": "A product's unique identifier. For more information about products in this version of the API, see Products and SKUs.",
+              "location": "path",
+              "required": true,
+              "type": "string"
+            }
+          },
+          "flatPath": "apps/licensing/v1/product/{productId}/sku/{skuId}/user/{userId}",
+          "description": "Reassign a user's product SKU with a different SKU in the same product. This method supports patch semantics.",
+          "path": "apps/licensing/v1/product/{productId}/sku/{skuId}/user/{userId}",
+          "parameterOrder": [
+            "productId",
+            "skuId",
+            "userId"
+          ],
+          "id": "licensing.licenseAssignments.patch",
+          "httpMethod": "PATCH",
+          "response": {
+            "$ref": "LicenseAssignment"
+          },
+          "scopes": [
+            "https://www.googleapis.com/auth/apps.licensing"
+          ]
         },
+        "listForProduct": {
+          "scopes": [
+            "https://www.googleapis.com/auth/apps.licensing"
+          ],
+          "httpMethod": "GET",
+          "flatPath": "apps/licensing/v1/product/{productId}/users",
+          "id": "licensing.licenseAssignments.listForProduct",
+          "parameterOrder": [
+            "productId",
+            "customerId"
+          ],
+          "description": "List all users assigned licenses for a specific product SKU.",
+          "parameters": {
+            "maxResults": {
+              "format": "uint32",
+              "default": "100",
+              "maximum": "1000",
+              "type": "integer",
+              "description": "The `maxResults` query string determines how many entries are returned on each page of a large response. This is an optional parameter. The value must be a positive number.",
+              "minimum": "1",
+              "location": "query"
+            },
+            "pageToken": {
+              "location": "query",
+              "default": "",
+              "type": "string",
+              "description": "Token to fetch the next page of data. The `maxResults` query string is related to the `pageToken` since `maxResults` determines how many entries are returned on each page. This is an optional query string. If not specified, the server returns the first page."
+            },
+            "productId": {
+              "location": "path",
+              "required": true,
+              "description": "A product's unique identifier. For more information about products in this version of the API, see Products and SKUs.",
+              "type": "string"
+            },
+            "customerId": {
+              "type": "string",
+              "description": "The customer's unique ID as defined in the Admin console, such as `C00000000`. If the customer is suspended, the server returns an error.",
+              "location": "query",
+              "required": true
+            }
+          },
+          "response": {
+            "$ref": "LicenseAssignmentList"
+          },
+          "path": "apps/licensing/v1/product/{productId}/users"
+        },
+        "listForProductAndSku": {
+          "parameters": {
+            "skuId": {
+              "location": "path",
+              "required": true,
+              "type": "string",
+              "description": "A product SKU's unique identifier. For more information about available SKUs in this version of the API, see Products and SKUs."
+            },
+            "customerId": {
+              "description": "The customer's unique ID as defined in the Admin console, such as `C00000000`. If the customer is suspended, the server returns an error.",
+              "location": "query",
+              "required": true,
+              "type": "string"
+            },
+            "productId": {
+              "location": "path",
+              "required": true,
+              "description": "A product's unique identifier. For more information about products in this version of the API, see Products and SKUs.",
+              "type": "string"
+            },
+            "maxResults": {
+              "minimum": "1",
+              "format": "uint32",
+              "description": "The `maxResults` query string determines how many entries are returned on each page of a large response. This is an optional parameter. The value must be a positive number.",
+              "default": "100",
+              "maximum": "1000",
+              "location": "query",
+              "type": "integer"
+            },
+            "pageToken": {
+              "location": "query",
+              "type": "string",
+              "description": "Token to fetch the next page of data. The `maxResults` query string is related to the `pageToken` since `maxResults` determines how many entries are returned on each page. This is an optional query string. If not specified, the server returns the first page.",
+              "default": ""
+            }
+          },
+          "flatPath": "apps/licensing/v1/product/{productId}/sku/{skuId}/users",
+          "description": "List all users assigned licenses for a specific product SKU.",
+          "scopes": [
+            "https://www.googleapis.com/auth/apps.licensing"
+          ],
+          "parameterOrder": [
+            "productId",
+            "skuId",
+            "customerId"
+          ],
+          "id": "licensing.licenseAssignments.listForProductAndSku",
+          "httpMethod": "GET",
+          "path": "apps/licensing/v1/product/{productId}/sku/{skuId}/users",
+          "response": {
+            "$ref": "LicenseAssignmentList"
+          }
+        },
+        "get": {
+          "parameterOrder": [
+            "productId",
+            "skuId",
+            "userId"
+          ],
+          "flatPath": "apps/licensing/v1/product/{productId}/sku/{skuId}/user/{userId}",
+          "id": "licensing.licenseAssignments.get",
+          "httpMethod": "GET",
+          "path": "apps/licensing/v1/product/{productId}/sku/{skuId}/user/{userId}",
+          "description": "Get a specific user's license by product SKU.",
+          "response": {
+            "$ref": "LicenseAssignment"
+          },
+          "scopes": [
+            "https://www.googleapis.com/auth/apps.licensing"
+          ],
+          "parameters": {
+            "skuId": {
+              "description": "A product SKU's unique identifier. For more information about available SKUs in this version of the API, see Products and SKUs.",
+              "type": "string",
+              "location": "path",
+              "required": true
+            },
+            "userId": {
+              "description": "The user's current primary email address. If the user's email address changes, use the new email address in your API requests. Since a `userId` is subject to change, do not use a `userId` value as a key for persistent data. This key could break if the current user's email address changes. If the `userId` is suspended, the license status changes.",
+              "type": "string",
+              "location": "path",
+              "required": true
+            },
+            "productId": {
+              "type": "string",
+              "location": "path",
+              "required": true,
+              "description": "A product's unique identifier. For more information about products in this version of the API, see Products and SKUs."
+            }
+          }
+        },
+        "insert": {
+          "scopes": [
+            "https://www.googleapis.com/auth/apps.licensing"
+          ],
+          "response": {
+            "$ref": "LicenseAssignment"
+          },
+          "httpMethod": "POST",
+          "parameterOrder": [
+            "productId",
+            "skuId"
+          ],
+          "path": "apps/licensing/v1/product/{productId}/sku/{skuId}/user",
+          "request": {
+            "$ref": "LicenseAssignmentInsert"
+          },
+          "id": "licensing.licenseAssignments.insert",
+          "flatPath": "apps/licensing/v1/product/{productId}/sku/{skuId}/user",
+          "description": "Assign a license.",
+          "parameters": {
+            "skuId": {
+              "location": "path",
+              "required": true,
+              "type": "string",
+              "description": "A product SKU's unique identifier. For more information about available SKUs in this version of the API, see Products and SKUs."
+            },
+            "productId": {
+              "type": "string",
+              "description": "A product's unique identifier. For more information about products in this version of the API, see Products and SKUs.",
+              "location": "path",
+              "required": true
+            }
+          }
+        },
+        "delete": {
+          "description": "Revoke a license.",
+          "scopes": [
+            "https://www.googleapis.com/auth/apps.licensing"
+          ],
+          "parameters": {
+            "productId": {
+              "type": "string",
+              "location": "path",
+              "required": true,
+              "description": "A product's unique identifier. For more information about products in this version of the API, see Products and SKUs."
+            },
+            "skuId": {
+              "type": "string",
+              "description": "A product SKU's unique identifier. For more information about available SKUs in this version of the API, see Products and SKUs.",
+              "location": "path",
+              "required": true
+            },
+            "userId": {
+              "location": "path",
+              "required": true,
+              "description": "The user's current primary email address. If the user's email address changes, use the new email address in your API requests. Since a `userId` is subject to change, do not use a `userId` value as a key for persistent data. This key could break if the current user's email address changes. If the `userId` is suspended, the license status changes.",
+              "type": "string"
+            }
+          },
+          "response": {
+            "$ref": "Empty"
+          },
+          "flatPath": "apps/licensing/v1/product/{productId}/sku/{skuId}/user/{userId}",
+          "path": "apps/licensing/v1/product/{productId}/sku/{skuId}/user/{userId}",
+          "httpMethod": "DELETE",
+          "parameterOrder": [
+            "productId",
+            "skuId",
+            "userId"
+          ],
+          "id": "licensing.licenseAssignments.delete"
+        },
+        "update": {
+          "response": {
+            "$ref": "LicenseAssignment"
+          },
+          "parameters": {
+            "skuId": {
+              "type": "string",
+              "location": "path",
+              "required": true,
+              "description": "A product SKU's unique identifier. For more information about available SKUs in this version of the API, see Products and SKUs."
+            },
+            "productId": {
+              "description": "A product's unique identifier. For more information about products in this version of the API, see Products and SKUs.",
+              "location": "path",
+              "required": true,
+              "type": "string"
+            },
+            "userId": {
+              "type": "string",
+              "description": "The user's current primary email address. If the user's email address changes, use the new email address in your API requests. Since a `userId` is subject to change, do not use a `userId` value as a key for persistent data. This key could break if the current user's email address changes. If the `userId` is suspended, the license status changes.",
+              "location": "path",
+              "required": true
+            }
+          },
+          "scopes": [
+            "https://www.googleapis.com/auth/apps.licensing"
+          ],
+          "id": "licensing.licenseAssignments.update",
+          "path": "apps/licensing/v1/product/{productId}/sku/{skuId}/user/{userId}",
+          "description": "Reassign a user's product SKU with a different SKU in the same product.",
+          "httpMethod": "PUT",
+          "flatPath": "apps/licensing/v1/product/{productId}/sku/{skuId}/user/{userId}",
+          "request": {
+            "$ref": "LicenseAssignment"
+          },
+          "parameterOrder": [
+            "productId",
+            "skuId",
+            "userId"
+          ]
+        }
+      }
+    }
+  },
+  "revision": "20261005",
+  "documentationLink": "https://developers.google.com/workspace/admin/licensing/",
+  "name": "licensing",
+  "schemas": {
+    "LicenseAssignment": {
+      "properties": {
         "skuId": {
           "description": "A product SKU's unique identifier. For more information about available SKUs in this version of the API, see Products and SKUs.",
+          "type": "string",
           "annotations": {
             "required": [
               "licensing.licenseAssignments.update"
             ]
-          },
-          "type": "string"
+          }
         },
-        "skuName": {
+        "productId": {
+          "description": "A product's unique identifier. For more information about products in this version of the API, see Product and SKU IDs.",
           "type": "string",
-          "description": "Display Name of the sku of the product."
+          "annotations": {
+            "required": [
+              "licensing.licenseAssignments.update"
+            ]
+          }
+        },
+        "etags": {
+          "type": "string",
+          "description": "ETag of the resource."
         },
         "kind": {
           "default": "licensing#licenseAssignment",
           "type": "string",
           "description": "Identifies the resource as a LicenseAssignment, which is `licensing#licenseAssignment`."
-        },
-        "etags": {
-          "description": "ETag of the resource.",
-          "type": "string"
-        },
-        "productId": {
-          "description": "A product's unique identifier. For more information about products in this version of the API, see Product and SKU IDs.",
-          "annotations": {
-            "required": [
-              "licensing.licenseAssignments.update"
-            ]
-          },
-          "type": "string"
-        },
-        "productName": {
-          "type": "string",
-          "description": "Display Name of the product."
         },
         "userId": {
           "description": "The user's current primary email address. If the user's email address changes, use the new email address in your API requests. Since a `userId` is subject to change, do not use a `userId` value as a key for persistent data. This key could break if the current user's email address changes. If the `userId` is suspended, the license status changes.",
@@ -72,26 +429,39 @@
             ]
           },
           "type": "string"
+        },
+        "selfLink": {
+          "description": "Link to this page.",
+          "type": "string"
+        },
+        "productName": {
+          "type": "string",
+          "description": "Display Name of the product."
+        },
+        "skuName": {
+          "type": "string",
+          "description": "Display Name of the sku of the product."
         }
       },
       "type": "object",
+      "id": "LicenseAssignment",
       "description": "Representation of a license assignment."
     },
     "LicenseAssignmentList": {
-      "type": "object",
       "id": "LicenseAssignmentList",
+      "type": "object",
       "properties": {
-        "kind": {
-          "type": "string",
-          "default": "licensing#licenseAssignmentList",
-          "description": "Identifies the resource as a collection of LicenseAssignments."
-        },
-        "nextPageToken": {
-          "type": "string",
-          "description": "The token that you must submit in a subsequent request to retrieve additional license results matching your query parameters. The `maxResults` query string is related to the `nextPageToken` since `maxResults` determines how many entries are returned on each next page."
-        },
         "etag": {
           "description": "ETag of the resource.",
+          "type": "string"
+        },
+        "kind": {
+          "description": "Identifies the resource as a collection of LicenseAssignments.",
+          "default": "licensing#licenseAssignmentList",
+          "type": "string"
+        },
+        "nextPageToken": {
+          "description": "The token that you must submit in a subsequent request to retrieve additional license results matching your query parameters. The `maxResults` query string is related to the `nextPageToken` since `maxResults` determines how many entries are returned on each next page.",
           "type": "string"
         },
         "items": {
@@ -102,412 +472,42 @@
           "description": "The LicenseAssignments in this page of results."
         }
       }
+    },
+    "Empty": {
+      "properties": {},
+      "description": "A generic empty message that you can re-use to avoid defining duplicated empty messages in your APIs. A typical example is to use it as the request or the response type of an API method. For instance: service Foo { rpc Bar(google.protobuf.Empty) returns (google.protobuf.Empty); }",
+      "type": "object",
+      "id": "Empty"
+    },
+    "LicenseAssignmentInsert": {
+      "id": "LicenseAssignmentInsert",
+      "type": "object",
+      "description": "Representation of a license assignment.",
+      "properties": {
+        "userId": {
+          "type": "string",
+          "annotations": {
+            "required": [
+              "licensing.licenseAssignments.insert"
+            ]
+          },
+          "description": "Email id of the user"
+        }
+      }
     }
   },
-  "revision": "20261005",
-  "description": "The Google Enterprise License Manager API lets you manage Google Workspace and related licenses for all users of a customer that you manage.",
-  "version": "v1",
+  "protocol": "rest",
+  "ownerName": "Google",
   "icons": {
     "x32": "http://www.google.com/images/icons/product/search-32.gif",
     "x16": "http://www.google.com/images/icons/product/search-16.gif"
   },
-  "kind": "discovery#restDescription",
-  "protocol": "rest",
-  "baseUrl": "https://licensing.googleapis.com/",
-  "title": "Enterprise License Manager API",
-  "rootUrl": "https://licensing.googleapis.com/",
-  "resources": {
-    "licenseAssignments": {
-      "methods": {
-        "listForProductAndSku": {
-          "parameterOrder": [
-            "productId",
-            "skuId",
-            "customerId"
-          ],
-          "description": "List all users assigned licenses for a specific product SKU.",
-          "path": "apps/licensing/v1/product/{productId}/sku/{skuId}/users",
-          "flatPath": "apps/licensing/v1/product/{productId}/sku/{skuId}/users",
-          "httpMethod": "GET",
-          "scopes": [
-            "https://www.googleapis.com/auth/apps.licensing"
-          ],
-          "response": {
-            "$ref": "LicenseAssignmentList"
-          },
-          "parameters": {
-            "skuId": {
-              "description": "A product SKU's unique identifier. For more information about available SKUs in this version of the API, see Products and SKUs.",
-              "required": true,
-              "type": "string",
-              "location": "path"
-            },
-            "productId": {
-              "description": "A product's unique identifier. For more information about products in this version of the API, see Products and SKUs.",
-              "location": "path",
-              "required": true,
-              "type": "string"
-            },
-            "pageToken": {
-              "location": "query",
-              "default": "",
-              "type": "string",
-              "description": "Token to fetch the next page of data. The `maxResults` query string is related to the `pageToken` since `maxResults` determines how many entries are returned on each page. This is an optional query string. If not specified, the server returns the first page."
-            },
-            "maxResults": {
-              "default": "100",
-              "format": "uint32",
-              "location": "query",
-              "description": "The `maxResults` query string determines how many entries are returned on each page of a large response. This is an optional parameter. The value must be a positive number.",
-              "maximum": "1000",
-              "type": "integer",
-              "minimum": "1"
-            },
-            "customerId": {
-              "location": "query",
-              "description": "The customer's unique ID as defined in the Admin console, such as `C00000000`. If the customer is suspended, the server returns an error.",
-              "required": true,
-              "type": "string"
-            }
-          },
-          "id": "licensing.licenseAssignments.listForProductAndSku"
-        },
-        "listForProduct": {
-          "httpMethod": "GET",
-          "scopes": [
-            "https://www.googleapis.com/auth/apps.licensing"
-          ],
-          "description": "List all users assigned licenses for a specific product SKU.",
-          "path": "apps/licensing/v1/product/{productId}/users",
-          "parameters": {
-            "maxResults": {
-              "type": "integer",
-              "default": "100",
-              "format": "uint32",
-              "minimum": "1",
-              "location": "query",
-              "maximum": "1000",
-              "description": "The `maxResults` query string determines how many entries are returned on each page of a large response. This is an optional parameter. The value must be a positive number."
-            },
-            "productId": {
-              "location": "path",
-              "type": "string",
-              "description": "A product's unique identifier. For more information about products in this version of the API, see Products and SKUs.",
-              "required": true
-            },
-            "pageToken": {
-              "description": "Token to fetch the next page of data. The `maxResults` query string is related to the `pageToken` since `maxResults` determines how many entries are returned on each page. This is an optional query string. If not specified, the server returns the first page.",
-              "default": "",
-              "location": "query",
-              "type": "string"
-            },
-            "customerId": {
-              "location": "query",
-              "type": "string",
-              "required": true,
-              "description": "The customer's unique ID as defined in the Admin console, such as `C00000000`. If the customer is suspended, the server returns an error."
-            }
-          },
-          "response": {
-            "$ref": "LicenseAssignmentList"
-          },
-          "id": "licensing.licenseAssignments.listForProduct",
-          "flatPath": "apps/licensing/v1/product/{productId}/users",
-          "parameterOrder": [
-            "productId",
-            "customerId"
-          ]
-        },
-        "insert": {
-          "httpMethod": "POST",
-          "flatPath": "apps/licensing/v1/product/{productId}/sku/{skuId}/user",
-          "path": "apps/licensing/v1/product/{productId}/sku/{skuId}/user",
-          "response": {
-            "$ref": "LicenseAssignment"
-          },
-          "request": {
-            "$ref": "LicenseAssignmentInsert"
-          },
-          "parameters": {
-            "skuId": {
-              "description": "A product SKU's unique identifier. For more information about available SKUs in this version of the API, see Products and SKUs.",
-              "location": "path",
-              "required": true,
-              "type": "string"
-            },
-            "productId": {
-              "location": "path",
-              "description": "A product's unique identifier. For more information about products in this version of the API, see Products and SKUs.",
-              "type": "string",
-              "required": true
-            }
-          },
-          "description": "Assign a license.",
-          "id": "licensing.licenseAssignments.insert",
-          "parameterOrder": [
-            "productId",
-            "skuId"
-          ],
-          "scopes": [
-            "https://www.googleapis.com/auth/apps.licensing"
-          ]
-        },
-        "get": {
-          "httpMethod": "GET",
-          "scopes": [
-            "https://www.googleapis.com/auth/apps.licensing"
-          ],
-          "response": {
-            "$ref": "LicenseAssignment"
-          },
-          "path": "apps/licensing/v1/product/{productId}/sku/{skuId}/user/{userId}",
-          "flatPath": "apps/licensing/v1/product/{productId}/sku/{skuId}/user/{userId}",
-          "parameters": {
-            "productId": {
-              "location": "path",
-              "type": "string",
-              "required": true,
-              "description": "A product's unique identifier. For more information about products in this version of the API, see Products and SKUs."
-            },
-            "userId": {
-              "description": "The user's current primary email address. If the user's email address changes, use the new email address in your API requests. Since a `userId` is subject to change, do not use a `userId` value as a key for persistent data. This key could break if the current user's email address changes. If the `userId` is suspended, the license status changes.",
-              "required": true,
-              "type": "string",
-              "location": "path"
-            },
-            "skuId": {
-              "required": true,
-              "description": "A product SKU's unique identifier. For more information about available SKUs in this version of the API, see Products and SKUs.",
-              "type": "string",
-              "location": "path"
-            }
-          },
-          "id": "licensing.licenseAssignments.get",
-          "parameterOrder": [
-            "productId",
-            "skuId",
-            "userId"
-          ],
-          "description": "Get a specific user's license by product SKU."
-        },
-        "update": {
-          "parameterOrder": [
-            "productId",
-            "skuId",
-            "userId"
-          ],
-          "request": {
-            "$ref": "LicenseAssignment"
-          },
-          "path": "apps/licensing/v1/product/{productId}/sku/{skuId}/user/{userId}",
-          "scopes": [
-            "https://www.googleapis.com/auth/apps.licensing"
-          ],
-          "httpMethod": "PUT",
-          "response": {
-            "$ref": "LicenseAssignment"
-          },
-          "description": "Reassign a user's product SKU with a different SKU in the same product.",
-          "id": "licensing.licenseAssignments.update",
-          "flatPath": "apps/licensing/v1/product/{productId}/sku/{skuId}/user/{userId}",
-          "parameters": {
-            "skuId": {
-              "description": "A product SKU's unique identifier. For more information about available SKUs in this version of the API, see Products and SKUs.",
-              "type": "string",
-              "location": "path",
-              "required": true
-            },
-            "productId": {
-              "location": "path",
-              "description": "A product's unique identifier. For more information about products in this version of the API, see Products and SKUs.",
-              "type": "string",
-              "required": true
-            },
-            "userId": {
-              "type": "string",
-              "required": true,
-              "description": "The user's current primary email address. If the user's email address changes, use the new email address in your API requests. Since a `userId` is subject to change, do not use a `userId` value as a key for persistent data. This key could break if the current user's email address changes. If the `userId` is suspended, the license status changes.",
-              "location": "path"
-            }
-          }
-        },
-        "patch": {
-          "flatPath": "apps/licensing/v1/product/{productId}/sku/{skuId}/user/{userId}",
-          "httpMethod": "PATCH",
-          "description": "Reassign a user's product SKU with a different SKU in the same product. This method supports patch semantics.",
-          "path": "apps/licensing/v1/product/{productId}/sku/{skuId}/user/{userId}",
-          "response": {
-            "$ref": "LicenseAssignment"
-          },
-          "parameters": {
-            "userId": {
-              "location": "path",
-              "description": "The user's current primary email address. If the user's email address changes, use the new email address in your API requests. Since a `userId` is subject to change, do not use a `userId` value as a key for persistent data. This key could break if the current user's email address changes. If the `userId` is suspended, the license status changes.",
-              "type": "string",
-              "required": true
-            },
-            "skuId": {
-              "location": "path",
-              "type": "string",
-              "description": "A product SKU's unique identifier. For more information about available SKUs in this version of the API, see Products and SKUs.",
-              "required": true
-            },
-            "productId": {
-              "location": "path",
-              "required": true,
-              "description": "A product's unique identifier. For more information about products in this version of the API, see Products and SKUs.",
-              "type": "string"
-            }
-          },
-          "request": {
-            "$ref": "LicenseAssignment"
-          },
-          "parameterOrder": [
-            "productId",
-            "skuId",
-            "userId"
-          ],
-          "scopes": [
-            "https://www.googleapis.com/auth/apps.licensing"
-          ],
-          "id": "licensing.licenseAssignments.patch"
-        },
-        "delete": {
-          "id": "licensing.licenseAssignments.delete",
-          "response": {
-            "$ref": "Empty"
-          },
-          "flatPath": "apps/licensing/v1/product/{productId}/sku/{skuId}/user/{userId}",
-          "description": "Revoke a license.",
-          "parameters": {
-            "skuId": {
-              "description": "A product SKU's unique identifier. For more information about available SKUs in this version of the API, see Products and SKUs.",
-              "required": true,
-              "type": "string",
-              "location": "path"
-            },
-            "userId": {
-              "location": "path",
-              "required": true,
-              "description": "The user's current primary email address. If the user's email address changes, use the new email address in your API requests. Since a `userId` is subject to change, do not use a `userId` value as a key for persistent data. This key could break if the current user's email address changes. If the `userId` is suspended, the license status changes.",
-              "type": "string"
-            },
-            "productId": {
-              "required": true,
-              "description": "A product's unique identifier. For more information about products in this version of the API, see Products and SKUs.",
-              "location": "path",
-              "type": "string"
-            }
-          },
-          "path": "apps/licensing/v1/product/{productId}/sku/{skuId}/user/{userId}",
-          "parameterOrder": [
-            "productId",
-            "skuId",
-            "userId"
-          ],
-          "scopes": [
-            "https://www.googleapis.com/auth/apps.licensing"
-          ],
-          "httpMethod": "DELETE"
-        }
-      }
-    }
-  },
-  "name": "licensing",
-  "mtlsRootUrl": "https://licensing.mtls.googleapis.com/",
+  "version": "v1",
   "batchPath": "batch",
-  "ownerName": "Google",
-  "servicePath": "",
-  "auth": {
-    "oauth2": {
-      "scopes": {
-        "https://www.googleapis.com/auth/apps.licensing": {
-          "description": "View and manage Google Workspace licenses for your domain"
-        }
-      }
-    }
-  },
-  "documentationLink": "https://developers.google.com/workspace/admin/licensing/",
-  "fullyEncodeReservedExpansion": true,
-  "id": "licensing:v1",
-  "ownerDomain": "google.com",
-  "parameters": {
-    "access_token": {
-      "description": "OAuth access token.",
-      "location": "query",
-      "type": "string"
-    },
-    "$.xgafv": {
-      "location": "query",
-      "enum": [
-        "1",
-        "2"
-      ],
-      "enumDescriptions": [
-        "v1 error format",
-        "v2 error format"
-      ],
-      "type": "string",
-      "description": "V1 error format."
-    },
-    "callback": {
-      "description": "JSONP",
-      "location": "query",
-      "type": "string"
-    },
-    "oauth_token": {
-      "type": "string",
-      "location": "query",
-      "description": "OAuth 2.0 token for the current user."
-    },
-    "upload_protocol": {
-      "description": "Upload protocol for media (e.g. \"raw\", \"multipart\").",
-      "location": "query",
-      "type": "string"
-    },
-    "key": {
-      "location": "query",
-      "description": "API key. Your API key identifies your project and provides you with API access, quota, and reports. Required unless you provide an OAuth 2.0 token.",
-      "type": "string"
-    },
-    "alt": {
-      "type": "string",
-      "location": "query",
-      "enum": [
-        "json",
-        "media",
-        "proto"
-      ],
-      "default": "json",
-      "description": "Data format for response.",
-      "enumDescriptions": [
-        "Responses with Content-Type of application/json",
-        "Media download with context-dependent Content-Type",
-        "Responses with Content-Type of application/x-protobuf"
-      ]
-    },
-    "uploadType": {
-      "type": "string",
-      "description": "Legacy upload protocol for media (e.g. \"media\", \"multipart\").",
-      "location": "query"
-    },
-    "quotaUser": {
-      "type": "string",
-      "description": "Available to use for quota purposes for server-side applications. Can be any arbitrary string assigned to a user, but should not exceed 40 characters.",
-      "location": "query"
-    },
-    "prettyPrint": {
-      "description": "Returns response with indentations and line breaks.",
-      "location": "query",
-      "default": "true",
-      "type": "boolean"
-    },
-    "fields": {
-      "location": "query",
-      "description": "Selector specifying which fields to include in a partial response.",
-      "type": "string"
-    }
-  },
+  "baseUrl": "https://licensing.googleapis.com/",
+  "rootUrl": "https://licensing.googleapis.com/",
   "discoveryVersion": "v1",
-  "basePath": ""
+  "servicePath": "",
+  "description": "The Google Enterprise License Manager API lets you manage Google Workspace and related licenses for all users of a customer that you manage.",
+  "id": "licensing:v1"
 }
