@@ -1,19 +1,113 @@
 {
-  "servicePath": "",
-  "canonicalName": "G Suite Marketplace API",
+  "schemas": {
+    "UserLicense": {
+      "properties": {
+        "enabled": {
+          "description": "The domain administrator has activated the application for this domain.",
+          "type": "boolean"
+        },
+        "editionId": {
+          "deprecated": true,
+          "description": "(Deprecated)",
+          "type": "string"
+        },
+        "customerId": {
+          "type": "string",
+          "description": "The domain name of the user."
+        },
+        "applicationId": {
+          "type": "string",
+          "description": "The ID of the application corresponding to the license query."
+        },
+        "id": {
+          "description": "The ID of the user license.",
+          "type": "string"
+        },
+        "state": {
+          "description": "The user's licensing status. One of: - `ACTIVE`: The user has a valid license and should be permitted to use the application. - `UNLICENSED`: The administrator of this user's domain never assigned a seat for the application to this user. - `EXPIRED`: The administrator assigned a seat to this user, but the license is expired.",
+          "type": "string"
+        },
+        "userId": {
+          "description": "The email address of the user.",
+          "type": "string"
+        },
+        "kind": {
+          "description": "The type of API resource. This is always `appsmarket#userLicense`.",
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "id": "UserLicense"
+    },
+    "Editions": {
+      "type": "object",
+      "id": "Editions",
+      "properties": {
+        "assignedSeats": {
+          "description": "(Deprecated)",
+          "format": "int32",
+          "type": "integer",
+          "deprecated": true
+        },
+        "editionId": {
+          "description": "(Deprecated)",
+          "deprecated": true,
+          "type": "string"
+        },
+        "seatCount": {
+          "description": "(Deprecated)",
+          "type": "integer",
+          "deprecated": true,
+          "format": "int32"
+        }
+      }
+    },
+    "CustomerLicense": {
+      "type": "object",
+      "properties": {
+        "state": {
+          "description": "The customer's license status. One of: - `ACTIVE`: The customer has a valid license. - `UNLICENSED`: There is no license. Either this customer has never installed your application or has deleted it.",
+          "type": "string"
+        },
+        "applicationId": {
+          "type": "string",
+          "description": "The ID of the application corresponding to this license query."
+        },
+        "editions": {
+          "description": "(Deprecated)",
+          "items": {
+            "$ref": "Editions"
+          },
+          "deprecated": true,
+          "type": "array"
+        },
+        "kind": {
+          "type": "string",
+          "description": "The type of API resource. This is always `appsmarket#customerLicense`."
+        },
+        "id": {
+          "type": "string",
+          "description": "The ID of the customer license."
+        },
+        "customerId": {
+          "type": "string",
+          "description": "The domain name of the customer."
+        }
+      },
+      "id": "CustomerLicense"
+    }
+  },
+  "kind": "discovery#restDescription",
+  "title": "Google Workspace Marketplace API",
   "ownerName": "Google",
-  "discoveryVersion": "v1",
-  "batchPath": "batch",
-  "baseUrl": "https://appsmarket.googleapis.com/",
-  "rootUrl": "https://appsmarket.googleapis.com/",
-  "mtlsRootUrl": "https://appsmarket.mtls.googleapis.com/",
-  "id": "appsmarket:v2",
-  "version_module": true,
-  "ownerDomain": "google.com",
-  "documentationLink": "https://developers.google.com/workspace/marketplace",
   "description": "Lets your Google Workspace Marketplace applications integrate with Google's installtion and licensing services. ",
-  "name": "appsmarket",
+  "id": "appsmarket:v2",
   "basePath": "",
+  "version_module": true,
+  "fullyEncodeReservedExpansion": true,
+  "documentationLink": "https://developers.google.com/workspace/marketplace",
+  "version": "v2",
+  "discoveryVersion": "v1",
   "auth": {
     "oauth2": {
       "scopes": {
@@ -23,200 +117,115 @@
       }
     }
   },
-  "kind": "discovery#restDescription",
-  "fullyEncodeReservedExpansion": true,
-  "icons": {
-    "x32": "http://www.google.com/images/icons/product/search-32.gif",
-    "x16": "http://www.google.com/images/icons/product/search-16.gif"
-  },
+  "servicePath": "",
   "resources": {
-    "userLicense": {
-      "methods": {
-        "get": {
-          "response": {
-            "$ref": "UserLicense"
-          },
-          "parameters": {
-            "applicationId": {
-              "location": "path",
-              "required": true,
-              "description": "The ID of the application.",
-              "type": "string"
-            },
-            "userId": {
-              "description": "The ID of the user.",
-              "required": true,
-              "type": "string",
-              "location": "path"
-            }
-          },
-          "flatPath": "appsmarket/v2/userLicense/{applicationId}/{userId}",
-          "parameterOrder": [
-            "applicationId",
-            "userId"
-          ],
-          "description": "Gets the user's licensing status to determine if they have permission to use a given app. For more information, see [Getting app installation and licensing details](https://developers.google.com/workspace/marketplace/example-calls-marketplace-api).",
-          "path": "appsmarket/v2/userLicense/{applicationId}/{userId}",
-          "scopes": [
-            "https://www.googleapis.com/auth/appsmarketplace.license"
-          ],
-          "httpMethod": "GET",
-          "id": "appsmarket.userLicense.get"
-        }
-      }
-    },
     "customerLicense": {
       "methods": {
         "get": {
+          "response": {
+            "$ref": "CustomerLicense"
+          },
+          "scopes": [
+            "https://www.googleapis.com/auth/appsmarketplace.license"
+          ],
+          "description": "Gets the customer's licensing status to determine if they have access to a given app. For more information, see [Getting app installation and licensing details](https://developers.google.com/workspace/marketplace/example-calls-marketplace-api).",
           "flatPath": "appsmarket/v2/customerLicense/{applicationId}/{customerId}",
           "parameterOrder": [
             "applicationId",
             "customerId"
           ],
-          "response": {
-            "$ref": "CustomerLicense"
-          },
+          "path": "appsmarket/v2/customerLicense/{applicationId}/{customerId}",
           "parameters": {
             "customerId": {
               "type": "string",
-              "required": true,
+              "description": "The ID of the customer.",
               "location": "path",
-              "description": "The ID of the customer."
+              "required": true
             },
             "applicationId": {
-              "location": "path",
-              "required": true,
+              "description": "The ID of the application.",
               "type": "string",
-              "description": "The ID of the application."
+              "location": "path",
+              "required": true
             }
           },
-          "path": "appsmarket/v2/customerLicense/{applicationId}/{customerId}",
-          "description": "Gets the customer's licensing status to determine if they have access to a given app. For more information, see [Getting app installation and licensing details](https://developers.google.com/workspace/marketplace/example-calls-marketplace-api).",
           "id": "appsmarket.customerLicense.get",
+          "httpMethod": "GET"
+        }
+      }
+    },
+    "userLicense": {
+      "methods": {
+        "get": {
           "scopes": [
             "https://www.googleapis.com/auth/appsmarketplace.license"
           ],
-          "httpMethod": "GET"
+          "parameterOrder": [
+            "applicationId",
+            "userId"
+          ],
+          "httpMethod": "GET",
+          "parameters": {
+            "applicationId": {
+              "type": "string",
+              "description": "The ID of the application.",
+              "required": true,
+              "location": "path"
+            },
+            "userId": {
+              "description": "The ID of the user.",
+              "type": "string",
+              "location": "path",
+              "required": true
+            }
+          },
+          "path": "appsmarket/v2/userLicense/{applicationId}/{userId}",
+          "description": "Gets the user's licensing status to determine if they have permission to use a given app. For more information, see [Getting app installation and licensing details](https://developers.google.com/workspace/marketplace/example-calls-marketplace-api).",
+          "response": {
+            "$ref": "UserLicense"
+          },
+          "flatPath": "appsmarket/v2/userLicense/{applicationId}/{userId}",
+          "id": "appsmarket.userLicense.get"
         }
       }
     }
   },
   "revision": "20261012",
-  "schemas": {
-    "CustomerLicense": {
-      "properties": {
-        "editions": {
-          "deprecated": true,
-          "items": {
-            "$ref": "Editions"
-          },
-          "description": "(Deprecated)",
-          "type": "array"
-        },
-        "state": {
-          "type": "string",
-          "description": "The customer's license status. One of: - `ACTIVE`: The customer has a valid license. - `UNLICENSED`: There is no license. Either this customer has never installed your application or has deleted it."
-        },
-        "id": {
-          "type": "string",
-          "description": "The ID of the customer license."
-        },
-        "kind": {
-          "description": "The type of API resource. This is always `appsmarket#customerLicense`.",
-          "type": "string"
-        },
-        "customerId": {
-          "type": "string",
-          "description": "The domain name of the customer."
-        },
-        "applicationId": {
-          "description": "The ID of the application corresponding to this license query.",
-          "type": "string"
-        }
-      },
-      "id": "CustomerLicense",
-      "type": "object"
-    },
-    "Editions": {
-      "properties": {
-        "editionId": {
-          "description": "(Deprecated)",
-          "deprecated": true,
-          "type": "string"
-        },
-        "assignedSeats": {
-          "deprecated": true,
-          "format": "int32",
-          "type": "integer",
-          "description": "(Deprecated)"
-        },
-        "seatCount": {
-          "deprecated": true,
-          "description": "(Deprecated)",
-          "type": "integer",
-          "format": "int32"
-        }
-      },
-      "id": "Editions",
-      "type": "object"
-    },
-    "UserLicense": {
-      "type": "object",
-      "id": "UserLicense",
-      "properties": {
-        "customerId": {
-          "type": "string",
-          "description": "The domain name of the user."
-        },
-        "applicationId": {
-          "type": "string",
-          "description": "The ID of the application corresponding to the license query."
-        },
-        "kind": {
-          "description": "The type of API resource. This is always `appsmarket#userLicense`.",
-          "type": "string"
-        },
-        "id": {
-          "type": "string",
-          "description": "The ID of the user license."
-        },
-        "editionId": {
-          "description": "(Deprecated)",
-          "type": "string",
-          "deprecated": true
-        },
-        "enabled": {
-          "description": "The domain administrator has activated the application for this domain.",
-          "type": "boolean"
-        },
-        "state": {
-          "description": "The user's licensing status. One of: - `ACTIVE`: The user has a valid license and should be permitted to use the application. - `UNLICENSED`: The administrator of this user's domain never assigned a seat for the application to this user. - `EXPIRED`: The administrator assigned a seat to this user, but the license is expired.",
-          "type": "string"
-        },
-        "userId": {
-          "description": "The email address of the user.",
-          "type": "string"
-        }
-      }
-    }
-  },
-  "version": "v2",
+  "protocol": "rest",
   "parameters": {
-    "upload_protocol": {
-      "description": "Upload protocol for media (e.g. \"raw\", \"multipart\").",
+    "alt": {
+      "default": "json",
+      "enumDescriptions": [
+        "Responses with Content-Type of application/json",
+        "Media download with context-dependent Content-Type",
+        "Responses with Content-Type of application/x-protobuf"
+      ],
       "type": "string",
+      "enum": [
+        "json",
+        "media",
+        "proto"
+      ],
+      "description": "Data format for response.",
       "location": "query"
     },
-    "prettyPrint": {
-      "description": "Returns response with indentations and line breaks.",
-      "type": "boolean",
+    "key": {
+      "type": "string",
       "location": "query",
-      "default": "true"
+      "description": "API key. Your API key identifies your project and provides you with API access, quota, and reports. Required unless you provide an OAuth 2.0 token."
     },
-    "uploadType": {
+    "$.xgafv": {
+      "type": "string",
+      "enumDescriptions": [
+        "v1 error format",
+        "v2 error format"
+      ],
       "location": "query",
-      "description": "Legacy upload protocol for media (e.g. \"media\", \"multipart\").",
-      "type": "string"
+      "enum": [
+        "1",
+        "2"
+      ],
+      "description": "V1 error format."
     },
     "oauth_token": {
       "type": "string",
@@ -224,60 +233,51 @@
       "description": "OAuth 2.0 token for the current user."
     },
     "access_token": {
-      "type": "string",
+      "description": "OAuth access token.",
       "location": "query",
-      "description": "OAuth access token."
+      "type": "string"
     },
     "fields": {
-      "type": "string",
       "location": "query",
+      "type": "string",
       "description": "Selector specifying which fields to include in a partial response."
     },
-    "callback": {
-      "description": "JSONP",
+    "uploadType": {
+      "description": "Legacy upload protocol for media (e.g. \"media\", \"multipart\").",
       "location": "query",
       "type": "string"
+    },
+    "callback": {
+      "type": "string",
+      "location": "query",
+      "description": "JSONP"
+    },
+    "upload_protocol": {
+      "description": "Upload protocol for media (e.g. \"raw\", \"multipart\").",
+      "type": "string",
+      "location": "query"
     },
     "quotaUser": {
-      "type": "string",
-      "location": "query",
-      "description": "Available to use for quota purposes for server-side applications. Can be any arbitrary string assigned to a user, but should not exceed 40 characters."
-    },
-    "$.xgafv": {
-      "type": "string",
-      "location": "query",
-      "description": "V1 error format.",
-      "enumDescriptions": [
-        "v1 error format",
-        "v2 error format"
-      ],
-      "enum": [
-        "1",
-        "2"
-      ]
-    },
-    "alt": {
-      "type": "string",
-      "description": "Data format for response.",
-      "location": "query",
-      "default": "json",
-      "enum": [
-        "json",
-        "media",
-        "proto"
-      ],
-      "enumDescriptions": [
-        "Responses with Content-Type of application/json",
-        "Media download with context-dependent Content-Type",
-        "Responses with Content-Type of application/x-protobuf"
-      ]
-    },
-    "key": {
-      "description": "API key. Your API key identifies your project and provides you with API access, quota, and reports. Required unless you provide an OAuth 2.0 token.",
+      "description": "Available to use for quota purposes for server-side applications. Can be any arbitrary string assigned to a user, but should not exceed 40 characters.",
       "location": "query",
       "type": "string"
+    },
+    "prettyPrint": {
+      "location": "query",
+      "type": "boolean",
+      "description": "Returns response with indentations and line breaks.",
+      "default": "true"
     }
   },
-  "title": "Google Workspace Marketplace API",
-  "protocol": "rest"
+  "batchPath": "batch",
+  "baseUrl": "https://appsmarket.googleapis.com/",
+  "rootUrl": "https://appsmarket.googleapis.com/",
+  "name": "appsmarket",
+  "icons": {
+    "x16": "http://www.google.com/images/icons/product/search-16.gif",
+    "x32": "http://www.google.com/images/icons/product/search-32.gif"
+  },
+  "ownerDomain": "google.com",
+  "canonicalName": "G Suite Marketplace API",
+  "mtlsRootUrl": "https://appsmarket.mtls.googleapis.com/"
 }
