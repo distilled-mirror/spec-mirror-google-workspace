@@ -1,51 +1,442 @@
 {
-  "ownerName": "Google",
-  "title": "Google Workspace Alert Center API",
-  "version": "v1beta1",
-  "kind": "discovery#restDescription",
-  "mtlsRootUrl": "https://alertcenter.mtls.googleapis.com/",
-  "revision": "20261030",
   "id": "alertcenter:v1beta1",
-  "documentationLink": "https://developers.google.com/workspace/admin/alertcenter/",
-  "rootUrl": "https://alertcenter.googleapis.com/",
-  "schemas": {
-    "AbuseDetected": {
-      "properties": {
-        "additionalDetails": {
-          "$ref": "EntityList",
-          "description": "List of abusive users/entities to be displayed in a table in the alert."
-        },
-        "variationType": {
-          "type": "string",
-          "description": "Variation of AbuseDetected alerts. The variation_type determines the texts displayed the alert details. This differs from sub_alert_id because each sub alert can have multiple variation_types, representing different stages of the alert.",
-          "enum": [
-            "ABUSE_DETECTED_VARIATION_TYPE_UNSPECIFIED",
-            "DRIVE_ABUSIVE_CONTENT",
-            "LIMITED_DISABLE"
+  "kind": "discovery#restDescription",
+  "resources": {
+    "alerts": {
+      "methods": {
+        "list": {
+          "parameters": {
+            "pageToken": {
+              "type": "string",
+              "description": "Optional. A token identifying a page of results the server should return. If empty, a new iteration is started. To continue an iteration, pass in the value from the previous ListAlertsResponse's next_page_token field.",
+              "location": "query"
+            },
+            "customerId": {
+              "description": "Optional. The unique identifier of the Google Workspace account of the customer the alerts are associated with. The `customer_id` must have the initial \"C\" stripped (for example, `046psxkn`). Inferred from the caller identity if not provided. [Find your customer ID](https://support.google.com/cloudidentity/answer/10070793).",
+              "type": "string",
+              "location": "query"
+            },
+            "filter": {
+              "location": "query",
+              "type": "string",
+              "description": "Optional. A query string for filtering alert results. For more details, see [Query filters](https://developers.google.com/workspace/admin/alertcenter/guides/query-filters) and [Supported query filter fields](https://developers.google.com/workspace/admin/alertcenter/reference/filter-fields#alerts.list)."
+            },
+            "pageSize": {
+              "format": "int32",
+              "type": "integer",
+              "description": "Optional. The requested page size. Server may return fewer items than requested. If unspecified, server picks an appropriate default.",
+              "location": "query"
+            },
+            "orderBy": {
+              "description": "Optional. The sort order of the list results. If not specified results may be returned in arbitrary order. You can sort the results in descending order based on the creation timestamp using `order_by=\"create_time desc\"`. Currently, supported sorting are `create_time asc`, `create_time desc`, `update_time desc`",
+              "type": "string",
+              "location": "query"
+            }
+          },
+          "response": {
+            "$ref": "ListAlertsResponse"
+          },
+          "scopes": [
+            "https://www.googleapis.com/auth/apps.alerts"
           ],
-          "enumDescriptions": [
-            "AbuseDetected alert variation type unspecified. No alert should be unspecified.",
-            "Variation displayed for Drive abusive content alerts.",
-            "Variation displayed for Limited Disable alerts, when a Google service is disabled for a user, totally or partially, due to the user's abusive behavior."
-          ]
+          "flatPath": "v1beta1/alerts",
+          "httpMethod": "GET",
+          "path": "v1beta1/alerts",
+          "id": "alertcenter.alerts.list",
+          "parameterOrder": [],
+          "description": "Lists the alerts."
         },
-        "product": {
-          "description": "Product that the abuse is originating from.",
-          "type": "string"
+        "batchDelete": {
+          "id": "alertcenter.alerts.batchDelete",
+          "parameters": {},
+          "parameterOrder": [],
+          "httpMethod": "POST",
+          "description": "Performs batch delete operation on alerts.",
+          "response": {
+            "$ref": "BatchDeleteAlertsResponse"
+          },
+          "scopes": [
+            "https://www.googleapis.com/auth/apps.alerts"
+          ],
+          "request": {
+            "$ref": "BatchDeleteAlertsRequest"
+          },
+          "flatPath": "v1beta1/alerts:batchDelete",
+          "path": "v1beta1/alerts:batchDelete"
         },
-        "subAlertId": {
-          "type": "string",
-          "description": "Unique identifier of each sub alert that is onboarded."
+        "delete": {
+          "parameters": {
+            "alertId": {
+              "location": "path",
+              "required": true,
+              "type": "string",
+              "description": "Required. The identifier of the alert to delete."
+            },
+            "customerId": {
+              "location": "query",
+              "description": "Optional. The unique identifier of the Google Workspace account of the customer the alert is associated with. The `customer_id` must have the initial \"C\" stripped (for example, `046psxkn`). Inferred from the caller identity if not provided. [Find your customer ID](https://support.google.com/cloudidentity/answer/10070793).",
+              "type": "string"
+            }
+          },
+          "scopes": [
+            "https://www.googleapis.com/auth/apps.alerts"
+          ],
+          "parameterOrder": [
+            "alertId"
+          ],
+          "path": "v1beta1/alerts/{alertId}",
+          "httpMethod": "DELETE",
+          "id": "alertcenter.alerts.delete",
+          "flatPath": "v1beta1/alerts/{alertId}",
+          "description": "Marks the specified alert for deletion. An alert that has been marked for deletion is removed from Alert Center after 30 days. Marking an alert for deletion has no effect on an alert which has already been marked for deletion. Attempting to mark a nonexistent alert for deletion results in a `NOT_FOUND` error.",
+          "response": {
+            "$ref": "Empty"
+          }
+        },
+        "getMetadata": {
+          "path": "v1beta1/alerts/{alertId}/metadata",
+          "parameterOrder": [
+            "alertId"
+          ],
+          "parameters": {
+            "alertId": {
+              "type": "string",
+              "location": "path",
+              "required": true,
+              "description": "Required. The identifier of the alert this metadata belongs to."
+            },
+            "customerId": {
+              "type": "string",
+              "description": "Optional. The unique identifier of the Google Workspace account of the customer the alert metadata is associated with. The `customer_id` must have the initial \"C\" stripped (for example, `046psxkn`). Inferred from the caller identity if not provided. [Find your customer ID](https://support.google.com/cloudidentity/answer/10070793).",
+              "location": "query"
+            }
+          },
+          "scopes": [
+            "https://www.googleapis.com/auth/apps.alerts"
+          ],
+          "response": {
+            "$ref": "AlertMetadata"
+          },
+          "flatPath": "v1beta1/alerts/{alertId}/metadata",
+          "httpMethod": "GET",
+          "description": "Returns the metadata of an alert. Attempting to get metadata for a non-existent alert returns `NOT_FOUND` error.",
+          "id": "alertcenter.alerts.getMetadata"
+        },
+        "undelete": {
+          "httpMethod": "POST",
+          "id": "alertcenter.alerts.undelete",
+          "flatPath": "v1beta1/alerts/{alertId}:undelete",
+          "scopes": [
+            "https://www.googleapis.com/auth/apps.alerts"
+          ],
+          "response": {
+            "$ref": "Alert"
+          },
+          "parameters": {
+            "alertId": {
+              "type": "string",
+              "location": "path",
+              "required": true,
+              "description": "Required. The identifier of the alert to undelete."
+            }
+          },
+          "request": {
+            "$ref": "UndeleteAlertRequest"
+          },
+          "parameterOrder": [
+            "alertId"
+          ],
+          "description": "Restores, or \"undeletes\", an alert that was marked for deletion within the past 30 days. Attempting to undelete an alert which was marked for deletion over 30 days ago (which has been removed from the Alert Center database) or a nonexistent alert returns a `NOT_FOUND` error. Attempting to undelete an alert which has not been marked for deletion has no effect.",
+          "path": "v1beta1/alerts/{alertId}:undelete"
+        },
+        "get": {
+          "scopes": [
+            "https://www.googleapis.com/auth/apps.alerts"
+          ],
+          "parameterOrder": [
+            "alertId"
+          ],
+          "httpMethod": "GET",
+          "response": {
+            "$ref": "Alert"
+          },
+          "description": "Gets the specified alert. Attempting to get a nonexistent alert returns `NOT_FOUND` error.",
+          "path": "v1beta1/alerts/{alertId}",
+          "parameters": {
+            "alertId": {
+              "location": "path",
+              "required": true,
+              "type": "string",
+              "description": "Required. The identifier of the alert to retrieve."
+            },
+            "customerId": {
+              "description": "Optional. The unique identifier of the Google Workspace account of the customer the alert is associated with. The `customer_id` must have the initial \"C\" stripped (for example, `046psxkn`). Inferred from the caller identity if not provided. [Find your customer ID](https://support.google.com/cloudidentity/answer/10070793).",
+              "type": "string",
+              "location": "query"
+            }
+          },
+          "id": "alertcenter.alerts.get",
+          "flatPath": "v1beta1/alerts/{alertId}"
+        },
+        "batchUndelete": {
+          "description": "Performs batch undelete operation on alerts.",
+          "parameterOrder": [],
+          "id": "alertcenter.alerts.batchUndelete",
+          "scopes": [
+            "https://www.googleapis.com/auth/apps.alerts"
+          ],
+          "request": {
+            "$ref": "BatchUndeleteAlertsRequest"
+          },
+          "httpMethod": "POST",
+          "path": "v1beta1/alerts:batchUndelete",
+          "response": {
+            "$ref": "BatchUndeleteAlertsResponse"
+          },
+          "parameters": {},
+          "flatPath": "v1beta1/alerts:batchUndelete"
         }
       },
-      "type": "object",
-      "id": "AbuseDetected",
-      "description": "A generic alert for abusive user activity occurring with a customer."
+      "resources": {
+        "feedback": {
+          "methods": {
+            "create": {
+              "id": "alertcenter.alerts.feedback.create",
+              "parameters": {
+                "alertId": {
+                  "type": "string",
+                  "location": "path",
+                  "required": true,
+                  "description": "Required. The identifier of the alert this feedback belongs to."
+                },
+                "customerId": {
+                  "type": "string",
+                  "location": "query",
+                  "description": "Optional. The unique identifier of the Google Workspace account of the customer the alert is associated with. The `customer_id` must have the initial \"C\" stripped (for example, `046psxkn`). Inferred from the caller identity if not provided. [Find your customer ID](https://support.google.com/cloudidentity/answer/10070793)."
+                }
+              },
+              "httpMethod": "POST",
+              "scopes": [
+                "https://www.googleapis.com/auth/apps.alerts"
+              ],
+              "parameterOrder": [
+                "alertId"
+              ],
+              "request": {
+                "$ref": "AlertFeedback"
+              },
+              "flatPath": "v1beta1/alerts/{alertId}/feedback",
+              "path": "v1beta1/alerts/{alertId}/feedback",
+              "response": {
+                "$ref": "AlertFeedback"
+              },
+              "description": "Creates new feedback for an alert. Attempting to create a feedback for a non-existent alert returns `NOT_FOUND` error. Attempting to create a feedback for an alert that is marked for deletion returns `FAILED_PRECONDITION' error."
+            },
+            "list": {
+              "response": {
+                "$ref": "ListAlertFeedbackResponse"
+              },
+              "id": "alertcenter.alerts.feedback.list",
+              "flatPath": "v1beta1/alerts/{alertId}/feedback",
+              "httpMethod": "GET",
+              "path": "v1beta1/alerts/{alertId}/feedback",
+              "scopes": [
+                "https://www.googleapis.com/auth/apps.alerts"
+              ],
+              "description": "Lists all the feedback for an alert. Attempting to list feedbacks for a non-existent alert returns `NOT_FOUND` error.",
+              "parameterOrder": [
+                "alertId"
+              ],
+              "parameters": {
+                "customerId": {
+                  "description": "Optional. The unique identifier of the Google Workspace account of the customer the alert is associated with. The `customer_id` must have the initial \"C\" stripped (for example, `046psxkn`). Inferred from the caller identity if not provided. [Find your customer ID](https://support.google.com/cloudidentity/answer/10070793).",
+                  "location": "query",
+                  "type": "string"
+                },
+                "alertId": {
+                  "description": "Required. The alert identifier. The \"-\" wildcard could be used to represent all alerts.",
+                  "location": "path",
+                  "required": true,
+                  "type": "string"
+                },
+                "filter": {
+                  "description": "Optional. A query string for filtering alert feedback results. For more details, see [Query filters](https://developers.google.com/workspace/admin/alertcenter/guides/query-filters) and [Supported query filter fields](https://developers.google.com/workspace/admin/alertcenter/reference/filter-fields#alerts.feedback.list).",
+                  "location": "query",
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
     },
+    "v1beta1": {
+      "methods": {
+        "getSettings": {
+          "parameterOrder": [],
+          "path": "v1beta1/settings",
+          "description": "Returns customer-level settings.",
+          "httpMethod": "GET",
+          "response": {
+            "$ref": "Settings"
+          },
+          "parameters": {
+            "customerId": {
+              "location": "query",
+              "type": "string",
+              "description": "Optional. The unique identifier of the Google Workspace account of the customer the alert settings are associated with. The `customer_id` must/ have the initial \"C\" stripped (for example, `046psxkn`). Inferred from the caller identity if not provided. [Find your customer ID](https://support.google.com/cloudidentity/answer/10070793)."
+            }
+          },
+          "scopes": [
+            "https://www.googleapis.com/auth/apps.alerts"
+          ],
+          "id": "alertcenter.getSettings",
+          "flatPath": "v1beta1/settings"
+        },
+        "updateSettings": {
+          "httpMethod": "PATCH",
+          "flatPath": "v1beta1/settings",
+          "scopes": [
+            "https://www.googleapis.com/auth/apps.alerts"
+          ],
+          "description": "Updates the customer-level settings.",
+          "path": "v1beta1/settings",
+          "response": {
+            "$ref": "Settings"
+          },
+          "request": {
+            "$ref": "Settings"
+          },
+          "parameters": {
+            "customerId": {
+              "description": "Optional. The unique identifier of the Google Workspace account of the customer the alert settings are associated with. The `customer_id` must have the initial \"C\" stripped (for example, `046psxkn`). Inferred from the caller identity if not provided. [Find your customer ID](https://support.google.com/cloudidentity/answer/10070793).",
+              "type": "string",
+              "location": "query"
+            }
+          },
+          "parameterOrder": [],
+          "id": "alertcenter.updateSettings"
+        }
+      }
+    }
+  },
+  "name": "alertcenter",
+  "basePath": "",
+  "mtlsRootUrl": "https://alertcenter.mtls.googleapis.com/",
+  "protocol": "rest",
+  "version_module": true,
+  "discoveryVersion": "v1",
+  "parameters": {
+    "quotaUser": {
+      "description": "Available to use for quota purposes for server-side applications. Can be any arbitrary string assigned to a user, but should not exceed 40 characters.",
+      "location": "query",
+      "type": "string"
+    },
+    "alt": {
+      "default": "json",
+      "description": "Data format for response.",
+      "enum": [
+        "json",
+        "media",
+        "proto"
+      ],
+      "type": "string",
+      "location": "query",
+      "enumDescriptions": [
+        "Responses with Content-Type of application/json",
+        "Media download with context-dependent Content-Type",
+        "Responses with Content-Type of application/x-protobuf"
+      ]
+    },
+    "prettyPrint": {
+      "location": "query",
+      "default": "true",
+      "type": "boolean",
+      "description": "Returns response with indentations and line breaks."
+    },
+    "key": {
+      "type": "string",
+      "description": "API key. Your API key identifies your project and provides you with API access, quota, and reports. Required unless you provide an OAuth 2.0 token.",
+      "location": "query"
+    },
+    "uploadType": {
+      "description": "Legacy upload protocol for media (e.g. \"media\", \"multipart\").",
+      "type": "string",
+      "location": "query"
+    },
+    "fields": {
+      "type": "string",
+      "location": "query",
+      "description": "Selector specifying which fields to include in a partial response."
+    },
+    "oauth_token": {
+      "location": "query",
+      "type": "string",
+      "description": "OAuth 2.0 token for the current user."
+    },
+    "upload_protocol": {
+      "location": "query",
+      "description": "Upload protocol for media (e.g. \"raw\", \"multipart\").",
+      "type": "string"
+    },
+    "access_token": {
+      "type": "string",
+      "location": "query",
+      "description": "OAuth access token."
+    },
+    "callback": {
+      "location": "query",
+      "type": "string",
+      "description": "JSONP"
+    },
+    "$.xgafv": {
+      "enum": [
+        "1",
+        "2"
+      ],
+      "type": "string",
+      "description": "V1 error format.",
+      "enumDescriptions": [
+        "v1 error format",
+        "v2 error format"
+      ],
+      "location": "query"
+    }
+  },
+  "documentationLink": "https://developers.google.com/workspace/admin/alertcenter/",
+  "batchPath": "batch",
+  "description": "Manages alerts on issues affecting your domain. Note: The current version of this API (v1beta1) is available to all Google Workspace customers. ",
+  "ownerDomain": "google.com",
+  "canonicalName": "AlertCenter",
+  "baseUrl": "https://alertcenter.googleapis.com/",
+  "ownerName": "Google",
+  "revision": "20261030",
+  "version": "v1beta1",
+  "icons": {
+    "x16": "http://www.google.com/images/icons/product/search-16.gif",
+    "x32": "http://www.google.com/images/icons/product/search-32.gif"
+  },
+  "title": "Google Workspace Alert Center API",
+  "servicePath": "",
+  "schemas": {
     "KeyServiceError": {
       "properties": {
-        "errorInfo": {
+        "keyServiceUrl": {
           "type": "string",
+          "description": "Url of the external key service."
+        },
+        "errorCount": {
+          "type": "string",
+          "description": "Number of similar errors encountered.",
+          "format": "int64"
+        },
+        "httpResponseCode": {
+          "type": "string",
+          "description": "HTTP response status code from the key service.",
+          "format": "int64"
+        },
+        "errorInfo": {
+          "description": "Info on the key service error.",
           "enum": [
             "KEY_SERVICE_ERROR_INFO_UNSPECIFIED",
             "MALFORMED_JSON",
@@ -56,6 +447,7 @@
             "FETCH_REQUEST_ERROR",
             "SERVER_SIDE_FETCH_REQUEST_ERROR"
           ],
+          "type": "string",
           "enumDescriptions": [
             "Error info not specified.",
             "The response has malformed JSON.",
@@ -65,52 +457,1580 @@
             "SMIME only: the algorithm name in the response is not supported by the client.",
             "Fetch request on the client has failed.",
             "Fetch request from the Google server to the key service has failed."
-          ],
-          "description": "Info on the key service error."
+          ]
+        }
+      },
+      "id": "KeyServiceError",
+      "description": "Error related to an external key service.",
+      "type": "object"
+    },
+    "DomainId": {
+      "properties": {
+        "customerPrimaryDomain": {
+          "description": "The primary domain for the customer.",
+          "type": "string"
+        }
+      },
+      "description": "Domain ID of Gmail phishing alerts.",
+      "id": "DomainId",
+      "type": "object"
+    },
+    "ClientSideEncryptionServiceUnavailable": {
+      "properties": {
+        "idpError": {
+          "items": {
+            "$ref": "IdentityProviderError"
+          },
+          "type": "array",
+          "description": "Identity providers impacted by an outage or misconfiguration."
         },
-        "errorCount": {
-          "description": "Number of similar errors encountered.",
-          "type": "string",
-          "format": "int64"
-        },
-        "keyServiceUrl": {
-          "type": "string",
-          "description": "Url of the external key service."
-        },
-        "httpResponseCode": {
-          "description": "HTTP response status code from the key service.",
-          "type": "string",
-          "format": "int64"
+        "keyServiceError": {
+          "items": {
+            "$ref": "KeyServiceError"
+          },
+          "description": "External key services impacted by an outage or misconfiguration.",
+          "type": "array"
         }
       },
       "type": "object",
-      "id": "KeyServiceError",
-      "description": "Error related to an external key service."
+      "id": "ClientSideEncryptionServiceUnavailable",
+      "description": "Alerts for client-side encryption outages."
     },
-    "DeviceCompromised": {
-      "description": "A mobile device compromised alert. Derived from audit logs.",
+    "Attachment": {
+      "id": "Attachment",
       "properties": {
-        "events": {
+        "csv": {
+          "$ref": "Csv",
+          "description": "A CSV file attachment."
+        }
+      },
+      "description": "Attachment with application-specific information about an alert.",
+      "type": "object"
+    },
+    "DlpRuleViolation": {
+      "type": "object",
+      "description": "Alerts that get triggered on violations of Data Loss Prevention (DLP) rules.",
+      "id": "DlpRuleViolation",
+      "properties": {
+        "ruleViolationInfo": {
+          "$ref": "RuleViolationInfo",
+          "description": "Details about the violated DLP rule. Admins can use the predefined detectors provided by Google Cloud DLP https://cloud.google.com/dlp/ when setting up a DLP rule. Matched Cloud DLP detectors in this violation if any will be captured in the MatchInfo.predefined_detector."
+        }
+      }
+    },
+    "AccessApproval": {
+      "id": "AccessApproval",
+      "description": "Alert that is triggered when Google support requests to access customer data.",
+      "properties": {
+        "products": {
           "type": "array",
           "items": {
-            "$ref": "DeviceCompromisedSecurityDetail"
+            "type": "string"
           },
-          "description": "Required. The list of security events."
+          "description": "Products within scope of the Access Approvals request."
+        },
+        "scope": {
+          "description": "Scope of access, also known as a resource. This is further narrowed down by the product field.",
+          "type": "string"
+        },
+        "justificationReason": {
+          "items": {
+            "enumDescriptions": [
+              "Justification unspecified",
+              "Customer Initiated Support",
+              "Google Initiated Review",
+              "Google Initiated Service",
+              "Third Party Data Request",
+              "Google Response to Production Alert"
+            ],
+            "type": "string",
+            "enum": [
+              "JUSTIFICATION_UNSPECIFIED",
+              "CUSTOMER_INITIATED_SUPPORT",
+              "GOOGLE_INITIATED_REVIEW",
+              "GOOGLE_INITIATED_SERVICE",
+              "THIRD_PARTY_DATA_REQUEST",
+              "GOOGLE_RESPONSE_TO_PRODUCTION_ALERT"
+            ]
+          },
+          "description": "Justification for data access based on justification enums.",
+          "type": "array"
+        },
+        "officeLocation": {
+          "description": "Office location of Google staff requesting access such as \"US\".",
+          "type": "string"
+        },
+        "tickets": {
+          "type": "array",
+          "description": "Support tickets related to this Access Approvals request. Populated if there is an associated case number.",
+          "items": {
+            "$ref": "SupportTicket"
+          }
+        },
+        "requestId": {
+          "description": "ID of the Access Approvals request. This is a helpful field when requesting support from Google.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "RequestInfo": {
+      "type": "object",
+      "description": "Requests for one application that needs default SQL setup.",
+      "id": "RequestInfo",
+      "properties": {
+        "appKey": {
+          "type": "string",
+          "description": "Required. The application that requires the SQL setup."
+        },
+        "appDeveloperEmail": {
+          "description": "List of app developers who triggered notifications for above application.",
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "numberOfRequests": {
+          "description": "Required. Number of requests sent for this application to set up default SQL instance.",
+          "type": "string",
+          "format": "int64"
+        }
+      }
+    },
+    "BatchUndeleteAlertsResponse": {
+      "properties": {
+        "failedAlertStatus": {
+          "additionalProperties": {
+            "$ref": "Status"
+          },
+          "description": "The status details for each failed `alert_id`.",
+          "type": "object"
+        },
+        "successAlertIds": {
+          "description": "The successful list of alert IDs.",
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        }
+      },
+      "id": "BatchUndeleteAlertsResponse",
+      "description": "Response to batch undelete operation on alerts.",
+      "type": "object"
+    },
+    "User": {
+      "id": "User",
+      "type": "object",
+      "description": "A user.",
+      "properties": {
+        "displayName": {
+          "description": "Display name of the user.",
+          "type": "string"
+        },
+        "emailAddress": {
+          "type": "string",
+          "description": "Email address of the user."
+        }
+      }
+    },
+    "AppSettingsChanged": {
+      "type": "object",
+      "properties": {
+        "alertDetails": {
+          "type": "string",
+          "format": "byte",
+          "description": "Any other associated alert details, for example, AlertConfiguration."
+        },
+        "name": {
+          "description": "Rule name",
+          "type": "string"
+        }
+      },
+      "description": "Alerts from AppSettingsChanged bucket Rules configured by Admin which contain the following rules: - Calendar settings changed - Drive settings changed - Email settings changed - Mobile settings changed",
+      "id": "AppSettingsChanged"
+    },
+    "VoicemailRecipientError": {
+      "id": "VoicemailRecipientError",
+      "description": "Issue(s) with a voicemail recipient.",
+      "properties": {
+        "email": {
+          "description": "Email address of the invalid recipient. This may be unavailable if the recipient was deleted.",
+          "type": "string"
+        },
+        "invalidReason": {
+          "enum": [
+            "EMAIL_INVALID_REASON_UNSPECIFIED",
+            "OUT_OF_QUOTA",
+            "RECIPIENT_DELETED"
+          ],
+          "type": "string",
+          "enumDescriptions": [
+            "Reason wasn't specified.",
+            "User can't receive emails due to insufficient quota.",
+            "All recipients were deleted."
+          ],
+          "description": "Reason for the error."
+        }
+      },
+      "type": "object"
+    },
+    "StateSponsoredAttack": {
+      "type": "object",
+      "description": "A state-sponsored attack alert. Derived from audit logs.",
+      "id": "StateSponsoredAttack",
+      "properties": {
+        "email": {
+          "description": "The email of the user this incident was created for.",
+          "type": "string"
+        }
+      }
+    },
+    "AppsOutage": {
+      "description": "An outage incident reported for a Google Workspace service.",
+      "id": "AppsOutage",
+      "type": "object",
+      "properties": {
+        "products": {
+          "items": {
+            "type": "string"
+          },
+          "description": "List of products impacted by the outage.",
+          "type": "array"
+        },
+        "resolutionTime": {
+          "format": "google-datetime",
+          "type": "string",
+          "description": "Timestamp when the outage is expected to be resolved, or has confirmed resolution. Provided only when known."
+        },
+        "dashboardUri": {
+          "type": "string",
+          "description": "Link to the outage event in Google Workspace Status Dashboard"
+        },
+        "mergeInfo": {
+          "$ref": "MergeInfo",
+          "description": "Indicates new alert details under which the outage is communicated. Only populated when Status is MERGED."
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "STATUS_UNSPECIFIED",
+            "NEW",
+            "ONGOING",
+            "RESOLVED",
+            "FALSE_POSITIVE",
+            "PARTIALLY_RESOLVED",
+            "MERGED",
+            "DOWNGRADED"
+          ],
+          "description": "Current outage status.",
+          "enumDescriptions": [
+            "Status is unspecified.",
+            "The incident has just been reported.",
+            "The incident is ongoing.",
+            "The incident has been resolved.",
+            "Further assessment indicated no customer impact.",
+            "The incident has been partially resolved.",
+            "The incident was merged into a parent.",
+            "The incident has lower impact than initially anticipated."
+          ]
+        },
+        "nextUpdateTime": {
+          "description": "Timestamp by which the next update is expected to arrive.",
+          "format": "google-datetime",
+          "type": "string"
+        },
+        "incidentTrackingId": {
+          "description": "Incident tracking ID.",
+          "type": "string"
+        }
+      }
+    },
+    "AccountWarning": {
+      "properties": {
+        "loginDetails": {
+          "description": "Optional. Details of the login action associated with the warning event. This is only available for: * Suspicious login * Suspicious login (less secure app) * Suspicious programmatic login * User suspended (suspicious activity)",
+          "$ref": "LoginDetails"
+        },
+        "email": {
+          "type": "string",
+          "description": "Required. The email of the user that this event belongs to."
+        }
+      },
+      "type": "object",
+      "description": "Alerts for user account warning events.",
+      "id": "AccountWarning"
+    },
+    "AbuseDetected": {
+      "properties": {
+        "variationType": {
+          "enumDescriptions": [
+            "AbuseDetected alert variation type unspecified. No alert should be unspecified.",
+            "Variation displayed for Drive abusive content alerts.",
+            "Variation displayed for Limited Disable alerts, when a Google service is disabled for a user, totally or partially, due to the user's abusive behavior."
+          ],
+          "description": "Variation of AbuseDetected alerts. The variation_type determines the texts displayed the alert details. This differs from sub_alert_id because each sub alert can have multiple variation_types, representing different stages of the alert.",
+          "type": "string",
+          "enum": [
+            "ABUSE_DETECTED_VARIATION_TYPE_UNSPECIFIED",
+            "DRIVE_ABUSIVE_CONTENT",
+            "LIMITED_DISABLE"
+          ]
+        },
+        "subAlertId": {
+          "description": "Unique identifier of each sub alert that is onboarded.",
+          "type": "string"
+        },
+        "product": {
+          "description": "Product that the abuse is originating from.",
+          "type": "string"
+        },
+        "additionalDetails": {
+          "description": "List of abusive users/entities to be displayed in a table in the alert.",
+          "$ref": "EntityList"
+        }
+      },
+      "type": "object",
+      "description": "A generic alert for abusive user activity occurring with a customer.",
+      "id": "AbuseDetected"
+    },
+    "Settings": {
+      "description": "Customer-level settings.",
+      "properties": {
+        "notifications": {
+          "description": "The list of notifications.",
+          "type": "array",
+          "items": {
+            "$ref": "Notification"
+          }
+        }
+      },
+      "id": "Settings",
+      "type": "object"
+    },
+    "PredefinedDetectorInfo": {
+      "properties": {
+        "detectorName": {
+          "type": "string",
+          "description": "Name that uniquely identifies the detector."
+        }
+      },
+      "description": "Detector provided by Google.",
+      "type": "object",
+      "id": "PredefinedDetectorInfo"
+    },
+    "ReportingRule": {
+      "id": "ReportingRule",
+      "properties": {
+        "query": {
+          "description": "Alert Rule query Sample Query query { condition { filter { expected_application_id: 777491262838 expected_event_name: \"indexable_content_change\" filter_op: IN } } conjunction_operator: OR }",
+          "format": "byte",
+          "type": "string"
+        },
+        "alertDetails": {
+          "type": "string",
+          "description": "Any other associated alert details, for example, AlertConfiguration.",
+          "format": "byte"
+        },
+        "name": {
+          "type": "string",
+          "description": "Rule name"
+        }
+      },
+      "type": "object",
+      "description": "Alerts from Reporting Rules configured by Admin."
+    },
+    "UndeleteAlertRequest": {
+      "description": "A request to undelete a specific alert that was marked for deletion.",
+      "properties": {
+        "customerId": {
+          "type": "string",
+          "description": "Optional. The unique identifier of the Google Workspace account of the customer the alert is associated with. The `customer_id` must have the initial \"C\" stripped (for example, `046psxkn`). Inferred from the caller identity if not provided. [Find your customer ID](https://support.google.com/cloudidentity/answer/10070793)."
+        }
+      },
+      "type": "object",
+      "id": "UndeleteAlertRequest"
+    },
+    "AppMakerSqlSetupNotification": {
+      "type": "object",
+      "description": "Alerts from App Maker to notify admins to set up default SQL instance.",
+      "properties": {
+        "requestInfo": {
+          "description": "List of applications with requests for default SQL set up.",
+          "items": {
+            "$ref": "RequestInfo"
+          },
+          "type": "array"
+        }
+      },
+      "id": "AppMakerSqlSetupNotification"
+    },
+    "SensitiveAdminAction": {
+      "type": "object",
+      "id": "SensitiveAdminAction",
+      "properties": {
+        "ssoProfileCreatedEvent": {
+          "description": "Event occurred when SSO Profile created in customer's account",
+          "$ref": "SSOProfileCreatedEvent"
+        },
+        "ssoProfileUpdatedEvent": {
+          "description": "Event occurred when SSO Profile updated in customer's account",
+          "$ref": "SSOProfileUpdatedEvent"
+        },
+        "eventTime": {
+          "format": "google-datetime",
+          "type": "string",
+          "description": "The time at which event occurred"
+        },
+        "ssoProfileDeletedEvent": {
+          "$ref": "SSOProfileDeletedEvent",
+          "description": "Event occurred when SSO Profile deleted in customer's account"
+        },
+        "actorEmail": {
+          "description": "Email of person who performed the action",
+          "type": "string"
+        },
+        "primaryAdminChangedEvent": {
+          "description": "Event occurred when primary admin changed in customer's account",
+          "$ref": "PrimaryAdminChangedEvent"
+        },
+        "superAdminPasswordResetEvent": {
+          "$ref": "SuperAdminPasswordResetEvent",
+          "description": "Event occurred when password was reset for super admin in customer's account"
+        }
+      },
+      "description": "Alert that is triggered when Sensitive Admin Action occur in customer account."
+    },
+    "SystemDefinedAlertDataAlertDetailFieldValue": {
+      "type": "object",
+      "properties": {
+        "boolValue": {
+          "type": "boolean",
+          "description": "Value if the type is boolean"
+        },
+        "timestampValue": {
+          "type": "string",
+          "description": "Value is the type is a timestamp",
+          "format": "google-datetime"
+        },
+        "stringValue": {
+          "type": "string",
+          "description": "Value if the type is string"
+        },
+        "intValue": {
+          "type": "string",
+          "description": "Value if the type is integer",
+          "format": "int64"
+        }
+      },
+      "id": "SystemDefinedAlertDataAlertDetailFieldValue",
+      "description": "Audit data value"
+    },
+    "BadWhitelist": {
+      "id": "BadWhitelist",
+      "properties": {
+        "messages": {
+          "type": "array",
+          "items": {
+            "$ref": "GmailMessageInfo"
+          },
+          "description": "The list of messages contained by this alert."
+        },
+        "sourceIp": {
+          "description": "The source IP address of the malicious email, for example, `127.0.0.1`.",
+          "type": "string"
+        },
+        "domainId": {
+          "description": "The domain ID.",
+          "$ref": "DomainId"
+        },
+        "maliciousEntity": {
+          "$ref": "MaliciousEntity",
+          "description": "The entity whose actions triggered a Gmail phishing alert."
+        }
+      },
+      "description": "Alert for setting the domain or IP that malicious email comes from as whitelisted domain or IP in Gmail advanced settings.",
+      "type": "object"
+    },
+    "DeviceManagementRule": {
+      "id": "DeviceManagementRule",
+      "description": "Alerts from Device Management Rules configured by Admin.",
+      "properties": {
+        "iosVendorId": {
+          "description": "Required for iOS, empty for others.",
+          "type": "string"
+        },
+        "resourceId": {
+          "type": "string",
+          "description": "The device resource ID."
+        },
+        "deviceId": {
+          "description": "Required. The device ID.",
+          "type": "string"
+        },
+        "serialNumber": {
+          "description": "The serial number of the device.",
+          "type": "string"
+        },
+        "id": {
+          "type": "string",
+          "description": "ID of the rule that triggered the alert"
+        },
+        "deviceModel": {
+          "description": "The model of the device.",
+          "type": "string"
         },
         "email": {
           "type": "string",
           "description": "The email of the user this alert was created for."
+        },
+        "ownerId": {
+          "type": "string",
+          "description": "Obfuscated ID of the owner of the device"
+        },
+        "deviceType": {
+          "description": "The type of the device.",
+          "type": "string"
+        },
+        "ruleAction": {
+          "type": "string",
+          "description": "Action taken as result of the rule"
         }
       },
-      "id": "DeviceCompromised",
       "type": "object"
     },
-    "RuleViolationInfo": {
-      "description": "Common alert information about violated rules that are configured by Google Workspace administrators.",
+    "SuspiciousActivitySecurityDetail": {
       "properties": {
-        "resourceInfo": {
-          "description": "Details of the resource which violated the rule.",
-          "$ref": "ResourceInfo"
+        "deviceType": {
+          "type": "string",
+          "description": "The type of the device."
+        },
+        "newValue": {
+          "description": "The new value of the device property after the change.",
+          "type": "string"
+        },
+        "serialNumber": {
+          "description": "The serial number of the device.",
+          "type": "string"
+        },
+        "deviceId": {
+          "description": "Required. The device ID.",
+          "type": "string"
+        },
+        "deviceProperty": {
+          "type": "string",
+          "description": "The device property which was changed."
+        },
+        "iosVendorId": {
+          "type": "string",
+          "description": "Required for iOS, empty for others."
+        },
+        "resourceId": {
+          "type": "string",
+          "description": "The device resource ID."
+        },
+        "deviceModel": {
+          "description": "The model of the device.",
+          "type": "string"
+        },
+        "oldValue": {
+          "description": "The old value of the device property before the change.",
+          "type": "string"
+        }
+      },
+      "description": "Detailed information of a single MDM suspicious activity event.",
+      "id": "SuspiciousActivitySecurityDetail",
+      "type": "object"
+    },
+    "PrimaryAdminChangedEvent": {
+      "id": "PrimaryAdminChangedEvent",
+      "description": "Event occurred when primary admin changed in customer's account. The event are being received from insight forwarder",
+      "type": "object",
+      "properties": {
+        "domain": {
+          "description": "domain in which actioned occurred",
+          "type": "string"
+        },
+        "previousAdminEmail": {
+          "type": "string",
+          "description": "Email of person who was the primary admin before the action"
+        },
+        "updatedAdminEmail": {
+          "description": "Email of person who is the primary admin after the action",
+          "type": "string"
+        }
+      }
+    },
+    "MatchInfo": {
+      "id": "MatchInfo",
+      "type": "object",
+      "properties": {
+        "predefinedDetector": {
+          "$ref": "PredefinedDetectorInfo",
+          "description": "For matched detector predefined by Google."
+        },
+        "userDefinedDetector": {
+          "description": "For matched detector defined by administrators.",
+          "$ref": "UserDefinedDetectorInfo"
+        }
+      },
+      "description": "Proto that contains match information from the condition part of the rule."
+    },
+    "IdentityProviderError": {
+      "id": "IdentityProviderError",
+      "properties": {
+        "authorizationBaseUrl": {
+          "description": "Authorization base url of the identity provider.",
+          "type": "string"
+        },
+        "errorCount": {
+          "format": "int64",
+          "type": "string",
+          "description": "Number of similar errors encountered."
+        },
+        "errorInfo": {
+          "description": "Info on the identity provider error.",
+          "enum": [
+            "IDENTITY_PROVIDER_ERROR_INFO_UNSPECIFIED",
+            "EMAIL_MISMATCH",
+            "UNAVAILABLE_DISCOVERY_CONTENT",
+            "INVALID_DISCOVERY_CONTENT",
+            "UNAVAILABLE_CSE_CONFIGURATION_CONTENT",
+            "INVALID_CSE_CONFIGURATION_CONTENT",
+            "INVALID_ID_TOKEN",
+            "INVALID_OIDC_SETUP",
+            "UNAVAILABLE_IDP",
+            "AUTH_CODE_EXCHANGE_ERROR",
+            "AUTHENTICATION_TOKEN_MISSING_CLAIM_EMAIL"
+          ],
+          "enumDescriptions": [
+            "Error info not specified.",
+            "Email in the ID token is different from the user's email.",
+            "Discovery URL was unreachable.",
+            "Discovery URL did not contain all the necessary information.",
+            "URL for client-side encryption configuration content was unreachable.",
+            "Client-side encryption .well-known URL did not contain all the necessary information.",
+            "ID token returned by the identity provider is invalid.",
+            "OIDC setup error.",
+            "Identity provider was unreachable.",
+            "Auth code exchange error.",
+            "Authentication token has no \"email\" or \"google_email\" claim."
+          ],
+          "type": "string"
+        }
+      },
+      "type": "object",
+      "description": "Error related to an identity provider."
+    },
+    "CsvRow": {
+      "properties": {
+        "entries": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "The data entries in a CSV file row, as a string array rather than a single comma-separated string."
+        }
+      },
+      "id": "CsvRow",
+      "description": "A representation of a single data row in a CSV file.",
+      "type": "object"
+    },
+    "AlertDetail": {
+      "type": "object",
+      "description": "The alert data relevant for this alert",
+      "properties": {
+        "fieldName": {
+          "description": "Audit data key",
+          "type": "string"
+        },
+        "fieldValues": {
+          "items": {
+            "$ref": "SystemDefinedAlertDataAlertDetailFieldValue"
+          },
+          "description": "Audit data values",
+          "type": "array"
+        }
+      },
+      "id": "AlertDetail"
+    },
+    "GoogleOperations": {
+      "type": "object",
+      "id": "GoogleOperations",
+      "description": "An incident reported by Google Operations for a Google Workspace application.",
+      "properties": {
+        "affectedUserEmails": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array",
+          "description": "The list of emails which correspond to the users directly affected by the incident."
+        },
+        "header": {
+          "description": "A header to display above the incident message. Typically used to attach a localized notice on the timeline for followup comms translations.",
+          "type": "string"
+        },
+        "domain": {
+          "type": "string",
+          "description": "Customer domain for email template personalization."
+        },
+        "title": {
+          "type": "string",
+          "description": "A one-line incident description."
+        },
+        "attachmentData": {
+          "description": "Optional. Application-specific data for an incident, provided when the Google Workspace application which reported the incident cannot be completely restored to a valid state.",
+          "$ref": "Attachment"
+        },
+        "description": {
+          "description": "A detailed, freeform incident description.",
+          "type": "string"
+        }
+      }
+    },
+    "MandatoryServiceAnnouncement": {
+      "type": "object",
+      "id": "MandatoryServiceAnnouncement",
+      "description": "Alert Created by the MSA team for communications necessary for continued use of Google Workspace Products.",
+      "properties": {
+        "description": {
+          "description": "Detailed, freeform text describing the announcement",
+          "type": "string"
+        },
+        "title": {
+          "description": "One line summary of the announcement",
+          "type": "string"
+        }
+      }
+    },
+    "UserDefinedDetectorInfo": {
+      "type": "object",
+      "description": "Detector defined by administrators.",
+      "properties": {
+        "displayName": {
+          "type": "string",
+          "description": "Display name of the detector."
+        },
+        "resourceName": {
+          "description": "Resource name that uniquely identifies the detector.",
+          "type": "string"
+        }
+      },
+      "id": "UserDefinedDetectorInfo"
+    },
+    "LoginDetails": {
+      "properties": {
+        "loginTime": {
+          "type": "string",
+          "description": "Optional. The successful login time that is associated with the warning event. This isn't present for blocked login attempts.",
+          "format": "google-datetime"
+        },
+        "ipAddress": {
+          "type": "string",
+          "description": "Optional. The human-readable IP address (for example, `11.22.33.44`) that is associated with the warning event."
+        }
+      },
+      "description": "The details of the login action.",
+      "type": "object",
+      "id": "LoginDetails"
+    },
+    "SuspiciousActivity": {
+      "id": "SuspiciousActivity",
+      "type": "object",
+      "description": "A mobile suspicious activity alert. Derived from audit logs.",
+      "properties": {
+        "events": {
+          "items": {
+            "$ref": "SuspiciousActivitySecurityDetail"
+          },
+          "type": "array",
+          "description": "Required. The list of security events."
+        },
+        "email": {
+          "description": "The email of the user this alert was created for.",
+          "type": "string"
+        }
+      }
+    },
+    "CloudPubsubTopic": {
+      "properties": {
+        "topicName": {
+          "type": "string",
+          "description": "The `name` field of a Cloud Pubsub [Topic] (https://cloud.google.com/pubsub/docs/reference/rest/v1/projects.topics#Topic)."
+        },
+        "payloadFormat": {
+          "enum": [
+            "PAYLOAD_FORMAT_UNSPECIFIED",
+            "JSON"
+          ],
+          "type": "string",
+          "description": "Optional. The format of the payload that would be sent. If not specified the format will be JSON.",
+          "enumDescriptions": [
+            "Payload format is not specified (will use JSON as default).",
+            "Use JSON."
+          ]
+        }
+      },
+      "id": "CloudPubsubTopic",
+      "type": "object",
+      "description": "A reference to a Cloud Pubsub topic. To register for notifications, the owner of the topic must grant `alerts-api-push-notifications@system.gserviceaccount.com` the `projects.topics.publish` permission."
+    },
+    "Csv": {
+      "properties": {
+        "dataRows": {
+          "items": {
+            "$ref": "CsvRow"
+          },
+          "description": "The list of data rows in a CSV file, as string arrays rather than as a single comma-separated string.",
+          "type": "array"
+        },
+        "headers": {
+          "description": "The list of headers for data columns in a CSV file.",
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "type": "object",
+      "description": "A representation of a CSV file attachment, as a list of column headers and a list of data rows.",
+      "id": "Csv"
+    },
+    "VaultAcceleratedDeletion": {
+      "properties": {
+        "createTime": {
+          "format": "google-datetime",
+          "description": "The UTC timestamp of when the AD request was created",
+          "type": "string"
+        },
+        "matterId": {
+          "type": "string",
+          "description": "Matter ID of the accelerated deletion request intended to be used to construct the Vault UI link to the AD request"
+        },
+        "appType": {
+          "description": "Currentlty only Gmail is supported as app type",
+          "type": "string",
+          "enumDescriptions": [
+            "Unspecified app type",
+            "Gmail app type"
+          ],
+          "enum": [
+            "VAULT_ACCELERATED_DELETION_APP_TYPE_UNSPECIFIED",
+            "VAULT_ACCELERATED_DELETION_APP_TYPE_GMAIL"
+          ]
+        },
+        "deletionRequestId": {
+          "description": "Accelerated deletion request ID intended to be used to construct the Vault UI link to the AD request",
+          "type": "string"
+        },
+        "actionType": {
+          "type": "string",
+          "description": "The action can be one of create and cancel",
+          "enumDescriptions": [
+            "Unspecified action type",
+            "AD Create action type",
+            "AD Cancel action type"
+          ],
+          "enum": [
+            "VAULT_ACCELERATED_DELETION_ACTION_TYPE_UNSPECIFIED",
+            "VAULT_ACCELERATED_DELETION_ACTION_TYPE_CREATE",
+            "VAULT_ACCELERATED_DELETION_ACTION_TYPE_CANCEL"
+          ]
+        }
+      },
+      "type": "object",
+      "id": "VaultAcceleratedDeletion",
+      "description": "Alert that is triggered when a Vault accelerated deletion request is created or canceled."
+    },
+    "Status": {
+      "type": "object",
+      "description": "The `Status` type defines a logical error model that is suitable for different programming environments, including REST APIs and RPC APIs. It is used by [gRPC](https://github.com/grpc). Each `Status` message contains three pieces of data: error code, error message, and error details. You can find out more about this error model and how to work with it in the [API Design Guide](https://cloud.google.com/apis/design/errors).",
+      "properties": {
+        "code": {
+          "format": "int32",
+          "type": "integer",
+          "description": "The status code, which should be an enum value of google.rpc.Code."
+        },
+        "message": {
+          "type": "string",
+          "description": "A developer-facing error message, which should be in English. Any user-facing error message should be localized and sent in the google.rpc.Status.details field, or localized by the client."
+        },
+        "details": {
+          "items": {
+            "additionalProperties": {
+              "description": "Properties of the object. Contains field @type with type URL.",
+              "type": "any"
+            },
+            "type": "object"
+          },
+          "type": "array",
+          "description": "A list of messages that carry the error details. There is a common set of message types for APIs to use."
+        }
+      },
+      "id": "Status"
+    },
+    "ListAlertsResponse": {
+      "description": "Response message for an alert listing request.",
+      "id": "ListAlertsResponse",
+      "type": "object",
+      "properties": {
+        "alerts": {
+          "type": "array",
+          "items": {
+            "$ref": "Alert"
+          },
+          "description": "The list of alerts."
+        },
+        "nextPageToken": {
+          "type": "string",
+          "description": "The token for the next page. If not empty, indicates that there may be more alerts that match the listing request; this value can be used in a subsequent ListAlertsRequest to get alerts continuing from last result of the current list call."
+        }
+      }
+    },
+    "SystemDefinedAlertData": {
+      "id": "SystemDefinedAlertData",
+      "description": "System defined alerts which trigger when an relevant audit event occures.",
+      "type": "object",
+      "properties": {
+        "alertDetails": {
+          "type": "array",
+          "description": "Details of the conditions which led to alert being created",
+          "items": {
+            "$ref": "AlertDetail"
+          }
+        }
+      }
+    },
+    "BatchUndeleteAlertsRequest": {
+      "description": "A request to perform batch undelete on alerts.",
+      "id": "BatchUndeleteAlertsRequest",
+      "properties": {
+        "customerId": {
+          "type": "string",
+          "description": "Optional. The unique identifier of the Google Workspace account of the customer the alerts are associated with. The `customer_id` must have the initial \"C\" stripped (for example, `046psxkn`). Inferred from the caller identity if not provided. [Find your customer ID](https://support.google.com/cloudidentity/answer/10070793)."
+        },
+        "alertId": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Required. The list of alert IDs to undelete."
+        }
+      },
+      "type": "object"
+    },
+    "EntityList": {
+      "properties": {
+        "entities": {
+          "type": "array",
+          "items": {
+            "$ref": "Entity"
+          },
+          "description": "List of entities affected by the alert."
+        },
+        "headers": {
+          "description": "Headers of the values in entities. If no value is defined in Entity, this field should be empty.",
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "name": {
+          "description": "Name of the key detail used to display this entity list.",
+          "type": "string"
+        }
+      },
+      "id": "EntityList",
+      "type": "object",
+      "description": "EntityList stores entities in a format that can be translated to a table in the Alert Center UI."
+    },
+    "SSOProfileUpdatedEvent": {
+      "description": "Event occurred when SSO Profile updated in customer's account. The event are being received from insight forwarder",
+      "type": "object",
+      "id": "SSOProfileUpdatedEvent",
+      "properties": {
+        "inboundSsoProfileChanges": {
+          "description": "changes made to sso profile",
+          "type": "string"
+        },
+        "inboundSsoProfileName": {
+          "description": "sso profile name which got updated",
+          "type": "string"
+        }
+      }
+    },
+    "UserChanges": {
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Rule name"
+        }
+      },
+      "id": "UserChanges",
+      "type": "object",
+      "description": "Alerts from UserChanges bucket Rules for predefined rules which contain the following rules: - Suspended user made active - New user added - User suspended (by admin) - User granted admin privileges - User admin privileges revoked - User deleted - Users password changed"
+    },
+    "Entity": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Human-readable name of this entity, such as an email address, file ID, or device name."
+        },
+        "values": {
+          "items": {
+            "type": "string"
+          },
+          "description": "Extra values beyond name. The order of values should align with headers in EntityList.",
+          "type": "array"
+        },
+        "link": {
+          "type": "string",
+          "description": "Link to a Security Investigation Tool search based on this entity, if available."
+        }
+      },
+      "id": "Entity",
+      "description": "Individual entity affected by, or related to, an alert."
+    },
+    "AlertFeedback": {
+      "description": "A customer feedback about an alert.",
+      "id": "AlertFeedback",
+      "type": "object",
+      "properties": {
+        "email": {
+          "type": "string",
+          "description": "Output only. The email of the user that provided the feedback."
+        },
+        "customerId": {
+          "description": "Output only. The unique identifier of the Google Workspace account of the customer.",
+          "type": "string"
+        },
+        "createTime": {
+          "type": "string",
+          "description": "Output only. The time this feedback was created.",
+          "format": "google-datetime"
+        },
+        "type": {
+          "type": "string",
+          "description": "Required. The type of the feedback.",
+          "enum": [
+            "ALERT_FEEDBACK_TYPE_UNSPECIFIED",
+            "NOT_USEFUL",
+            "SOMEWHAT_USEFUL",
+            "VERY_USEFUL"
+          ],
+          "enumDescriptions": [
+            "The feedback type is not specified.",
+            "The alert report is not useful.",
+            "The alert report is somewhat useful.",
+            "The alert report is very useful."
+          ]
+        },
+        "feedbackId": {
+          "type": "string",
+          "description": "Output only. The unique identifier for the feedback."
+        },
+        "alertId": {
+          "description": "Output only. The alert identifier.",
+          "type": "string"
+        }
+      }
+    },
+    "MergeInfo": {
+      "properties": {
+        "newIncidentTrackingId": {
+          "description": "The new tracking ID from the parent incident.",
+          "type": "string"
+        },
+        "newAlertId": {
+          "type": "string",
+          "description": "Optional. New alert ID. Reference the [google.apps.alertcenter.Alert] with this ID for the current state."
+        }
+      },
+      "description": "New alert tracking numbers.",
+      "id": "MergeInfo",
+      "type": "object"
+    },
+    "SSOProfileCreatedEvent": {
+      "type": "object",
+      "description": "Event occurred when SSO Profile created in customer's account. The event are being received from insight forwarder",
+      "properties": {
+        "inboundSsoProfileName": {
+          "type": "string",
+          "description": "sso profile name which got created"
+        }
+      },
+      "id": "SSOProfileCreatedEvent"
+    },
+    "AccountSuspensionWarning": {
+      "description": "A warning that the customer's account is about to be suspended.",
+      "id": "AccountSuspensionWarning",
+      "type": "object",
+      "properties": {
+        "appealWindow": {
+          "description": "The amount of time remaining to appeal an imminent suspension. After this window has elapsed, the account will be suspended. Only populated if the account suspension is in WARNING state.",
+          "type": "string",
+          "format": "google-duration"
+        },
+        "state": {
+          "description": "Account suspension warning state.",
+          "enumDescriptions": [
+            "State is unspecified.",
+            "Customer is receiving a warning about imminent suspension.",
+            "Customer is being notified that their account has been suspended.",
+            "Customer is being notified that their suspension appeal was approved.",
+            "Customer has submitted their appeal, which is pending review."
+          ],
+          "type": "string",
+          "enum": [
+            "ACCOUNT_SUSPENSION_WARNING_STATE_UNSPECIFIED",
+            "WARNING",
+            "SUSPENDED",
+            "APPEAL_APPROVED",
+            "APPEAL_SUBMITTED"
+          ]
+        },
+        "suspensionDetails": {
+          "items": {
+            "$ref": "AccountSuspensionDetails"
+          },
+          "description": "Details about why an account is being suspended.",
+          "type": "array"
+        }
+      }
+    },
+    "VoicemailMisconfiguration": {
+      "id": "VoicemailMisconfiguration",
+      "type": "object",
+      "description": "Issue(s) with sending to voicemail.",
+      "properties": {
+        "errors": {
+          "description": "Issue(s) with voicemail recipients.",
+          "type": "array",
+          "items": {
+            "$ref": "VoicemailRecipientError"
+          }
+        }
+      }
+    },
+    "ListAlertFeedbackResponse": {
+      "type": "object",
+      "description": "Response message for an alert feedback listing request.",
+      "properties": {
+        "feedback": {
+          "description": "The list of alert feedback. Feedback entries for each alert are ordered by creation time descending.",
+          "items": {
+            "$ref": "AlertFeedback"
+          },
+          "type": "array"
+        }
+      },
+      "id": "ListAlertFeedbackResponse"
+    },
+    "SupportTicket": {
+      "type": "object",
+      "properties": {
+        "ticketId": {
+          "type": "string",
+          "description": "Support ticket ID"
+        },
+        "ticketUrl": {
+          "type": "string",
+          "description": "Link to support ticket"
+        }
+      },
+      "id": "SupportTicket",
+      "description": "Support ticket related to Access Approvals request"
+    },
+    "DeviceCompromisedSecurityDetail": {
+      "description": "Detailed information of a single MDM device compromised event.",
+      "id": "DeviceCompromisedSecurityDetail",
+      "properties": {
+        "deviceModel": {
+          "description": "The model of the device.",
+          "type": "string"
+        },
+        "deviceCompromisedState": {
+          "description": "The device compromised state. Possible values are \"`Compromised`\" or \"`Not Compromised`\".",
+          "type": "string"
+        },
+        "iosVendorId": {
+          "description": "Required for iOS, empty for others.",
+          "type": "string"
+        },
+        "serialNumber": {
+          "description": "The serial number of the device.",
+          "type": "string"
+        },
+        "deviceType": {
+          "description": "The type of the device.",
+          "type": "string"
+        },
+        "resourceId": {
+          "description": "The device resource ID.",
+          "type": "string"
+        },
+        "deviceId": {
+          "description": "Required. The device ID.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "SuperAdminPasswordResetEvent": {
+      "type": "object",
+      "description": "Event occurred when password was reset for super admin in customer's account. The event are being received from insight forwarder",
+      "properties": {
+        "userEmail": {
+          "type": "string",
+          "description": "email of person whose password was reset"
+        }
+      },
+      "id": "SuperAdminPasswordResetEvent"
+    },
+    "ActionInfo": {
+      "properties": {
+        "evidenceLockerFilePath": {
+          "type": "string",
+          "description": "Google Cloud Storage location of the content that violated the rule. This field has format: \"/\""
+        }
+      },
+      "id": "ActionInfo",
+      "description": "Metadata related to the action.",
+      "type": "object"
+    },
+    "AlertMetadata": {
+      "id": "AlertMetadata",
+      "description": "An alert metadata.",
+      "properties": {
+        "customerId": {
+          "type": "string",
+          "description": "Output only. The unique identifier of the Google Workspace account of the customer."
+        },
+        "severity": {
+          "type": "string",
+          "description": "The severity value of the alert. Alert Center will set this field at alert creation time, default's to an empty string when it could not be determined. The supported values for update actions on this field are the following: * HIGH * MEDIUM * LOW"
+        },
+        "etag": {
+          "description": "Optional. `etag` is used for optimistic concurrency control as a way to help prevent simultaneous updates of an alert metadata from overwriting each other. It is strongly suggested that systems make use of the `etag` in the read-modify-write cycle to perform metadata updates in order to avoid race conditions: An `etag` is returned in the response which contains alert metadata, and systems are expected to put that etag in the request to update alert metadata to ensure that their change will be applied to the same version of the alert metadata. If no `etag` is provided in the call to update alert metadata, then the existing alert metadata is overwritten blindly.",
+          "type": "string"
+        },
+        "status": {
+          "type": "string",
+          "description": "The current status of the alert. The supported values are the following: * NOT_STARTED * IN_PROGRESS * CLOSED"
+        },
+        "assignee": {
+          "description": "The email address of the user assigned to the alert.",
+          "type": "string"
+        },
+        "alertId": {
+          "description": "Output only. The alert identifier.",
+          "type": "string"
+        },
+        "updateTime": {
+          "format": "google-datetime",
+          "description": "Output only. The time this metadata was last updated.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "TransferError": {
+      "description": "Details for an invalid transfer or forward.",
+      "type": "object",
+      "id": "TransferError",
+      "properties": {
+        "id": {
+          "description": "Ring group or auto attendant ID. Not set for users.",
+          "type": "string"
+        },
+        "name": {
+          "type": "string",
+          "description": "User's full name, or the ring group / auto attendant name. This may be unavailable if the entity was deleted."
+        },
+        "email": {
+          "type": "string",
+          "description": "User's email address. This may be unavailable if the entity was deleted."
+        },
+        "entityType": {
+          "description": "Type of entity being transferred to. For ring group members, this should always be USER.",
+          "enumDescriptions": [
+            "Entity type wasn't set.",
+            "Transfer to auto attendant.",
+            "Transfer to ring group.",
+            "Transfer to user."
+          ],
+          "enum": [
+            "TRANSFER_ENTITY_TYPE_UNSPECIFIED",
+            "TRANSFER_AUTO_ATTENDANT",
+            "TRANSFER_RING_GROUP",
+            "TRANSFER_USER"
+          ],
+          "type": "string"
+        },
+        "invalidReason": {
+          "enum": [
+            "TRANSFER_INVALID_REASON_UNSPECIFIED",
+            "TRANSFER_TARGET_DELETED",
+            "UNLICENSED",
+            "SUSPENDED",
+            "NO_PHONE_NUMBER"
+          ],
+          "description": "Reason for the error.",
+          "enumDescriptions": [
+            "Reason wasn't specified.",
+            "The transfer target can't be found—most likely it was deleted.",
+            "The user's Google Voice license was removed.",
+            "The user's Google Workspace account was suspended.",
+            "The transfer target no longer has a phone number. This reason should become deprecated once we support numberless transfer."
+          ],
+          "type": "string"
+        }
+      }
+    },
+    "BatchDeleteAlertsRequest": {
+      "properties": {
+        "customerId": {
+          "type": "string",
+          "description": "Optional. The unique identifier of the Google Workspace account of the customer the alerts are associated with. The `customer_id` must have the initial \"C\" stripped (for example, `046psxkn`). Inferred from the caller identity if not provided. [Find your customer ID](https://support.google.com/cloudidentity/answer/10070793)."
+        },
+        "alertId": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Required. The list of alert IDs to delete."
+        }
+      },
+      "description": "A request to perform batch delete on alerts.",
+      "type": "object",
+      "id": "BatchDeleteAlertsRequest"
+    },
+    "VoiceMisconfiguration": {
+      "properties": {
+        "membersMisconfiguration": {
+          "description": "Issue(s) with members of a ring group.",
+          "$ref": "TransferMisconfiguration"
+        },
+        "entityType": {
+          "enum": [
+            "ENTITY_TYPE_UNSPECIFIED",
+            "AUTO_ATTENDANT",
+            "RING_GROUP"
+          ],
+          "enumDescriptions": [
+            "Entity type wasn't set.",
+            "Invalid auto attendant.",
+            "Invalid ring group."
+          ],
+          "description": "Type of the entity whose configuration is now invalid.",
+          "type": "string"
+        },
+        "fixUri": {
+          "description": "Link that the admin can follow to fix the issue.",
+          "type": "string"
+        },
+        "transferMisconfiguration": {
+          "description": "Issue(s) with transferring or forwarding to an external entity.",
+          "$ref": "TransferMisconfiguration"
+        },
+        "entityName": {
+          "type": "string",
+          "description": "Name of the entity whose configuration is now invalid."
+        },
+        "voicemailMisconfiguration": {
+          "$ref": "VoicemailMisconfiguration",
+          "description": "Issue(s) with sending to voicemail."
+        }
+      },
+      "type": "object",
+      "description": "An alert triggered when Google Voice configuration becomes invalid, generally due to an external entity being modified or deleted.",
+      "id": "VoiceMisconfiguration"
+    },
+    "RuleViolationInfo": {
+      "type": "object",
+      "properties": {
+        "eventType": {
+          "type": "string",
+          "enum": [
+            "EVENT_TYPE_UNSPECIFIED",
+            "ACCESS_BLOCKED",
+            "SHARING_BLOCKED"
+          ],
+          "description": "Event associated with this alert after applying the rule.",
+          "enumDescriptions": [
+            "Event type wasn't set.",
+            "An access attempt was blocked.",
+            "A sharing attempt was blocked."
+          ]
+        },
+        "recipients": {
+          "items": {
+            "type": "string"
+          },
+          "description": "Resource recipients. For Drive, they are grantees that the Drive file was shared with at the time of rule triggering. Valid values include user emails, group emails, domains, or 'anyone' if the file was publicly accessible. If the file was private the recipients list will be empty. For Gmail, they are emails of the users or groups that the Gmail message was sent to.",
+          "type": "array"
+        },
+        "suppressedActionTypes": {
+          "items": {
+            "enum": [
+              "ACTION_TYPE_UNSPECIFIED",
+              "DRIVE_BLOCK_EXTERNAL_SHARING",
+              "DRIVE_WARN_ON_EXTERNAL_SHARING",
+              "DRIVE_RESTRICT_DOWNLOAD_PRINT_COPY",
+              "DRIVE_RESTRICT_DOWNLOAD_PRINT_COPY_FOR_ALL",
+              "DRIVE_APPLY_DRIVE_LABELS",
+              "GMAIL_QUARANTINE_MESSAGE",
+              "GMAIL_BLOCK_MESSAGE",
+              "GMAIL_WARN_USERS",
+              "GMAIL_APPLY_CLASSIFICATION_LABELS",
+              "CHROME_BLOCK_FILE_DOWNLOAD",
+              "CHROME_WARN_FILE_DOWNLOAD",
+              "CHROME_BLOCK_FILE_UPLOAD",
+              "CHROME_WARN_FILE_UPLOAD",
+              "CHROME_BLOCK_WEB_CONTENT_UPLOAD",
+              "CHROME_WARN_WEB_CONTENT_UPLOAD",
+              "CHROME_BLOCK_PAGE_PRINT",
+              "CHROME_WARN_PAGE_PRINT",
+              "CHROME_BLOCK_FILE_TRANSFER",
+              "CHROME_WARN_FILE_TRANSFER",
+              "CHROME_BLOCK_URL_VISITED",
+              "CHROME_WARN_URL_VISITED",
+              "CHROME_BLOCK_SCREENSHOT",
+              "CHROME_STORE_CONTENT",
+              "CHROME_WATERMARK",
+              "CHROME_FORCE_SAVE_TO_CLOUD",
+              "CHROME_KEEP_IN_MANAGED_CHROME",
+              "CHROME_BLOCK_DATA_COPIED",
+              "CHROME_WARN_DATA_COPIED",
+              "DELETE_WEBPROTECT_EVIDENCE",
+              "CHAT_BLOCK_CONTENT",
+              "CHAT_WARN_USER",
+              "ALERT",
+              "RULE_ACTIVATE",
+              "RULE_DEACTIVATE"
+            ],
+            "enumDescriptions": [
+              "Action type is unspecified.",
+              "Block sharing a file externally.",
+              "Show a warning message when sharing a file externally.",
+              "Disable download, print, and copy for commenters and viewers in drive.",
+              "Disable download, print, and copy for all collaborators in drive.",
+              "Apply customer specified Drive labels to the file.",
+              "Quarantine message.",
+              "Block message.",
+              "Warn users.",
+              "Apply classification labels.",
+              "Chrome actions. Block file download.",
+              "Warn user about downloaded file.",
+              "Block file upload.",
+              "Warn user about uploaded file.",
+              "Block web content upload.",
+              "Warn user about uploaded web content.",
+              "Block page print.",
+              "Warn user about printed page.",
+              "Block ChromeOS file transfer.",
+              "Warn user about ChromeOS file transfer.",
+              "Block Chrome URL visit.",
+              "Warn user about Chrome URL visited.",
+              "Block screenshot alert.",
+              "Store the content that violated the rule.",
+              "Send watermark alert",
+              "Force save to cloud storage.",
+              "Keep in managed Chrome.",
+              "Block text copied from Chrome.",
+              "Warn on text copied from Chrome.",
+              "Delete web protect evidence file",
+              "Chat actions. Block Chat content to be sent out.",
+              "Warn end user about Chat content.",
+              "Send alert.",
+              "Activate Rule Action",
+              "Deactivate Rule Action"
+            ],
+            "type": "string"
+          },
+          "type": "array",
+          "description": "Actions suppressed due to other actions with higher priority."
+        },
+        "triggeredActionTypes": {
+          "items": {
+            "type": "string",
+            "enum": [
+              "ACTION_TYPE_UNSPECIFIED",
+              "DRIVE_BLOCK_EXTERNAL_SHARING",
+              "DRIVE_WARN_ON_EXTERNAL_SHARING",
+              "DRIVE_RESTRICT_DOWNLOAD_PRINT_COPY",
+              "DRIVE_RESTRICT_DOWNLOAD_PRINT_COPY_FOR_ALL",
+              "DRIVE_APPLY_DRIVE_LABELS",
+              "GMAIL_QUARANTINE_MESSAGE",
+              "GMAIL_BLOCK_MESSAGE",
+              "GMAIL_WARN_USERS",
+              "GMAIL_APPLY_CLASSIFICATION_LABELS",
+              "CHROME_BLOCK_FILE_DOWNLOAD",
+              "CHROME_WARN_FILE_DOWNLOAD",
+              "CHROME_BLOCK_FILE_UPLOAD",
+              "CHROME_WARN_FILE_UPLOAD",
+              "CHROME_BLOCK_WEB_CONTENT_UPLOAD",
+              "CHROME_WARN_WEB_CONTENT_UPLOAD",
+              "CHROME_BLOCK_PAGE_PRINT",
+              "CHROME_WARN_PAGE_PRINT",
+              "CHROME_BLOCK_FILE_TRANSFER",
+              "CHROME_WARN_FILE_TRANSFER",
+              "CHROME_BLOCK_URL_VISITED",
+              "CHROME_WARN_URL_VISITED",
+              "CHROME_BLOCK_SCREENSHOT",
+              "CHROME_STORE_CONTENT",
+              "CHROME_WATERMARK",
+              "CHROME_FORCE_SAVE_TO_CLOUD",
+              "CHROME_KEEP_IN_MANAGED_CHROME",
+              "CHROME_BLOCK_DATA_COPIED",
+              "CHROME_WARN_DATA_COPIED",
+              "DELETE_WEBPROTECT_EVIDENCE",
+              "CHAT_BLOCK_CONTENT",
+              "CHAT_WARN_USER",
+              "ALERT",
+              "RULE_ACTIVATE",
+              "RULE_DEACTIVATE"
+            ],
+            "enumDescriptions": [
+              "Action type is unspecified.",
+              "Block sharing a file externally.",
+              "Show a warning message when sharing a file externally.",
+              "Disable download, print, and copy for commenters and viewers in drive.",
+              "Disable download, print, and copy for all collaborators in drive.",
+              "Apply customer specified Drive labels to the file.",
+              "Quarantine message.",
+              "Block message.",
+              "Warn users.",
+              "Apply classification labels.",
+              "Chrome actions. Block file download.",
+              "Warn user about downloaded file.",
+              "Block file upload.",
+              "Warn user about uploaded file.",
+              "Block web content upload.",
+              "Warn user about uploaded web content.",
+              "Block page print.",
+              "Warn user about printed page.",
+              "Block ChromeOS file transfer.",
+              "Warn user about ChromeOS file transfer.",
+              "Block Chrome URL visit.",
+              "Warn user about Chrome URL visited.",
+              "Block screenshot alert.",
+              "Store the content that violated the rule.",
+              "Send watermark alert",
+              "Force save to cloud storage.",
+              "Keep in managed Chrome.",
+              "Block text copied from Chrome.",
+              "Warn on text copied from Chrome.",
+              "Delete web protect evidence file",
+              "Chat actions. Block Chat content to be sent out.",
+              "Warn end user about Chat content.",
+              "Send alert.",
+              "Activate Rule Action",
+              "Deactivate Rule Action"
+            ]
+          },
+          "type": "array",
+          "description": "Actions applied as a consequence of the rule being triggered."
         },
         "dataSource": {
           "enum": [
@@ -130,157 +2050,38 @@
             "Chat data source."
           ]
         },
-        "eventType": {
-          "type": "string",
-          "description": "Event associated with this alert after applying the rule.",
-          "enumDescriptions": [
-            "Event type wasn't set.",
-            "An access attempt was blocked.",
-            "A sharing attempt was blocked."
-          ],
-          "enum": [
-            "EVENT_TYPE_UNSPECIFIED",
-            "ACCESS_BLOCKED",
-            "SHARING_BLOCKED"
-          ]
+        "resourceInfo": {
+          "description": "Details of the resource which violated the rule.",
+          "$ref": "ResourceInfo"
         },
-        "recipients": {
-          "description": "Resource recipients. For Drive, they are grantees that the Drive file was shared with at the time of rule triggering. Valid values include user emails, group emails, domains, or 'anyone' if the file was publicly accessible. If the file was private the recipients list will be empty. For Gmail, they are emails of the users or groups that the Gmail message was sent to.",
-          "type": "array",
+        "matchInfo": {
+          "description": "List of matches that were found in the resource content.",
           "items": {
-            "type": "string"
-          }
-        },
-        "suppressedActionTypes": {
-          "type": "array",
-          "description": "Actions suppressed due to other actions with higher priority.",
-          "items": {
-            "type": "string",
-            "enumDescriptions": [
-              "Action type is unspecified.",
-              "Block sharing a file externally.",
-              "Show a warning message when sharing a file externally.",
-              "Disable download, print, and copy for commenters and viewers in drive.",
-              "Disable download, print, and copy for all collaborators in drive.",
-              "Apply customer specified Drive labels to the file.",
-              "Quarantine message.",
-              "Block message.",
-              "Warn users.",
-              "Apply classification labels.",
-              "Chrome actions. Block file download.",
-              "Warn user about downloaded file.",
-              "Block file upload.",
-              "Warn user about uploaded file.",
-              "Block web content upload.",
-              "Warn user about uploaded web content.",
-              "Block page print.",
-              "Warn user about printed page.",
-              "Block ChromeOS file transfer.",
-              "Warn user about ChromeOS file transfer.",
-              "Block Chrome URL visit.",
-              "Warn user about Chrome URL visited.",
-              "Block screenshot alert.",
-              "Store the content that violated the rule.",
-              "Send watermark alert",
-              "Force save to cloud storage.",
-              "Keep in managed Chrome.",
-              "Block text copied from Chrome.",
-              "Warn on text copied from Chrome.",
-              "Delete web protect evidence file",
-              "Chat actions. Block Chat content to be sent out.",
-              "Warn end user about Chat content.",
-              "Send alert.",
-              "Activate Rule Action",
-              "Deactivate Rule Action"
-            ],
-            "enum": [
-              "ACTION_TYPE_UNSPECIFIED",
-              "DRIVE_BLOCK_EXTERNAL_SHARING",
-              "DRIVE_WARN_ON_EXTERNAL_SHARING",
-              "DRIVE_RESTRICT_DOWNLOAD_PRINT_COPY",
-              "DRIVE_RESTRICT_DOWNLOAD_PRINT_COPY_FOR_ALL",
-              "DRIVE_APPLY_DRIVE_LABELS",
-              "GMAIL_QUARANTINE_MESSAGE",
-              "GMAIL_BLOCK_MESSAGE",
-              "GMAIL_WARN_USERS",
-              "GMAIL_APPLY_CLASSIFICATION_LABELS",
-              "CHROME_BLOCK_FILE_DOWNLOAD",
-              "CHROME_WARN_FILE_DOWNLOAD",
-              "CHROME_BLOCK_FILE_UPLOAD",
-              "CHROME_WARN_FILE_UPLOAD",
-              "CHROME_BLOCK_WEB_CONTENT_UPLOAD",
-              "CHROME_WARN_WEB_CONTENT_UPLOAD",
-              "CHROME_BLOCK_PAGE_PRINT",
-              "CHROME_WARN_PAGE_PRINT",
-              "CHROME_BLOCK_FILE_TRANSFER",
-              "CHROME_WARN_FILE_TRANSFER",
-              "CHROME_BLOCK_URL_VISITED",
-              "CHROME_WARN_URL_VISITED",
-              "CHROME_BLOCK_SCREENSHOT",
-              "CHROME_STORE_CONTENT",
-              "CHROME_WATERMARK",
-              "CHROME_FORCE_SAVE_TO_CLOUD",
-              "CHROME_KEEP_IN_MANAGED_CHROME",
-              "CHROME_BLOCK_DATA_COPIED",
-              "CHROME_WARN_DATA_COPIED",
-              "DELETE_WEBPROTECT_EVIDENCE",
-              "CHAT_BLOCK_CONTENT",
-              "CHAT_WARN_USER",
-              "ALERT",
-              "RULE_ACTIVATE",
-              "RULE_DEACTIVATE"
-            ]
-          }
-        },
-        "triggeredActionInfo": {
-          "type": "array",
-          "description": "Metadata related to the triggered actions.",
-          "items": {
-            "$ref": "ActionInfo"
-          }
-        },
-        "ruleInfo": {
-          "description": "Details of the violated rule.",
-          "$ref": "RuleInfo"
+            "$ref": "MatchInfo"
+          },
+          "type": "array"
         },
         "triggeringUserEmail": {
-          "description": "Email of the user who caused the violation. Value could be empty if not applicable, for example, a violation found by drive continuous scan.",
-          "type": "string"
+          "type": "string",
+          "description": "Email of the user who caused the violation. Value could be empty if not applicable, for example, a violation found by drive continuous scan."
         },
         "agentType": {
-          "type": "string",
           "description": "Optional. Agent type that triggered the rule.",
-          "enum": [
-            "AGENT_TYPE_UNSPECIFIED",
-            "STUDIO",
-            "WORK_AGENT"
-          ],
           "enumDescriptions": [
             "Unspecified agent type.",
             "Studio agent type.",
             "Work Agent agent type."
+          ],
+          "type": "string",
+          "enum": [
+            "AGENT_TYPE_UNSPECIFIED",
+            "STUDIO",
+            "WORK_AGENT"
           ]
         },
         "trigger": {
-          "description": "Trigger of the rule.",
           "type": "string",
-          "enumDescriptions": [
-            "Trigger is unspecified.",
-            "A Drive file is shared.",
-            "An email message is sent.",
-            "A file being downloaded in a Chrome browser.",
-            "A file being uploaded from a Chrome browser.",
-            "Web content being uploaded from a Chrome browser.",
-            "A Chat message is sent.",
-            "A Chat attachment is uploaded.",
-            "A page is being printed by Chrome.",
-            "A URL is visited within Chrome.",
-            "A file being transferred (copy or moved) between different file systems on ChromeOS.",
-            "Gemini access.",
-            "Agent execution.",
-            "Text copied from Chrome.",
-            "Network request from Chrome."
-          ],
+          "description": "Trigger of the rule.",
           "enum": [
             "TRIGGER_UNSPECIFIED",
             "DRIVE_SHARE",
@@ -297,924 +2098,216 @@
             "AGENT_EXECUTION",
             "CHROME_DATA_COPIED",
             "CHROME_NETWORK_REQUEST"
+          ],
+          "enumDescriptions": [
+            "Trigger is unspecified.",
+            "A Drive file is shared.",
+            "An email message is sent.",
+            "A file being downloaded in a Chrome browser.",
+            "A file being uploaded from a Chrome browser.",
+            "Web content being uploaded from a Chrome browser.",
+            "A Chat message is sent.",
+            "A Chat attachment is uploaded.",
+            "A page is being printed by Chrome.",
+            "A URL is visited within Chrome.",
+            "A file being transferred (copy or moved) between different file systems on ChromeOS.",
+            "Gemini access.",
+            "Agent execution.",
+            "Text copied from Chrome.",
+            "Network request from Chrome."
           ]
         },
-        "matchInfo": {
-          "type": "array",
-          "description": "List of matches that were found in the resource content.",
-          "items": {
-            "$ref": "MatchInfo"
-          }
+        "ruleInfo": {
+          "$ref": "RuleInfo",
+          "description": "Details of the violated rule."
         },
-        "triggeredActionTypes": {
-          "description": "Actions applied as a consequence of the rule being triggered.",
+        "triggeredActionInfo": {
           "items": {
-            "enum": [
-              "ACTION_TYPE_UNSPECIFIED",
-              "DRIVE_BLOCK_EXTERNAL_SHARING",
-              "DRIVE_WARN_ON_EXTERNAL_SHARING",
-              "DRIVE_RESTRICT_DOWNLOAD_PRINT_COPY",
-              "DRIVE_RESTRICT_DOWNLOAD_PRINT_COPY_FOR_ALL",
-              "DRIVE_APPLY_DRIVE_LABELS",
-              "GMAIL_QUARANTINE_MESSAGE",
-              "GMAIL_BLOCK_MESSAGE",
-              "GMAIL_WARN_USERS",
-              "GMAIL_APPLY_CLASSIFICATION_LABELS",
-              "CHROME_BLOCK_FILE_DOWNLOAD",
-              "CHROME_WARN_FILE_DOWNLOAD",
-              "CHROME_BLOCK_FILE_UPLOAD",
-              "CHROME_WARN_FILE_UPLOAD",
-              "CHROME_BLOCK_WEB_CONTENT_UPLOAD",
-              "CHROME_WARN_WEB_CONTENT_UPLOAD",
-              "CHROME_BLOCK_PAGE_PRINT",
-              "CHROME_WARN_PAGE_PRINT",
-              "CHROME_BLOCK_FILE_TRANSFER",
-              "CHROME_WARN_FILE_TRANSFER",
-              "CHROME_BLOCK_URL_VISITED",
-              "CHROME_WARN_URL_VISITED",
-              "CHROME_BLOCK_SCREENSHOT",
-              "CHROME_STORE_CONTENT",
-              "CHROME_WATERMARK",
-              "CHROME_FORCE_SAVE_TO_CLOUD",
-              "CHROME_KEEP_IN_MANAGED_CHROME",
-              "CHROME_BLOCK_DATA_COPIED",
-              "CHROME_WARN_DATA_COPIED",
-              "DELETE_WEBPROTECT_EVIDENCE",
-              "CHAT_BLOCK_CONTENT",
-              "CHAT_WARN_USER",
-              "ALERT",
-              "RULE_ACTIVATE",
-              "RULE_DEACTIVATE"
-            ],
-            "enumDescriptions": [
-              "Action type is unspecified.",
-              "Block sharing a file externally.",
-              "Show a warning message when sharing a file externally.",
-              "Disable download, print, and copy for commenters and viewers in drive.",
-              "Disable download, print, and copy for all collaborators in drive.",
-              "Apply customer specified Drive labels to the file.",
-              "Quarantine message.",
-              "Block message.",
-              "Warn users.",
-              "Apply classification labels.",
-              "Chrome actions. Block file download.",
-              "Warn user about downloaded file.",
-              "Block file upload.",
-              "Warn user about uploaded file.",
-              "Block web content upload.",
-              "Warn user about uploaded web content.",
-              "Block page print.",
-              "Warn user about printed page.",
-              "Block ChromeOS file transfer.",
-              "Warn user about ChromeOS file transfer.",
-              "Block Chrome URL visit.",
-              "Warn user about Chrome URL visited.",
-              "Block screenshot alert.",
-              "Store the content that violated the rule.",
-              "Send watermark alert",
-              "Force save to cloud storage.",
-              "Keep in managed Chrome.",
-              "Block text copied from Chrome.",
-              "Warn on text copied from Chrome.",
-              "Delete web protect evidence file",
-              "Chat actions. Block Chat content to be sent out.",
-              "Warn end user about Chat content.",
-              "Send alert.",
-              "Activate Rule Action",
-              "Deactivate Rule Action"
-            ],
-            "type": "string"
+            "$ref": "ActionInfo"
           },
-          "type": "array"
+          "type": "array",
+          "description": "Metadata related to the triggered actions."
         }
       },
       "id": "RuleViolationInfo",
-      "type": "object"
-    },
-    "UserDefinedDetectorInfo": {
-      "description": "Detector defined by administrators.",
-      "properties": {
-        "resourceName": {
-          "description": "Resource name that uniquely identifies the detector.",
-          "type": "string"
-        },
-        "displayName": {
-          "type": "string",
-          "description": "Display name of the detector."
-        }
-      },
-      "type": "object",
-      "id": "UserDefinedDetectorInfo"
-    },
-    "TransferError": {
-      "type": "object",
-      "description": "Details for an invalid transfer or forward.",
-      "properties": {
-        "invalidReason": {
-          "enumDescriptions": [
-            "Reason wasn't specified.",
-            "The transfer target can't be found—most likely it was deleted.",
-            "The user's Google Voice license was removed.",
-            "The user's Google Workspace account was suspended.",
-            "The transfer target no longer has a phone number. This reason should become deprecated once we support numberless transfer."
-          ],
-          "enum": [
-            "TRANSFER_INVALID_REASON_UNSPECIFIED",
-            "TRANSFER_TARGET_DELETED",
-            "UNLICENSED",
-            "SUSPENDED",
-            "NO_PHONE_NUMBER"
-          ],
-          "description": "Reason for the error.",
-          "type": "string"
-        },
-        "id": {
-          "type": "string",
-          "description": "Ring group or auto attendant ID. Not set for users."
-        },
-        "name": {
-          "description": "User's full name, or the ring group / auto attendant name. This may be unavailable if the entity was deleted.",
-          "type": "string"
-        },
-        "entityType": {
-          "enum": [
-            "TRANSFER_ENTITY_TYPE_UNSPECIFIED",
-            "TRANSFER_AUTO_ATTENDANT",
-            "TRANSFER_RING_GROUP",
-            "TRANSFER_USER"
-          ],
-          "enumDescriptions": [
-            "Entity type wasn't set.",
-            "Transfer to auto attendant.",
-            "Transfer to ring group.",
-            "Transfer to user."
-          ],
-          "description": "Type of entity being transferred to. For ring group members, this should always be USER.",
-          "type": "string"
-        },
-        "email": {
-          "type": "string",
-          "description": "User's email address. This may be unavailable if the entity was deleted."
-        }
-      },
-      "id": "TransferError"
-    },
-    "SuspiciousActivitySecurityDetail": {
-      "type": "object",
-      "description": "Detailed information of a single MDM suspicious activity event.",
-      "id": "SuspiciousActivitySecurityDetail",
-      "properties": {
-        "oldValue": {
-          "description": "The old value of the device property before the change.",
-          "type": "string"
-        },
-        "deviceProperty": {
-          "description": "The device property which was changed.",
-          "type": "string"
-        },
-        "iosVendorId": {
-          "type": "string",
-          "description": "Required for iOS, empty for others."
-        },
-        "serialNumber": {
-          "description": "The serial number of the device.",
-          "type": "string"
-        },
-        "resourceId": {
-          "description": "The device resource ID.",
-          "type": "string"
-        },
-        "deviceType": {
-          "type": "string",
-          "description": "The type of the device."
-        },
-        "deviceModel": {
-          "description": "The model of the device.",
-          "type": "string"
-        },
-        "newValue": {
-          "type": "string",
-          "description": "The new value of the device property after the change."
-        },
-        "deviceId": {
-          "description": "Required. The device ID.",
-          "type": "string"
-        }
-      }
-    },
-    "UndeleteAlertRequest": {
-      "properties": {
-        "customerId": {
-          "type": "string",
-          "description": "Optional. The unique identifier of the Google Workspace account of the customer the alert is associated with. The `customer_id` must have the initial \"C\" stripped (for example, `046psxkn`). Inferred from the caller identity if not provided. [Find your customer ID](https://support.google.com/cloudidentity/answer/10070793)."
-        }
-      },
-      "type": "object",
-      "id": "UndeleteAlertRequest",
-      "description": "A request to undelete a specific alert that was marked for deletion."
+      "description": "Common alert information about violated rules that are configured by Google Workspace administrators."
     },
     "ResourceInfo": {
+      "type": "object",
       "properties": {
-        "chatMessageId": {
-          "description": "Chat message ID.",
-          "type": "string"
+        "resourceTitle": {
+          "type": "string",
+          "description": "Title of the resource, for example email subject, or document title."
         },
         "chatAttachmentId": {
           "description": "Chat attachment ID.",
           "type": "string"
         },
-        "resourceTitle": {
-          "description": "Title of the resource, for example email subject, or document title.",
+        "messageId": {
+          "description": "RFC2822 message ID.",
+          "type": "string"
+        },
+        "deviceId": {
+          "description": "Id to identify a device. For example, for Android devices, this is the \"Android Device Id\" and for Chrome OS devices, it's the \"Device Virtual Id\".",
           "type": "string"
         },
         "documentId": {
           "type": "string",
           "description": "Drive file ID."
         },
-        "deviceId": {
-          "description": "Id to identify a device. For example, for Android devices, this is the \"Android Device Id\" and for Chrome OS devices, it's the \"Device Virtual Id\".",
+        "chatMessageId": {
+          "description": "Chat message ID.",
           "type": "string"
-        },
-        "messageId": {
-          "type": "string",
-          "description": "RFC2822 message ID."
         }
       },
-      "id": "ResourceInfo",
       "description": "Proto that contains resource information.",
-      "type": "object"
+      "id": "ResourceInfo"
     },
-    "UserChanges": {
-      "description": "Alerts from UserChanges bucket Rules for predefined rules which contain the following rules: - Suspended user made active - New user added - User suspended (by admin) - User granted admin privileges - User admin privileges revoked - User deleted - Users password changed",
+    "Empty": {
+      "id": "Empty",
+      "properties": {},
+      "type": "object",
+      "description": "A generic empty message that you can re-use to avoid defining duplicated empty messages in your APIs. A typical example is to use it as the request or the response type of an API method. For instance: service Foo { rpc Bar(google.protobuf.Empty) returns (google.protobuf.Empty); }"
+    },
+    "TransferMisconfiguration": {
+      "id": "TransferMisconfiguration",
+      "description": "Error related to transferring or forwarding a phone call.",
       "type": "object",
       "properties": {
-        "name": {
-          "description": "Rule name",
-          "type": "string"
-        }
-      },
-      "id": "UserChanges"
-    },
-    "SSOProfileUpdatedEvent": {
-      "type": "object",
-      "description": "Event occurred when SSO Profile updated in customer's account. The event are being received from insight forwarder",
-      "properties": {
-        "inboundSsoProfileName": {
-          "type": "string",
-          "description": "sso profile name which got updated"
-        },
-        "inboundSsoProfileChanges": {
-          "description": "changes made to sso profile",
-          "type": "string"
-        }
-      },
-      "id": "SSOProfileUpdatedEvent"
-    },
-    "CsvRow": {
-      "id": "CsvRow",
-      "description": "A representation of a single data row in a CSV file.",
-      "type": "object",
-      "properties": {
-        "entries": {
-          "description": "The data entries in a CSV file row, as a string array rather than a single comma-separated string.",
+        "errors": {
+          "description": "Details for each invalid transfer or forward.",
+          "type": "array",
           "items": {
-            "type": "string"
-          },
-          "type": "array"
+            "$ref": "TransferError"
+          }
         }
       }
     },
-    "AccessApproval": {
+    "DeviceCompromised": {
       "properties": {
-        "products": {
-          "description": "Products within scope of the Access Approvals request.",
+        "email": {
+          "type": "string",
+          "description": "The email of the user this alert was created for."
+        },
+        "events": {
           "type": "array",
           "items": {
-            "type": "string"
-          }
-        },
-        "tickets": {
-          "description": "Support tickets related to this Access Approvals request. Populated if there is an associated case number.",
-          "items": {
-            "$ref": "SupportTicket"
+            "$ref": "DeviceCompromisedSecurityDetail"
           },
-          "type": "array"
-        },
-        "scope": {
-          "description": "Scope of access, also known as a resource. This is further narrowed down by the product field.",
-          "type": "string"
-        },
-        "justificationReason": {
-          "type": "array",
-          "items": {
-            "type": "string",
-            "enumDescriptions": [
-              "Justification unspecified",
-              "Customer Initiated Support",
-              "Google Initiated Review",
-              "Google Initiated Service",
-              "Third Party Data Request",
-              "Google Response to Production Alert"
-            ],
-            "enum": [
-              "JUSTIFICATION_UNSPECIFIED",
-              "CUSTOMER_INITIATED_SUPPORT",
-              "GOOGLE_INITIATED_REVIEW",
-              "GOOGLE_INITIATED_SERVICE",
-              "THIRD_PARTY_DATA_REQUEST",
-              "GOOGLE_RESPONSE_TO_PRODUCTION_ALERT"
-            ]
-          },
-          "description": "Justification for data access based on justification enums."
-        },
-        "requestId": {
-          "type": "string",
-          "description": "ID of the Access Approvals request. This is a helpful field when requesting support from Google."
-        },
-        "officeLocation": {
-          "type": "string",
-          "description": "Office location of Google staff requesting access such as \"US\"."
+          "description": "Required. The list of security events."
         }
       },
       "type": "object",
-      "description": "Alert that is triggered when Google support requests to access customer data.",
-      "id": "AccessApproval"
+      "description": "A mobile device compromised alert. Derived from audit logs.",
+      "id": "DeviceCompromised"
     },
     "SSOProfileDeletedEvent": {
+      "description": "Event occurred when SSO Profile deleted in customer's account. The event are being received from insight forwarder",
+      "type": "object",
+      "id": "SSOProfileDeletedEvent",
       "properties": {
         "inboundSsoProfileName": {
           "description": "sso profile name which got deleted",
           "type": "string"
         }
-      },
-      "type": "object",
-      "description": "Event occurred when SSO Profile deleted in customer's account. The event are being received from insight forwarder",
-      "id": "SSOProfileDeletedEvent"
-    },
-    "Attachment": {
-      "id": "Attachment",
-      "type": "object",
-      "properties": {
-        "csv": {
-          "description": "A CSV file attachment.",
-          "$ref": "Csv"
-        }
-      },
-      "description": "Attachment with application-specific information about an alert."
-    },
-    "Empty": {
-      "properties": {},
-      "type": "object",
-      "id": "Empty",
-      "description": "A generic empty message that you can re-use to avoid defining duplicated empty messages in your APIs. A typical example is to use it as the request or the response type of an API method. For instance: service Foo { rpc Bar(google.protobuf.Empty) returns (google.protobuf.Empty); }"
-    },
-    "AccountWarning": {
-      "properties": {
-        "loginDetails": {
-          "description": "Optional. Details of the login action associated with the warning event. This is only available for: * Suspicious login * Suspicious login (less secure app) * Suspicious programmatic login * User suspended (suspicious activity)",
-          "$ref": "LoginDetails"
-        },
-        "email": {
-          "type": "string",
-          "description": "Required. The email of the user that this event belongs to."
-        }
-      },
-      "id": "AccountWarning",
-      "description": "Alerts for user account warning events.",
-      "type": "object"
-    },
-    "AppSettingsChanged": {
-      "properties": {
-        "name": {
-          "type": "string",
-          "description": "Rule name"
-        },
-        "alertDetails": {
-          "format": "byte",
-          "type": "string",
-          "description": "Any other associated alert details, for example, AlertConfiguration."
-        }
-      },
-      "id": "AppSettingsChanged",
-      "description": "Alerts from AppSettingsChanged bucket Rules configured by Admin which contain the following rules: - Calendar settings changed - Drive settings changed - Email settings changed - Mobile settings changed",
-      "type": "object"
-    },
-    "Status": {
-      "type": "object",
-      "id": "Status",
-      "description": "The `Status` type defines a logical error model that is suitable for different programming environments, including REST APIs and RPC APIs. It is used by [gRPC](https://github.com/grpc). Each `Status` message contains three pieces of data: error code, error message, and error details. You can find out more about this error model and how to work with it in the [API Design Guide](https://cloud.google.com/apis/design/errors).",
-      "properties": {
-        "code": {
-          "format": "int32",
-          "description": "The status code, which should be an enum value of google.rpc.Code.",
-          "type": "integer"
-        },
-        "message": {
-          "type": "string",
-          "description": "A developer-facing error message, which should be in English. Any user-facing error message should be localized and sent in the google.rpc.Status.details field, or localized by the client."
-        },
-        "details": {
-          "type": "array",
-          "description": "A list of messages that carry the error details. There is a common set of message types for APIs to use.",
-          "items": {
-            "type": "object",
-            "additionalProperties": {
-              "description": "Properties of the object. Contains field @type with type URL.",
-              "type": "any"
-            }
-          }
-        }
       }
-    },
-    "AccountSuspensionWarning": {
-      "id": "AccountSuspensionWarning",
-      "description": "A warning that the customer's account is about to be suspended.",
-      "properties": {
-        "appealWindow": {
-          "description": "The amount of time remaining to appeal an imminent suspension. After this window has elapsed, the account will be suspended. Only populated if the account suspension is in WARNING state.",
-          "type": "string",
-          "format": "google-duration"
-        },
-        "state": {
-          "enum": [
-            "ACCOUNT_SUSPENSION_WARNING_STATE_UNSPECIFIED",
-            "WARNING",
-            "SUSPENDED",
-            "APPEAL_APPROVED",
-            "APPEAL_SUBMITTED"
-          ],
-          "description": "Account suspension warning state.",
-          "type": "string",
-          "enumDescriptions": [
-            "State is unspecified.",
-            "Customer is receiving a warning about imminent suspension.",
-            "Customer is being notified that their account has been suspended.",
-            "Customer is being notified that their suspension appeal was approved.",
-            "Customer has submitted their appeal, which is pending review."
-          ]
-        },
-        "suspensionDetails": {
-          "description": "Details about why an account is being suspended.",
-          "type": "array",
-          "items": {
-            "$ref": "AccountSuspensionDetails"
-          }
-        }
-      },
-      "type": "object"
-    },
-    "SystemDefinedAlertDataAlertDetailFieldValue": {
-      "type": "object",
-      "id": "SystemDefinedAlertDataAlertDetailFieldValue",
-      "description": "Audit data value",
-      "properties": {
-        "stringValue": {
-          "description": "Value if the type is string",
-          "type": "string"
-        },
-        "intValue": {
-          "description": "Value if the type is integer",
-          "format": "int64",
-          "type": "string"
-        },
-        "timestampValue": {
-          "type": "string",
-          "format": "google-datetime",
-          "description": "Value is the type is a timestamp"
-        },
-        "boolValue": {
-          "description": "Value if the type is boolean",
-          "type": "boolean"
-        }
-      }
-    },
-    "ReportingRule": {
-      "properties": {
-        "alertDetails": {
-          "description": "Any other associated alert details, for example, AlertConfiguration.",
-          "type": "string",
-          "format": "byte"
-        },
-        "name": {
-          "type": "string",
-          "description": "Rule name"
-        },
-        "query": {
-          "description": "Alert Rule query Sample Query query { condition { filter { expected_application_id: 777491262838 expected_event_name: \"indexable_content_change\" filter_op: IN } } conjunction_operator: OR }",
-          "format": "byte",
-          "type": "string"
-        }
-      },
-      "type": "object",
-      "description": "Alerts from Reporting Rules configured by Admin.",
-      "id": "ReportingRule"
-    },
-    "VaultAcceleratedDeletion": {
-      "type": "object",
-      "description": "Alert that is triggered when a Vault accelerated deletion request is created or canceled.",
-      "properties": {
-        "actionType": {
-          "type": "string",
-          "description": "The action can be one of create and cancel",
-          "enumDescriptions": [
-            "Unspecified action type",
-            "AD Create action type",
-            "AD Cancel action type"
-          ],
-          "enum": [
-            "VAULT_ACCELERATED_DELETION_ACTION_TYPE_UNSPECIFIED",
-            "VAULT_ACCELERATED_DELETION_ACTION_TYPE_CREATE",
-            "VAULT_ACCELERATED_DELETION_ACTION_TYPE_CANCEL"
-          ]
-        },
-        "deletionRequestId": {
-          "description": "Accelerated deletion request ID intended to be used to construct the Vault UI link to the AD request",
-          "type": "string"
-        },
-        "appType": {
-          "description": "Currentlty only Gmail is supported as app type",
-          "enum": [
-            "VAULT_ACCELERATED_DELETION_APP_TYPE_UNSPECIFIED",
-            "VAULT_ACCELERATED_DELETION_APP_TYPE_GMAIL"
-          ],
-          "enumDescriptions": [
-            "Unspecified app type",
-            "Gmail app type"
-          ],
-          "type": "string"
-        },
-        "matterId": {
-          "type": "string",
-          "description": "Matter ID of the accelerated deletion request intended to be used to construct the Vault UI link to the AD request"
-        },
-        "createTime": {
-          "type": "string",
-          "description": "The UTC timestamp of when the AD request was created",
-          "format": "google-datetime"
-        }
-      },
-      "id": "VaultAcceleratedDeletion"
-    },
-    "User": {
-      "id": "User",
-      "type": "object",
-      "properties": {
-        "emailAddress": {
-          "description": "Email address of the user.",
-          "type": "string"
-        },
-        "displayName": {
-          "type": "string",
-          "description": "Display name of the user."
-        }
-      },
-      "description": "A user."
-    },
-    "SystemDefinedAlertData": {
-      "description": "System defined alerts which trigger when an relevant audit event occures.",
-      "id": "SystemDefinedAlertData",
-      "type": "object",
-      "properties": {
-        "alertDetails": {
-          "type": "array",
-          "description": "Details of the conditions which led to alert being created",
-          "items": {
-            "$ref": "AlertDetail"
-          }
-        }
-      }
-    },
-    "AlertDetail": {
-      "type": "object",
-      "description": "The alert data relevant for this alert",
-      "properties": {
-        "fieldValues": {
-          "items": {
-            "$ref": "SystemDefinedAlertDataAlertDetailFieldValue"
-          },
-          "type": "array",
-          "description": "Audit data values"
-        },
-        "fieldName": {
-          "description": "Audit data key",
-          "type": "string"
-        }
-      },
-      "id": "AlertDetail"
-    },
-    "GoogleOperations": {
-      "properties": {
-        "attachmentData": {
-          "description": "Optional. Application-specific data for an incident, provided when the Google Workspace application which reported the incident cannot be completely restored to a valid state.",
-          "$ref": "Attachment"
-        },
-        "domain": {
-          "type": "string",
-          "description": "Customer domain for email template personalization."
-        },
-        "affectedUserEmails": {
-          "items": {
-            "type": "string"
-          },
-          "type": "array",
-          "description": "The list of emails which correspond to the users directly affected by the incident."
-        },
-        "title": {
-          "type": "string",
-          "description": "A one-line incident description."
-        },
-        "description": {
-          "type": "string",
-          "description": "A detailed, freeform incident description."
-        },
-        "header": {
-          "type": "string",
-          "description": "A header to display above the incident message. Typically used to attach a localized notice on the timeline for followup comms translations."
-        }
-      },
-      "description": "An incident reported by Google Operations for a Google Workspace application.",
-      "id": "GoogleOperations",
-      "type": "object"
-    },
-    "BatchDeleteAlertsRequest": {
-      "properties": {
-        "alertId": {
-          "items": {
-            "type": "string"
-          },
-          "type": "array",
-          "description": "Required. The list of alert IDs to delete."
-        },
-        "customerId": {
-          "description": "Optional. The unique identifier of the Google Workspace account of the customer the alerts are associated with. The `customer_id` must have the initial \"C\" stripped (for example, `046psxkn`). Inferred from the caller identity if not provided. [Find your customer ID](https://support.google.com/cloudidentity/answer/10070793).",
-          "type": "string"
-        }
-      },
-      "description": "A request to perform batch delete on alerts.",
-      "type": "object",
-      "id": "BatchDeleteAlertsRequest"
-    },
-    "Settings": {
-      "type": "object",
-      "description": "Customer-level settings.",
-      "id": "Settings",
-      "properties": {
-        "notifications": {
-          "items": {
-            "$ref": "Notification"
-          },
-          "type": "array",
-          "description": "The list of notifications."
-        }
-      }
-    },
-    "AppMakerSqlSetupNotification": {
-      "properties": {
-        "requestInfo": {
-          "description": "List of applications with requests for default SQL set up.",
-          "type": "array",
-          "items": {
-            "$ref": "RequestInfo"
-          }
-        }
-      },
-      "id": "AppMakerSqlSetupNotification",
-      "description": "Alerts from App Maker to notify admins to set up default SQL instance.",
-      "type": "object"
-    },
-    "BatchUndeleteAlertsRequest": {
-      "id": "BatchUndeleteAlertsRequest",
-      "description": "A request to perform batch undelete on alerts.",
-      "properties": {
-        "customerId": {
-          "type": "string",
-          "description": "Optional. The unique identifier of the Google Workspace account of the customer the alerts are associated with. The `customer_id` must have the initial \"C\" stripped (for example, `046psxkn`). Inferred from the caller identity if not provided. [Find your customer ID](https://support.google.com/cloudidentity/answer/10070793)."
-        },
-        "alertId": {
-          "items": {
-            "type": "string"
-          },
-          "description": "Required. The list of alert IDs to undelete.",
-          "type": "array"
-        }
-      },
-      "type": "object"
-    },
-    "PredefinedDetectorInfo": {
-      "id": "PredefinedDetectorInfo",
-      "description": "Detector provided by Google.",
-      "properties": {
-        "detectorName": {
-          "description": "Name that uniquely identifies the detector.",
-          "type": "string"
-        }
-      },
-      "type": "object"
-    },
-    "RuleInfo": {
-      "properties": {
-        "resourceName": {
-          "description": "Resource name that uniquely identifies the rule.",
-          "type": "string"
-        },
-        "displayName": {
-          "description": "User provided name of the rule.",
-          "type": "string"
-        }
-      },
-      "description": "Proto that contains rule information.",
-      "id": "RuleInfo",
-      "type": "object"
     },
     "PhishingSpike": {
-      "description": "Alert for a spike in user reported phishing. *Warning*: This type has been deprecated. Use [MailPhishing](https://developers.google.com/workspace/admin/alertcenter/reference/rest/v1beta1/MailPhishing) instead.",
+      "id": "PhishingSpike",
       "type": "object",
+      "description": "Alert for a spike in user reported phishing. *Warning*: This type has been deprecated. Use [MailPhishing](https://developers.google.com/workspace/admin/alertcenter/reference/rest/v1beta1/MailPhishing) instead.",
       "properties": {
+        "domainId": {
+          "$ref": "DomainId",
+          "description": "The domain ID."
+        },
         "isInternal": {
           "description": "If `true`, the email originated from within the organization.",
           "type": "boolean"
         },
-        "maliciousEntity": {
-          "$ref": "MaliciousEntity",
-          "description": "The entity whose actions triggered a Gmail phishing alert."
-        },
-        "domainId": {
-          "description": "The domain ID.",
-          "$ref": "DomainId"
-        },
         "messages": {
-          "type": "array",
           "description": "The list of messages contained by this alert.",
           "items": {
             "$ref": "GmailMessageInfo"
-          }
-        }
-      },
-      "id": "PhishingSpike"
-    },
-    "ListAlertFeedbackResponse": {
-      "id": "ListAlertFeedbackResponse",
-      "description": "Response message for an alert feedback listing request.",
-      "properties": {
-        "feedback": {
-          "type": "array",
-          "description": "The list of alert feedback. Feedback entries for each alert are ordered by creation time descending.",
-          "items": {
-            "$ref": "AlertFeedback"
-          }
-        }
-      },
-      "type": "object"
-    },
-    "DriveSyncStateChanged": {
-      "description": "Alerts for when a user is restricted from syncing content from clients such as Drive for Desktop.",
-      "properties": {
-        "syncPauseStartTime": {
-          "format": "google-datetime",
-          "description": "Time at which sync was paused.",
-          "type": "string"
+          },
+          "type": "array"
         },
-        "syncState": {
-          "enum": [
-            "SYNC_STATE_UNSPECIFIED",
-            "PAUSED",
-            "RESUMED"
-          ],
-          "description": "The current sync state.",
-          "enumDescriptions": [
-            "Unspecified state",
-            "Sync is paused",
-            "Sync is resumed"
-          ],
-          "type": "string"
-        },
-        "syncStateChangeReason": {
-          "type": "string",
-          "enum": [
-            "SYNC_STATE_CHANGE_REASON_UNSPECIFIED",
-            "UNUSUAL_ACTIVITY",
-            "USER_FEEDBACK_TRUE_POSITIVE",
-            "USER_FEEDBACK_FALSE_POSITIVE"
-          ],
-          "description": "The reason for the sync state change.",
-          "enumDescriptions": [
-            "Unspecified state change reason",
-            "Sync state was changed due to unusual activity, such as potential ransomware",
-            "The user provided feedback indicating that the initial sync state change may have been caused by unexpected activity",
-            "The user provided feedback indicating that the initial sync state change may have been caused by a false positive"
-          ]
-        },
-        "email": {
-          "type": "string",
-          "description": "Email of the user affected."
-        }
-      },
-      "id": "DriveSyncStateChanged",
-      "type": "object"
-    },
-    "StateSponsoredAttack": {
-      "properties": {
-        "email": {
-          "description": "The email of the user this incident was created for.",
-          "type": "string"
-        }
-      },
-      "id": "StateSponsoredAttack",
-      "type": "object",
-      "description": "A state-sponsored attack alert. Derived from audit logs."
-    },
-    "IdentityProviderError": {
-      "type": "object",
-      "description": "Error related to an identity provider.",
-      "id": "IdentityProviderError",
-      "properties": {
-        "errorInfo": {
-          "description": "Info on the identity provider error.",
-          "type": "string",
-          "enumDescriptions": [
-            "Error info not specified.",
-            "Email in the ID token is different from the user's email.",
-            "Discovery URL was unreachable.",
-            "Discovery URL did not contain all the necessary information.",
-            "URL for client-side encryption configuration content was unreachable.",
-            "Client-side encryption .well-known URL did not contain all the necessary information.",
-            "ID token returned by the identity provider is invalid.",
-            "OIDC setup error.",
-            "Identity provider was unreachable.",
-            "Auth code exchange error.",
-            "Authentication token has no \"email\" or \"google_email\" claim."
-          ],
-          "enum": [
-            "IDENTITY_PROVIDER_ERROR_INFO_UNSPECIFIED",
-            "EMAIL_MISMATCH",
-            "UNAVAILABLE_DISCOVERY_CONTENT",
-            "INVALID_DISCOVERY_CONTENT",
-            "UNAVAILABLE_CSE_CONFIGURATION_CONTENT",
-            "INVALID_CSE_CONFIGURATION_CONTENT",
-            "INVALID_ID_TOKEN",
-            "INVALID_OIDC_SETUP",
-            "UNAVAILABLE_IDP",
-            "AUTH_CODE_EXCHANGE_ERROR",
-            "AUTHENTICATION_TOKEN_MISSING_CLAIM_EMAIL"
-          ]
-        },
-        "authorizationBaseUrl": {
-          "description": "Authorization base url of the identity provider.",
-          "type": "string"
-        },
-        "errorCount": {
-          "format": "int64",
-          "description": "Number of similar errors encountered.",
-          "type": "string"
+        "maliciousEntity": {
+          "description": "The entity whose actions triggered a Gmail phishing alert.",
+          "$ref": "MaliciousEntity"
         }
       }
     },
-    "AlertFeedback": {
-      "id": "AlertFeedback",
-      "type": "object",
+    "Alert": {
       "properties": {
-        "createTime": {
-          "description": "Output only. The time this feedback was created.",
-          "type": "string",
-          "format": "google-datetime"
-        },
-        "alertId": {
-          "type": "string",
-          "description": "Output only. The alert identifier."
-        },
-        "email": {
-          "description": "Output only. The email of the user that provided the feedback.",
+        "startTime": {
+          "description": "Required. The time the event that caused this alert was started or detected.",
+          "format": "google-datetime",
           "type": "string"
         },
-        "feedbackId": {
-          "description": "Output only. The unique identifier for the feedback.",
+        "etag": {
+          "description": "Optional. `etag` is used for optimistic concurrency control as a way to help prevent simultaneous updates of an alert from overwriting each other. It is strongly suggested that systems make use of the `etag` in the read-modify-write cycle to perform alert updates in order to avoid race conditions: An `etag` is returned in the response which contains alerts, and systems are expected to put that etag in the request to update alert to ensure that their change will be applied to the same version of the alert. If no `etag` is provided in the call to update alert, then the existing alert is overwritten blindly.",
           "type": "string"
+        },
+        "securityInvestigationToolLink": {
+          "description": "Output only. An optional [Security Investigation Tool](https://support.google.com/a/answer/7575955) query for this alert.",
+          "type": "string"
+        },
+        "deleted": {
+          "description": "Output only. `True` if this alert is marked for deletion.",
+          "type": "boolean"
         },
         "type": {
-          "enum": [
-            "ALERT_FEEDBACK_TYPE_UNSPECIFIED",
-            "NOT_USEFUL",
-            "SOMEWHAT_USEFUL",
-            "VERY_USEFUL"
-          ],
-          "description": "Required. The type of the feedback.",
+          "description": "Required. The type of the alert. This is output only after alert is created. For a list of available alert types see [Google Workspace Alert types](https://developers.google.com/workspace/admin/alertcenter/reference/alert-types).",
+          "type": "string"
+        },
+        "createTime": {
+          "format": "google-datetime",
           "type": "string",
-          "enumDescriptions": [
-            "The feedback type is not specified.",
-            "The alert report is not useful.",
-            "The alert report is somewhat useful.",
-            "The alert report is very useful."
-          ]
+          "description": "Output only. The time this alert was created."
+        },
+        "updateTime": {
+          "description": "Output only. The time this alert was last updated.",
+          "format": "google-datetime",
+          "type": "string"
         },
         "customerId": {
-          "description": "Output only. The unique identifier of the Google Workspace account of the customer.",
+          "type": "string",
+          "description": "Output only. The unique identifier of the Google Workspace account of the customer."
+        },
+        "endTime": {
+          "type": "string",
+          "format": "google-datetime",
+          "description": "Optional. The time the event that caused this alert ceased being active. If provided, the end time must not be earlier than the start time. If not provided, it indicates an ongoing alert."
+        },
+        "metadata": {
+          "description": "Output only. The metadata associated with this alert.",
+          "$ref": "AlertMetadata"
+        },
+        "alertId": {
+          "description": "Output only. The unique identifier for the alert.",
           "type": "string"
+        },
+        "data": {
+          "description": "Optional. The data associated with this alert, for example google.apps.alertcenter.type.DeviceCompromised.",
+          "additionalProperties": {
+            "type": "any",
+            "description": "Properties of the object. Contains field @type with type URL."
+          },
+          "type": "object"
+        },
+        "source": {
+          "type": "string",
+          "description": "Required. A unique identifier for the system that reported the alert. This is output only after alert is created. Supported sources are any of the following: * Google Operations * Mobile device management * Gmail phishing * Data Loss Prevention * Domain wide takeout * State sponsored attack * Google identity * Apps outage"
         }
       },
-      "description": "A customer feedback about an alert."
+      "id": "Alert",
+      "description": "An alert affecting a customer.",
+      "type": "object"
     },
     "AccountSuspensionDetails": {
       "id": "AccountSuspensionDetails",
+      "description": "Details about why an account is receiving an account suspension warning.",
       "type": "object",
       "properties": {
         "abuseReason": {
@@ -1230,7 +2323,6 @@
             "UNWANTED_CONTENT",
             "UNQUALIFIED_EDU"
           ],
-          "description": "The reason why this account is receiving an account suspension warning.",
           "enumDescriptions": [
             "Abuse reason is unspecified.",
             "This account is being suspended for a Terms of Service violation.",
@@ -1243,508 +2335,45 @@
             "This account is being suspended for unwanted content.",
             "This account is being suspended for being an unqualified educational institution."
           ],
+          "description": "The reason why this account is receiving an account suspension warning.",
           "type": "string"
         },
         "productName": {
           "description": "The name of the product being abused. This is restricted to only the following values: \"Gmail\" \"Google Workspace\" \"Payments\" \"Voice\" \"YouTube\" \"Other\"",
           "type": "string"
         }
-      },
-      "description": "Details about why an account is receiving an account suspension warning."
-    },
-    "VoicemailRecipientError": {
-      "id": "VoicemailRecipientError",
-      "properties": {
-        "invalidReason": {
-          "description": "Reason for the error.",
-          "enum": [
-            "EMAIL_INVALID_REASON_UNSPECIFIED",
-            "OUT_OF_QUOTA",
-            "RECIPIENT_DELETED"
-          ],
-          "enumDescriptions": [
-            "Reason wasn't specified.",
-            "User can't receive emails due to insufficient quota.",
-            "All recipients were deleted."
-          ],
-          "type": "string"
-        },
-        "email": {
-          "description": "Email address of the invalid recipient. This may be unavailable if the recipient was deleted.",
-          "type": "string"
-        }
-      },
-      "type": "object",
-      "description": "Issue(s) with a voicemail recipient."
-    },
-    "SuspiciousActivity": {
-      "properties": {
-        "email": {
-          "description": "The email of the user this alert was created for.",
-          "type": "string"
-        },
-        "events": {
-          "description": "Required. The list of security events.",
-          "type": "array",
-          "items": {
-            "$ref": "SuspiciousActivitySecurityDetail"
-          }
-        }
-      },
-      "id": "SuspiciousActivity",
-      "type": "object",
-      "description": "A mobile suspicious activity alert. Derived from audit logs."
-    },
-    "AppsOutage": {
-      "id": "AppsOutage",
-      "type": "object",
-      "properties": {
-        "products": {
-          "items": {
-            "type": "string"
-          },
-          "description": "List of products impacted by the outage.",
-          "type": "array"
-        },
-        "mergeInfo": {
-          "description": "Indicates new alert details under which the outage is communicated. Only populated when Status is MERGED.",
-          "$ref": "MergeInfo"
-        },
-        "status": {
-          "enumDescriptions": [
-            "Status is unspecified.",
-            "The incident has just been reported.",
-            "The incident is ongoing.",
-            "The incident has been resolved.",
-            "Further assessment indicated no customer impact.",
-            "The incident has been partially resolved.",
-            "The incident was merged into a parent.",
-            "The incident has lower impact than initially anticipated."
-          ],
-          "type": "string",
-          "enum": [
-            "STATUS_UNSPECIFIED",
-            "NEW",
-            "ONGOING",
-            "RESOLVED",
-            "FALSE_POSITIVE",
-            "PARTIALLY_RESOLVED",
-            "MERGED",
-            "DOWNGRADED"
-          ],
-          "description": "Current outage status."
-        },
-        "dashboardUri": {
-          "type": "string",
-          "description": "Link to the outage event in Google Workspace Status Dashboard"
-        },
-        "nextUpdateTime": {
-          "type": "string",
-          "format": "google-datetime",
-          "description": "Timestamp by which the next update is expected to arrive."
-        },
-        "incidentTrackingId": {
-          "description": "Incident tracking ID.",
-          "type": "string"
-        },
-        "resolutionTime": {
-          "description": "Timestamp when the outage is expected to be resolved, or has confirmed resolution. Provided only when known.",
-          "format": "google-datetime",
-          "type": "string"
-        }
-      },
-      "description": "An outage incident reported for a Google Workspace service."
-    },
-    "MergeInfo": {
-      "properties": {
-        "newAlertId": {
-          "description": "Optional. New alert ID. Reference the [google.apps.alertcenter.Alert] with this ID for the current state.",
-          "type": "string"
-        },
-        "newIncidentTrackingId": {
-          "description": "The new tracking ID from the parent incident.",
-          "type": "string"
-        }
-      },
-      "type": "object",
-      "description": "New alert tracking numbers.",
-      "id": "MergeInfo"
-    },
-    "SSOProfileCreatedEvent": {
-      "type": "object",
-      "id": "SSOProfileCreatedEvent",
-      "description": "Event occurred when SSO Profile created in customer's account. The event are being received from insight forwarder",
-      "properties": {
-        "inboundSsoProfileName": {
-          "description": "sso profile name which got created",
-          "type": "string"
-        }
       }
     },
-    "MandatoryServiceAnnouncement": {
-      "id": "MandatoryServiceAnnouncement",
-      "type": "object",
+    "RuleInfo": {
       "properties": {
-        "title": {
+        "displayName": {
           "type": "string",
-          "description": "One line summary of the announcement"
+          "description": "User provided name of the rule."
         },
-        "description": {
-          "type": "string",
-          "description": "Detailed, freeform text describing the announcement"
+        "resourceName": {
+          "description": "Resource name that uniquely identifies the rule.",
+          "type": "string"
         }
       },
-      "description": "Alert Created by the MSA team for communications necessary for continued use of Google Workspace Products."
+      "description": "Proto that contains rule information.",
+      "id": "RuleInfo",
+      "type": "object"
     },
-    "Alert": {
-      "description": "An alert affecting a customer.",
+    "Notification": {
       "type": "object",
-      "id": "Alert",
+      "description": "Settings for callback notifications. For more details see [Google Workspace Alert Notification](https://developers.google.com/workspace/admin/alertcenter/guides/notifications).",
+      "id": "Notification",
       "properties": {
-        "metadata": {
-          "$ref": "AlertMetadata",
-          "description": "Output only. The metadata associated with this alert."
-        },
-        "type": {
-          "description": "Required. The type of the alert. This is output only after alert is created. For a list of available alert types see [Google Workspace Alert types](https://developers.google.com/workspace/admin/alertcenter/reference/alert-types).",
-          "type": "string"
-        },
-        "source": {
-          "type": "string",
-          "description": "Required. A unique identifier for the system that reported the alert. This is output only after alert is created. Supported sources are any of the following: * Google Operations * Mobile device management * Gmail phishing * Data Loss Prevention * Domain wide takeout * State sponsored attack * Google identity * Apps outage"
-        },
-        "deleted": {
-          "type": "boolean",
-          "description": "Output only. `True` if this alert is marked for deletion."
-        },
-        "customerId": {
-          "description": "Output only. The unique identifier of the Google Workspace account of the customer.",
-          "type": "string"
-        },
-        "updateTime": {
-          "type": "string",
-          "format": "google-datetime",
-          "description": "Output only. The time this alert was last updated."
-        },
-        "securityInvestigationToolLink": {
-          "description": "Output only. An optional [Security Investigation Tool](https://support.google.com/a/answer/7575955) query for this alert.",
-          "type": "string"
-        },
-        "alertId": {
-          "type": "string",
-          "description": "Output only. The unique identifier for the alert."
-        },
-        "etag": {
-          "type": "string",
-          "description": "Optional. `etag` is used for optimistic concurrency control as a way to help prevent simultaneous updates of an alert from overwriting each other. It is strongly suggested that systems make use of the `etag` in the read-modify-write cycle to perform alert updates in order to avoid race conditions: An `etag` is returned in the response which contains alerts, and systems are expected to put that etag in the request to update alert to ensure that their change will be applied to the same version of the alert. If no `etag` is provided in the call to update alert, then the existing alert is overwritten blindly."
-        },
-        "data": {
-          "additionalProperties": {
-            "description": "Properties of the object. Contains field @type with type URL.",
-            "type": "any"
-          },
-          "type": "object",
-          "description": "Optional. The data associated with this alert, for example google.apps.alertcenter.type.DeviceCompromised."
-        },
-        "createTime": {
-          "description": "Output only. The time this alert was created.",
-          "format": "google-datetime",
-          "type": "string"
-        },
-        "startTime": {
-          "type": "string",
-          "format": "google-datetime",
-          "description": "Required. The time the event that caused this alert was started or detected."
-        },
-        "endTime": {
-          "type": "string",
-          "format": "google-datetime",
-          "description": "Optional. The time the event that caused this alert ceased being active. If provided, the end time must not be earlier than the start time. If not provided, it indicates an ongoing alert."
+        "cloudPubsubTopic": {
+          "$ref": "CloudPubsubTopic",
+          "description": "A Google Cloud Pub/sub topic destination."
         }
       }
-    },
-    "MailPhishing": {
-      "properties": {
-        "systemActionType": {
-          "enumDescriptions": [
-            "System action is unspecified.",
-            "No operation.",
-            "Messages were removed from the inbox."
-          ],
-          "type": "string",
-          "enum": [
-            "SYSTEM_ACTION_TYPE_UNSPECIFIED",
-            "NO_OPERATION",
-            "REMOVED_FROM_INBOX"
-          ],
-          "description": "System actions on the messages."
-        },
-        "maliciousEntity": {
-          "$ref": "MaliciousEntity",
-          "description": "The entity whose actions triggered a Gmail phishing alert."
-        },
-        "domainId": {
-          "$ref": "DomainId",
-          "description": "The domain ID."
-        },
-        "messages": {
-          "description": "The list of messages contained by this alert.",
-          "items": {
-            "$ref": "GmailMessageInfo"
-          },
-          "type": "array"
-        },
-        "isInternal": {
-          "description": "If `true`, the email originated from within the organization.",
-          "type": "boolean"
-        }
-      },
-      "type": "object",
-      "description": "Proto for all phishing alerts with common payload. Supported types are any of the following: * User reported phishing * User reported spam spike * Suspicious message reported * Phishing reclassification * Malware reclassification * Gmail potential employee spoofing",
-      "id": "MailPhishing"
-    },
-    "BatchDeleteAlertsResponse": {
-      "id": "BatchDeleteAlertsResponse",
-      "properties": {
-        "successAlertIds": {
-          "description": "The successful list of alert IDs.",
-          "items": {
-            "type": "string"
-          },
-          "type": "array"
-        },
-        "failedAlertStatus": {
-          "additionalProperties": {
-            "$ref": "Status"
-          },
-          "type": "object",
-          "description": "The status details for each failed `alert_id`."
-        }
-      },
-      "type": "object",
-      "description": "Response to batch delete operation on alerts."
-    },
-    "BatchUndeleteAlertsResponse": {
-      "type": "object",
-      "properties": {
-        "successAlertIds": {
-          "description": "The successful list of alert IDs.",
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
-        },
-        "failedAlertStatus": {
-          "type": "object",
-          "additionalProperties": {
-            "$ref": "Status"
-          },
-          "description": "The status details for each failed `alert_id`."
-        }
-      },
-      "description": "Response to batch undelete operation on alerts.",
-      "id": "BatchUndeleteAlertsResponse"
-    },
-    "PrimaryAdminChangedEvent": {
-      "type": "object",
-      "properties": {
-        "domain": {
-          "type": "string",
-          "description": "domain in which actioned occurred"
-        },
-        "updatedAdminEmail": {
-          "type": "string",
-          "description": "Email of person who is the primary admin after the action"
-        },
-        "previousAdminEmail": {
-          "description": "Email of person who was the primary admin before the action",
-          "type": "string"
-        }
-      },
-      "description": "Event occurred when primary admin changed in customer's account. The event are being received from insight forwarder",
-      "id": "PrimaryAdminChangedEvent"
-    },
-    "EntityList": {
-      "type": "object",
-      "id": "EntityList",
-      "properties": {
-        "headers": {
-          "items": {
-            "type": "string"
-          },
-          "description": "Headers of the values in entities. If no value is defined in Entity, this field should be empty.",
-          "type": "array"
-        },
-        "name": {
-          "type": "string",
-          "description": "Name of the key detail used to display this entity list."
-        },
-        "entities": {
-          "description": "List of entities affected by the alert.",
-          "items": {
-            "$ref": "Entity"
-          },
-          "type": "array"
-        }
-      },
-      "description": "EntityList stores entities in a format that can be translated to a table in the Alert Center UI."
-    },
-    "GmailMessageInfo": {
-      "description": "Details of a message in phishing spike alert.",
-      "type": "object",
-      "properties": {
-        "recipient": {
-          "description": "The recipient of this email.",
-          "type": "string"
-        },
-        "subjectText": {
-          "type": "string",
-          "description": "The email subject text (only available for reported emails)."
-        },
-        "messageId": {
-          "type": "string",
-          "description": "The message ID."
-        },
-        "attachmentsSha256Hash": {
-          "items": {
-            "type": "string"
-          },
-          "type": "array",
-          "description": "The `SHA256` hash of email's attachment and all MIME parts."
-        },
-        "messageBodySnippet": {
-          "description": "The snippet of the message body text (only available for reported emails).",
-          "type": "string"
-        },
-        "sentTime": {
-          "description": "The sent time of the email.",
-          "format": "google-datetime",
-          "type": "string"
-        },
-        "md5HashSubject": {
-          "type": "string",
-          "description": "The MD5 Hash of email's subject (only available for reported emails)."
-        },
-        "md5HashMessageBody": {
-          "description": "The hash of the message body text.",
-          "type": "string"
-        },
-        "date": {
-          "type": "string",
-          "format": "google-datetime",
-          "description": "The date of the event related to this email."
-        }
-      },
-      "id": "GmailMessageInfo"
-    },
-    "Csv": {
-      "description": "A representation of a CSV file attachment, as a list of column headers and a list of data rows.",
-      "type": "object",
-      "id": "Csv",
-      "properties": {
-        "headers": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          },
-          "description": "The list of headers for data columns in a CSV file."
-        },
-        "dataRows": {
-          "description": "The list of data rows in a CSV file, as string arrays rather than as a single comma-separated string.",
-          "items": {
-            "$ref": "CsvRow"
-          },
-          "type": "array"
-        }
-      }
-    },
-    "Entity": {
-      "properties": {
-        "link": {
-          "type": "string",
-          "description": "Link to a Security Investigation Tool search based on this entity, if available."
-        },
-        "values": {
-          "items": {
-            "type": "string"
-          },
-          "description": "Extra values beyond name. The order of values should align with headers in EntityList.",
-          "type": "array"
-        },
-        "name": {
-          "type": "string",
-          "description": "Human-readable name of this entity, such as an email address, file ID, or device name."
-        }
-      },
-      "type": "object",
-      "description": "Individual entity affected by, or related to, an alert.",
-      "id": "Entity"
-    },
-    "ApnsCertificateExpirationInfo": {
-      "id": "ApnsCertificateExpirationInfo",
-      "description": "The explanation message associated with \"APNS certificate is expiring soon\" and \"APNS certificate has expired\" alerts.",
-      "type": "object",
-      "properties": {
-        "uid": {
-          "description": "The UID of the certificate.",
-          "type": "string"
-        },
-        "expirationTime": {
-          "description": "The expiration date of the APNS certificate.",
-          "format": "google-datetime",
-          "type": "string"
-        },
-        "appleId": {
-          "description": "The Apple ID used to create the certificate. It may be blank if admins didn't enter it.",
-          "type": "string"
-        }
-      }
-    },
-    "ClientSideEncryptionServiceUnavailable": {
-      "description": "Alerts for client-side encryption outages.",
-      "type": "object",
-      "properties": {
-        "keyServiceError": {
-          "type": "array",
-          "items": {
-            "$ref": "KeyServiceError"
-          },
-          "description": "External key services impacted by an outage or misconfiguration."
-        },
-        "idpError": {
-          "items": {
-            "$ref": "IdentityProviderError"
-          },
-          "description": "Identity providers impacted by an outage or misconfiguration.",
-          "type": "array"
-        }
-      },
-      "id": "ClientSideEncryptionServiceUnavailable"
-    },
-    "CloudPubsubTopic": {
-      "description": "A reference to a Cloud Pubsub topic. To register for notifications, the owner of the topic must grant `alerts-api-push-notifications@system.gserviceaccount.com` the `projects.topics.publish` permission.",
-      "type": "object",
-      "properties": {
-        "topicName": {
-          "type": "string",
-          "description": "The `name` field of a Cloud Pubsub [Topic] (https://cloud.google.com/pubsub/docs/reference/rest/v1/projects.topics#Topic)."
-        },
-        "payloadFormat": {
-          "description": "Optional. The format of the payload that would be sent. If not specified the format will be JSON.",
-          "enum": [
-            "PAYLOAD_FORMAT_UNSPECIFIED",
-            "JSON"
-          ],
-          "type": "string",
-          "enumDescriptions": [
-            "Payload format is not specified (will use JSON as default).",
-            "Use JSON."
-          ]
-        }
-      },
-      "id": "CloudPubsubTopic"
     },
     "DomainWideTakeoutInitiated": {
+      "type": "object",
+      "description": "A takeout operation for the entire domain was initiated by an admin. Derived from audit logs.",
+      "id": "DomainWideTakeoutInitiated",
       "properties": {
         "email": {
           "type": "string",
@@ -1754,61 +2383,158 @@
           "type": "string",
           "description": "The takeout request ID."
         }
-      },
-      "id": "DomainWideTakeoutInitiated",
-      "description": "A takeout operation for the entire domain was initiated by an admin. Derived from audit logs.",
-      "type": "object"
+      }
     },
-    "SuperAdminPasswordResetEvent": {
+    "ActivityRule": {
+      "id": "ActivityRule",
       "properties": {
-        "userEmail": {
-          "description": "email of person whose password was reset",
-          "type": "string"
-        }
-      },
-      "description": "Event occurred when password was reset for super admin in customer's account. The event are being received from insight forwarder",
-      "type": "object",
-      "id": "SuperAdminPasswordResetEvent"
-    },
-    "VoicemailMisconfiguration": {
-      "description": "Issue(s) with sending to voicemail.",
-      "id": "VoicemailMisconfiguration",
-      "properties": {
-        "errors": {
-          "description": "Issue(s) with voicemail recipients.",
-          "items": {
-            "$ref": "VoicemailRecipientError"
-          },
-          "type": "array"
-        }
-      },
-      "type": "object"
-    },
-    "TransferMisconfiguration": {
-      "properties": {
-        "errors": {
-          "description": "Details for each invalid transfer or forward.",
-          "items": {
-            "$ref": "TransferError"
-          },
-          "type": "array"
-        }
-      },
-      "type": "object",
-      "description": "Error related to transferring or forwarding a phone call.",
-      "id": "TransferMisconfiguration"
-    },
-    "BadWhitelist": {
-      "description": "Alert for setting the domain or IP that malicious email comes from as whitelisted domain or IP in Gmail advanced settings.",
-      "id": "BadWhitelist",
-      "properties": {
-        "maliciousEntity": {
-          "description": "The entity whose actions triggered a Gmail phishing alert.",
-          "$ref": "MaliciousEntity"
+        "windowSize": {
+          "type": "string",
+          "description": "Rule window size. Possible values are 1 hour or 24 hours.",
+          "format": "google-duration"
         },
+        "description": {
+          "description": "Description of the rule.",
+          "type": "string"
+        },
+        "actionNames": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array",
+          "description": "List of action names associated with the rule threshold."
+        },
+        "supersededAlerts": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "List of alert IDs superseded by this alert. It is used to indicate that this alert is essentially extension of superseded alerts and we found the relationship after creating these alerts."
+        },
+        "query": {
+          "description": "Query that is used to get the data from the associated source.",
+          "type": "string"
+        },
+        "name": {
+          "description": "Rule name.",
+          "type": "string"
+        },
+        "displayName": {
+          "description": "Alert display name.",
+          "type": "string"
+        },
+        "threshold": {
+          "description": "Alert threshold is for example “COUNT > 5”.",
+          "type": "string"
+        },
+        "supersedingAlert": {
+          "type": "string",
+          "description": "Alert ID superseding this alert. It is used to indicate that superseding alert is essentially extension of this alert and we found the relationship after creating both alerts."
+        },
+        "createTime": {
+          "description": "Rule create timestamp.",
+          "format": "google-datetime",
+          "type": "string"
+        },
+        "triggerSource": {
+          "description": "The trigger sources for this rule. * GMAIL_EVENTS * DEVICE_EVENTS * USER_EVENTS",
+          "type": "string"
+        },
+        "updateTime": {
+          "description": "The timestamp of the last update to the rule.",
+          "type": "string",
+          "format": "google-datetime"
+        }
+      },
+      "description": "Alerts from Google Workspace Security Center rules service configured by an admin.",
+      "type": "object"
+    },
+    "ApnsCertificateExpirationInfo": {
+      "id": "ApnsCertificateExpirationInfo",
+      "description": "The explanation message associated with \"APNS certificate is expiring soon\" and \"APNS certificate has expired\" alerts.",
+      "properties": {
+        "uid": {
+          "description": "The UID of the certificate.",
+          "type": "string"
+        },
+        "appleId": {
+          "type": "string",
+          "description": "The Apple ID used to create the certificate. It may be blank if admins didn't enter it."
+        },
+        "expirationTime": {
+          "type": "string",
+          "format": "google-datetime",
+          "description": "The expiration date of the APNS certificate."
+        }
+      },
+      "type": "object"
+    },
+    "BatchDeleteAlertsResponse": {
+      "id": "BatchDeleteAlertsResponse",
+      "properties": {
+        "successAlertIds": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array",
+          "description": "The successful list of alert IDs."
+        },
+        "failedAlertStatus": {
+          "type": "object",
+          "additionalProperties": {
+            "$ref": "Status"
+          },
+          "description": "The status details for each failed `alert_id`."
+        }
+      },
+      "type": "object",
+      "description": "Response to batch delete operation on alerts."
+    },
+    "MaliciousEntity": {
+      "properties": {
+        "displayName": {
+          "type": "string",
+          "description": "The header from display name."
+        },
+        "fromHeader": {
+          "type": "string",
+          "description": "The sender email address."
+        },
+        "entity": {
+          "$ref": "User",
+          "description": "The actor who triggered a gmail phishing alert."
+        }
+      },
+      "type": "object",
+      "id": "MaliciousEntity",
+      "description": "Entity whose actions triggered a Gmail phishing alert."
+    },
+    "MailPhishing": {
+      "id": "MailPhishing",
+      "type": "object",
+      "description": "Proto for all phishing alerts with common payload. Supported types are any of the following: * User reported phishing * User reported spam spike * Suspicious message reported * Phishing reclassification * Malware reclassification * Gmail potential employee spoofing",
+      "properties": {
         "domainId": {
-          "$ref": "DomainId",
-          "description": "The domain ID."
+          "description": "The domain ID.",
+          "$ref": "DomainId"
+        },
+        "isInternal": {
+          "type": "boolean",
+          "description": "If `true`, the email originated from within the organization."
+        },
+        "systemActionType": {
+          "enum": [
+            "SYSTEM_ACTION_TYPE_UNSPECIFIED",
+            "NO_OPERATION",
+            "REMOVED_FROM_INBOX"
+          ],
+          "type": "string",
+          "enumDescriptions": [
+            "System action is unspecified.",
+            "No operation.",
+            "Messages were removed from the inbox."
+          ],
+          "description": "System actions on the messages."
         },
         "messages": {
           "items": {
@@ -1817,835 +2543,107 @@
           "type": "array",
           "description": "The list of messages contained by this alert."
         },
-        "sourceIp": {
-          "description": "The source IP address of the malicious email, for example, `127.0.0.1`.",
-          "type": "string"
+        "maliciousEntity": {
+          "description": "The entity whose actions triggered a Gmail phishing alert.",
+          "$ref": "MaliciousEntity"
         }
-      },
-      "type": "object"
+      }
     },
-    "ActivityRule": {
-      "type": "object",
+    "DriveSyncStateChanged": {
       "properties": {
-        "supersedingAlert": {
-          "description": "Alert ID superseding this alert. It is used to indicate that superseding alert is essentially extension of this alert and we found the relationship after creating both alerts.",
-          "type": "string"
-        },
-        "triggerSource": {
-          "description": "The trigger sources for this rule. * GMAIL_EVENTS * DEVICE_EVENTS * USER_EVENTS",
-          "type": "string"
-        },
-        "threshold": {
-          "description": "Alert threshold is for example “COUNT > 5”.",
-          "type": "string"
-        },
-        "displayName": {
-          "type": "string",
-          "description": "Alert display name."
-        },
-        "name": {
-          "type": "string",
-          "description": "Rule name."
-        },
-        "description": {
-          "description": "Description of the rule.",
-          "type": "string"
-        },
-        "createTime": {
-          "type": "string",
-          "description": "Rule create timestamp.",
-          "format": "google-datetime"
-        },
-        "updateTime": {
+        "syncPauseStartTime": {
           "format": "google-datetime",
           "type": "string",
-          "description": "The timestamp of the last update to the rule."
+          "description": "Time at which sync was paused."
         },
-        "supersededAlerts": {
-          "description": "List of alert IDs superseded by this alert. It is used to indicate that this alert is essentially extension of superseded alerts and we found the relationship after creating these alerts.",
-          "items": {
-            "type": "string"
-          },
-          "type": "array"
-        },
-        "query": {
+        "syncState": {
+          "enum": [
+            "SYNC_STATE_UNSPECIFIED",
+            "PAUSED",
+            "RESUMED"
+          ],
           "type": "string",
-          "description": "Query that is used to get the data from the associated source."
+          "enumDescriptions": [
+            "Unspecified state",
+            "Sync is paused",
+            "Sync is resumed"
+          ],
+          "description": "The current sync state."
         },
-        "windowSize": {
-          "description": "Rule window size. Possible values are 1 hour or 24 hours.",
+        "email": {
+          "description": "Email of the user affected.",
+          "type": "string"
+        },
+        "syncStateChangeReason": {
+          "enumDescriptions": [
+            "Unspecified state change reason",
+            "Sync state was changed due to unusual activity, such as potential ransomware",
+            "The user provided feedback indicating that the initial sync state change may have been caused by unexpected activity",
+            "The user provided feedback indicating that the initial sync state change may have been caused by a false positive"
+          ],
           "type": "string",
-          "format": "google-duration"
-        },
-        "actionNames": {
-          "description": "List of action names associated with the rule threshold.",
-          "items": {
-            "type": "string"
-          },
-          "type": "array"
+          "description": "The reason for the sync state change.",
+          "enum": [
+            "SYNC_STATE_CHANGE_REASON_UNSPECIFIED",
+            "UNUSUAL_ACTIVITY",
+            "USER_FEEDBACK_TRUE_POSITIVE",
+            "USER_FEEDBACK_FALSE_POSITIVE"
+          ]
         }
       },
-      "description": "Alerts from Google Workspace Security Center rules service configured by an admin.",
-      "id": "ActivityRule"
+      "id": "DriveSyncStateChanged",
+      "type": "object",
+      "description": "Alerts for when a user is restricted from syncing content from clients such as Drive for Desktop."
     },
-    "LoginDetails": {
-      "description": "The details of the login action.",
+    "GmailMessageInfo": {
+      "description": "Details of a message in phishing spike alert.",
+      "type": "object",
       "properties": {
-        "loginTime": {
+        "messageId": {
+          "description": "The message ID.",
+          "type": "string"
+        },
+        "sentTime": {
+          "description": "The sent time of the email.",
           "type": "string",
-          "description": "Optional. The successful login time that is associated with the warning event. This isn't present for blocked login attempts.",
           "format": "google-datetime"
         },
-        "ipAddress": {
-          "description": "Optional. The human-readable IP address (for example, `11.22.33.44`) that is associated with the warning event.",
-          "type": "string"
-        }
-      },
-      "type": "object",
-      "id": "LoginDetails"
-    },
-    "DeviceCompromisedSecurityDetail": {
-      "id": "DeviceCompromisedSecurityDetail",
-      "properties": {
-        "iosVendorId": {
-          "type": "string",
-          "description": "Required for iOS, empty for others."
-        },
-        "deviceModel": {
-          "type": "string",
-          "description": "The model of the device."
-        },
-        "deviceCompromisedState": {
-          "description": "The device compromised state. Possible values are \"`Compromised`\" or \"`Not Compromised`\".",
+        "date": {
+          "description": "The date of the event related to this email.",
+          "format": "google-datetime",
           "type": "string"
         },
-        "deviceType": {
-          "description": "The type of the device.",
+        "recipient": {
+          "description": "The recipient of this email.",
           "type": "string"
         },
-        "resourceId": {
-          "type": "string",
-          "description": "The device resource ID."
-        },
-        "deviceId": {
-          "type": "string",
-          "description": "Required. The device ID."
-        },
-        "serialNumber": {
-          "description": "The serial number of the device.",
-          "type": "string"
-        }
-      },
-      "description": "Detailed information of a single MDM device compromised event.",
-      "type": "object"
-    },
-    "MaliciousEntity": {
-      "description": "Entity whose actions triggered a Gmail phishing alert.",
-      "id": "MaliciousEntity",
-      "properties": {
-        "displayName": {
-          "description": "The header from display name.",
+        "messageBodySnippet": {
+          "description": "The snippet of the message body text (only available for reported emails).",
           "type": "string"
         },
-        "entity": {
-          "description": "The actor who triggered a gmail phishing alert.",
-          "$ref": "User"
-        },
-        "fromHeader": {
-          "type": "string",
-          "description": "The sender email address."
-        }
-      },
-      "type": "object"
-    },
-    "RequestInfo": {
-      "type": "object",
-      "description": "Requests for one application that needs default SQL setup.",
-      "properties": {
-        "numberOfRequests": {
-          "description": "Required. Number of requests sent for this application to set up default SQL instance.",
-          "format": "int64",
-          "type": "string"
-        },
-        "appDeveloperEmail": {
+        "attachmentsSha256Hash": {
+          "description": "The `SHA256` hash of email's attachment and all MIME parts.",
           "type": "array",
           "items": {
             "type": "string"
-          },
-          "description": "List of app developers who triggered notifications for above application."
-        },
-        "appKey": {
-          "type": "string",
-          "description": "Required. The application that requires the SQL setup."
-        }
-      },
-      "id": "RequestInfo"
-    },
-    "ActionInfo": {
-      "description": "Metadata related to the action.",
-      "id": "ActionInfo",
-      "type": "object",
-      "properties": {
-        "evidenceLockerFilePath": {
-          "description": "Google Cloud Storage location of the content that violated the rule. This field has format: \"/\"",
-          "type": "string"
-        }
-      }
-    },
-    "ListAlertsResponse": {
-      "description": "Response message for an alert listing request.",
-      "properties": {
-        "alerts": {
-          "items": {
-            "$ref": "Alert"
-          },
-          "description": "The list of alerts.",
-          "type": "array"
-        },
-        "nextPageToken": {
-          "description": "The token for the next page. If not empty, indicates that there may be more alerts that match the listing request; this value can be used in a subsequent ListAlertsRequest to get alerts continuing from last result of the current list call.",
-          "type": "string"
-        }
-      },
-      "type": "object",
-      "id": "ListAlertsResponse"
-    },
-    "SensitiveAdminAction": {
-      "type": "object",
-      "properties": {
-        "superAdminPasswordResetEvent": {
-          "description": "Event occurred when password was reset for super admin in customer's account",
-          "$ref": "SuperAdminPasswordResetEvent"
-        },
-        "ssoProfileUpdatedEvent": {
-          "$ref": "SSOProfileUpdatedEvent",
-          "description": "Event occurred when SSO Profile updated in customer's account"
-        },
-        "ssoProfileDeletedEvent": {
-          "description": "Event occurred when SSO Profile deleted in customer's account",
-          "$ref": "SSOProfileDeletedEvent"
-        },
-        "eventTime": {
-          "description": "The time at which event occurred",
-          "type": "string",
-          "format": "google-datetime"
-        },
-        "ssoProfileCreatedEvent": {
-          "description": "Event occurred when SSO Profile created in customer's account",
-          "$ref": "SSOProfileCreatedEvent"
-        },
-        "primaryAdminChangedEvent": {
-          "description": "Event occurred when primary admin changed in customer's account",
-          "$ref": "PrimaryAdminChangedEvent"
-        },
-        "actorEmail": {
-          "description": "Email of person who performed the action",
-          "type": "string"
-        }
-      },
-      "id": "SensitiveAdminAction",
-      "description": "Alert that is triggered when Sensitive Admin Action occur in customer account."
-    },
-    "Notification": {
-      "description": "Settings for callback notifications. For more details see [Google Workspace Alert Notification](https://developers.google.com/workspace/admin/alertcenter/guides/notifications).",
-      "id": "Notification",
-      "type": "object",
-      "properties": {
-        "cloudPubsubTopic": {
-          "description": "A Google Cloud Pub/sub topic destination.",
-          "$ref": "CloudPubsubTopic"
-        }
-      }
-    },
-    "SupportTicket": {
-      "properties": {
-        "ticketUrl": {
-          "type": "string",
-          "description": "Link to support ticket"
-        },
-        "ticketId": {
-          "description": "Support ticket ID",
-          "type": "string"
-        }
-      },
-      "description": "Support ticket related to Access Approvals request",
-      "type": "object",
-      "id": "SupportTicket"
-    },
-    "VoiceMisconfiguration": {
-      "description": "An alert triggered when Google Voice configuration becomes invalid, generally due to an external entity being modified or deleted.",
-      "properties": {
-        "voicemailMisconfiguration": {
-          "description": "Issue(s) with sending to voicemail.",
-          "$ref": "VoicemailMisconfiguration"
-        },
-        "transferMisconfiguration": {
-          "description": "Issue(s) with transferring or forwarding to an external entity.",
-          "$ref": "TransferMisconfiguration"
-        },
-        "entityType": {
-          "type": "string",
-          "enumDescriptions": [
-            "Entity type wasn't set.",
-            "Invalid auto attendant.",
-            "Invalid ring group."
-          ],
-          "description": "Type of the entity whose configuration is now invalid.",
-          "enum": [
-            "ENTITY_TYPE_UNSPECIFIED",
-            "AUTO_ATTENDANT",
-            "RING_GROUP"
-          ]
-        },
-        "entityName": {
-          "description": "Name of the entity whose configuration is now invalid.",
-          "type": "string"
-        },
-        "fixUri": {
-          "description": "Link that the admin can follow to fix the issue.",
-          "type": "string"
-        },
-        "membersMisconfiguration": {
-          "$ref": "TransferMisconfiguration",
-          "description": "Issue(s) with members of a ring group."
-        }
-      },
-      "id": "VoiceMisconfiguration",
-      "type": "object"
-    },
-    "DlpRuleViolation": {
-      "description": "Alerts that get triggered on violations of Data Loss Prevention (DLP) rules.",
-      "type": "object",
-      "properties": {
-        "ruleViolationInfo": {
-          "description": "Details about the violated DLP rule. Admins can use the predefined detectors provided by Google Cloud DLP https://cloud.google.com/dlp/ when setting up a DLP rule. Matched Cloud DLP detectors in this violation if any will be captured in the MatchInfo.predefined_detector.",
-          "$ref": "RuleViolationInfo"
-        }
-      },
-      "id": "DlpRuleViolation"
-    },
-    "DeviceManagementRule": {
-      "type": "object",
-      "description": "Alerts from Device Management Rules configured by Admin.",
-      "properties": {
-        "email": {
-          "type": "string",
-          "description": "The email of the user this alert was created for."
-        },
-        "ownerId": {
-          "type": "string",
-          "description": "Obfuscated ID of the owner of the device"
-        },
-        "ruleAction": {
-          "description": "Action taken as result of the rule",
-          "type": "string"
-        },
-        "deviceType": {
-          "description": "The type of the device.",
-          "type": "string"
-        },
-        "deviceModel": {
-          "description": "The model of the device.",
-          "type": "string"
-        },
-        "deviceId": {
-          "description": "Required. The device ID.",
-          "type": "string"
-        },
-        "resourceId": {
-          "description": "The device resource ID.",
-          "type": "string"
-        },
-        "serialNumber": {
-          "description": "The serial number of the device.",
-          "type": "string"
-        },
-        "id": {
-          "description": "ID of the rule that triggered the alert",
-          "type": "string"
-        },
-        "iosVendorId": {
-          "description": "Required for iOS, empty for others.",
-          "type": "string"
-        }
-      },
-      "id": "DeviceManagementRule"
-    },
-    "MatchInfo": {
-      "id": "MatchInfo",
-      "type": "object",
-      "properties": {
-        "userDefinedDetector": {
-          "description": "For matched detector defined by administrators.",
-          "$ref": "UserDefinedDetectorInfo"
-        },
-        "predefinedDetector": {
-          "description": "For matched detector predefined by Google.",
-          "$ref": "PredefinedDetectorInfo"
-        }
-      },
-      "description": "Proto that contains match information from the condition part of the rule."
-    },
-    "AlertMetadata": {
-      "id": "AlertMetadata",
-      "type": "object",
-      "description": "An alert metadata.",
-      "properties": {
-        "assignee": {
-          "description": "The email address of the user assigned to the alert.",
-          "type": "string"
-        },
-        "updateTime": {
-          "type": "string",
-          "description": "Output only. The time this metadata was last updated.",
-          "format": "google-datetime"
-        },
-        "status": {
-          "description": "The current status of the alert. The supported values are the following: * NOT_STARTED * IN_PROGRESS * CLOSED",
-          "type": "string"
-        },
-        "severity": {
-          "type": "string",
-          "description": "The severity value of the alert. Alert Center will set this field at alert creation time, default's to an empty string when it could not be determined. The supported values for update actions on this field are the following: * HIGH * MEDIUM * LOW"
-        },
-        "alertId": {
-          "description": "Output only. The alert identifier.",
-          "type": "string"
-        },
-        "etag": {
-          "description": "Optional. `etag` is used for optimistic concurrency control as a way to help prevent simultaneous updates of an alert metadata from overwriting each other. It is strongly suggested that systems make use of the `etag` in the read-modify-write cycle to perform metadata updates in order to avoid race conditions: An `etag` is returned in the response which contains alert metadata, and systems are expected to put that etag in the request to update alert metadata to ensure that their change will be applied to the same version of the alert metadata. If no `etag` is provided in the call to update alert metadata, then the existing alert metadata is overwritten blindly.",
-          "type": "string"
-        },
-        "customerId": {
-          "type": "string",
-          "description": "Output only. The unique identifier of the Google Workspace account of the customer."
-        }
-      }
-    },
-    "DomainId": {
-      "description": "Domain ID of Gmail phishing alerts.",
-      "properties": {
-        "customerPrimaryDomain": {
-          "description": "The primary domain for the customer.",
-          "type": "string"
-        }
-      },
-      "type": "object",
-      "id": "DomainId"
-    }
-  },
-  "ownerDomain": "google.com",
-  "parameters": {
-    "prettyPrint": {
-      "type": "boolean",
-      "location": "query",
-      "default": "true",
-      "description": "Returns response with indentations and line breaks."
-    },
-    "alt": {
-      "default": "json",
-      "location": "query",
-      "description": "Data format for response.",
-      "enumDescriptions": [
-        "Responses with Content-Type of application/json",
-        "Media download with context-dependent Content-Type",
-        "Responses with Content-Type of application/x-protobuf"
-      ],
-      "enum": [
-        "json",
-        "media",
-        "proto"
-      ],
-      "type": "string"
-    },
-    "oauth_token": {
-      "description": "OAuth 2.0 token for the current user.",
-      "location": "query",
-      "type": "string"
-    },
-    "upload_protocol": {
-      "description": "Upload protocol for media (e.g. \"raw\", \"multipart\").",
-      "location": "query",
-      "type": "string"
-    },
-    "callback": {
-      "type": "string",
-      "description": "JSONP",
-      "location": "query"
-    },
-    "uploadType": {
-      "location": "query",
-      "type": "string",
-      "description": "Legacy upload protocol for media (e.g. \"media\", \"multipart\")."
-    },
-    "fields": {
-      "location": "query",
-      "description": "Selector specifying which fields to include in a partial response.",
-      "type": "string"
-    },
-    "access_token": {
-      "type": "string",
-      "description": "OAuth access token.",
-      "location": "query"
-    },
-    "$.xgafv": {
-      "enum": [
-        "1",
-        "2"
-      ],
-      "type": "string",
-      "enumDescriptions": [
-        "v1 error format",
-        "v2 error format"
-      ],
-      "description": "V1 error format.",
-      "location": "query"
-    },
-    "key": {
-      "description": "API key. Your API key identifies your project and provides you with API access, quota, and reports. Required unless you provide an OAuth 2.0 token.",
-      "location": "query",
-      "type": "string"
-    },
-    "quotaUser": {
-      "location": "query",
-      "type": "string",
-      "description": "Available to use for quota purposes for server-side applications. Can be any arbitrary string assigned to a user, but should not exceed 40 characters."
-    }
-  },
-  "discoveryVersion": "v1",
-  "servicePath": "",
-  "basePath": "",
-  "baseUrl": "https://alertcenter.googleapis.com/",
-  "fullyEncodeReservedExpansion": true,
-  "batchPath": "batch",
-  "canonicalName": "AlertCenter",
-  "protocol": "rest",
-  "version_module": true,
-  "description": "Manages alerts on issues affecting your domain. Note: The current version of this API (v1beta1) is available to all Google Workspace customers. ",
-  "resources": {
-    "alerts": {
-      "methods": {
-        "delete": {
-          "httpMethod": "DELETE",
-          "flatPath": "v1beta1/alerts/{alertId}",
-          "description": "Marks the specified alert for deletion. An alert that has been marked for deletion is removed from Alert Center after 30 days. Marking an alert for deletion has no effect on an alert which has already been marked for deletion. Attempting to mark a nonexistent alert for deletion results in a `NOT_FOUND` error.",
-          "path": "v1beta1/alerts/{alertId}",
-          "parameters": {
-            "alertId": {
-              "required": true,
-              "location": "path",
-              "type": "string",
-              "description": "Required. The identifier of the alert to delete."
-            },
-            "customerId": {
-              "location": "query",
-              "description": "Optional. The unique identifier of the Google Workspace account of the customer the alert is associated with. The `customer_id` must have the initial \"C\" stripped (for example, `046psxkn`). Inferred from the caller identity if not provided. [Find your customer ID](https://support.google.com/cloudidentity/answer/10070793).",
-              "type": "string"
-            }
-          },
-          "parameterOrder": [
-            "alertId"
-          ],
-          "scopes": [
-            "https://www.googleapis.com/auth/apps.alerts"
-          ],
-          "response": {
-            "$ref": "Empty"
-          },
-          "id": "alertcenter.alerts.delete"
-        },
-        "get": {
-          "scopes": [
-            "https://www.googleapis.com/auth/apps.alerts"
-          ],
-          "httpMethod": "GET",
-          "response": {
-            "$ref": "Alert"
-          },
-          "parameterOrder": [
-            "alertId"
-          ],
-          "id": "alertcenter.alerts.get",
-          "description": "Gets the specified alert. Attempting to get a nonexistent alert returns `NOT_FOUND` error.",
-          "parameters": {
-            "customerId": {
-              "description": "Optional. The unique identifier of the Google Workspace account of the customer the alert is associated with. The `customer_id` must have the initial \"C\" stripped (for example, `046psxkn`). Inferred from the caller identity if not provided. [Find your customer ID](https://support.google.com/cloudidentity/answer/10070793).",
-              "type": "string",
-              "location": "query"
-            },
-            "alertId": {
-              "required": true,
-              "description": "Required. The identifier of the alert to retrieve.",
-              "type": "string",
-              "location": "path"
-            }
-          },
-          "path": "v1beta1/alerts/{alertId}",
-          "flatPath": "v1beta1/alerts/{alertId}"
-        },
-        "batchUndelete": {
-          "response": {
-            "$ref": "BatchUndeleteAlertsResponse"
-          },
-          "description": "Performs batch undelete operation on alerts.",
-          "httpMethod": "POST",
-          "path": "v1beta1/alerts:batchUndelete",
-          "id": "alertcenter.alerts.batchUndelete",
-          "request": {
-            "$ref": "BatchUndeleteAlertsRequest"
-          },
-          "parameterOrder": [],
-          "flatPath": "v1beta1/alerts:batchUndelete",
-          "scopes": [
-            "https://www.googleapis.com/auth/apps.alerts"
-          ],
-          "parameters": {}
-        },
-        "list": {
-          "httpMethod": "GET",
-          "flatPath": "v1beta1/alerts",
-          "parameterOrder": [],
-          "scopes": [
-            "https://www.googleapis.com/auth/apps.alerts"
-          ],
-          "response": {
-            "$ref": "ListAlertsResponse"
-          },
-          "parameters": {
-            "customerId": {
-              "location": "query",
-              "description": "Optional. The unique identifier of the Google Workspace account of the customer the alerts are associated with. The `customer_id` must have the initial \"C\" stripped (for example, `046psxkn`). Inferred from the caller identity if not provided. [Find your customer ID](https://support.google.com/cloudidentity/answer/10070793).",
-              "type": "string"
-            },
-            "pageSize": {
-              "type": "integer",
-              "format": "int32",
-              "description": "Optional. The requested page size. Server may return fewer items than requested. If unspecified, server picks an appropriate default.",
-              "location": "query"
-            },
-            "pageToken": {
-              "location": "query",
-              "type": "string",
-              "description": "Optional. A token identifying a page of results the server should return. If empty, a new iteration is started. To continue an iteration, pass in the value from the previous ListAlertsResponse's next_page_token field."
-            },
-            "orderBy": {
-              "location": "query",
-              "type": "string",
-              "description": "Optional. The sort order of the list results. If not specified results may be returned in arbitrary order. You can sort the results in descending order based on the creation timestamp using `order_by=\"create_time desc\"`. Currently, supported sorting are `create_time asc`, `create_time desc`, `update_time desc`"
-            },
-            "filter": {
-              "type": "string",
-              "location": "query",
-              "description": "Optional. A query string for filtering alert results. For more details, see [Query filters](https://developers.google.com/workspace/admin/alertcenter/guides/query-filters) and [Supported query filter fields](https://developers.google.com/workspace/admin/alertcenter/reference/filter-fields#alerts.list)."
-            }
-          },
-          "description": "Lists the alerts.",
-          "id": "alertcenter.alerts.list",
-          "path": "v1beta1/alerts"
-        },
-        "batchDelete": {
-          "id": "alertcenter.alerts.batchDelete",
-          "path": "v1beta1/alerts:batchDelete",
-          "parameterOrder": [],
-          "description": "Performs batch delete operation on alerts.",
-          "httpMethod": "POST",
-          "scopes": [
-            "https://www.googleapis.com/auth/apps.alerts"
-          ],
-          "response": {
-            "$ref": "BatchDeleteAlertsResponse"
-          },
-          "request": {
-            "$ref": "BatchDeleteAlertsRequest"
-          },
-          "parameters": {},
-          "flatPath": "v1beta1/alerts:batchDelete"
-        },
-        "undelete": {
-          "parameterOrder": [
-            "alertId"
-          ],
-          "scopes": [
-            "https://www.googleapis.com/auth/apps.alerts"
-          ],
-          "parameters": {
-            "alertId": {
-              "location": "path",
-              "description": "Required. The identifier of the alert to undelete.",
-              "type": "string",
-              "required": true
-            }
-          },
-          "response": {
-            "$ref": "Alert"
-          },
-          "description": "Restores, or \"undeletes\", an alert that was marked for deletion within the past 30 days. Attempting to undelete an alert which was marked for deletion over 30 days ago (which has been removed from the Alert Center database) or a nonexistent alert returns a `NOT_FOUND` error. Attempting to undelete an alert which has not been marked for deletion has no effect.",
-          "id": "alertcenter.alerts.undelete",
-          "flatPath": "v1beta1/alerts/{alertId}:undelete",
-          "path": "v1beta1/alerts/{alertId}:undelete",
-          "request": {
-            "$ref": "UndeleteAlertRequest"
-          },
-          "httpMethod": "POST"
-        },
-        "getMetadata": {
-          "parameters": {
-            "alertId": {
-              "location": "path",
-              "description": "Required. The identifier of the alert this metadata belongs to.",
-              "type": "string",
-              "required": true
-            },
-            "customerId": {
-              "location": "query",
-              "description": "Optional. The unique identifier of the Google Workspace account of the customer the alert metadata is associated with. The `customer_id` must have the initial \"C\" stripped (for example, `046psxkn`). Inferred from the caller identity if not provided. [Find your customer ID](https://support.google.com/cloudidentity/answer/10070793).",
-              "type": "string"
-            }
-          },
-          "scopes": [
-            "https://www.googleapis.com/auth/apps.alerts"
-          ],
-          "parameterOrder": [
-            "alertId"
-          ],
-          "description": "Returns the metadata of an alert. Attempting to get metadata for a non-existent alert returns `NOT_FOUND` error.",
-          "flatPath": "v1beta1/alerts/{alertId}/metadata",
-          "httpMethod": "GET",
-          "id": "alertcenter.alerts.getMetadata",
-          "response": {
-            "$ref": "AlertMetadata"
-          },
-          "path": "v1beta1/alerts/{alertId}/metadata"
-        }
-      },
-      "resources": {
-        "feedback": {
-          "methods": {
-            "list": {
-              "description": "Lists all the feedback for an alert. Attempting to list feedbacks for a non-existent alert returns `NOT_FOUND` error.",
-              "id": "alertcenter.alerts.feedback.list",
-              "parameters": {
-                "filter": {
-                  "description": "Optional. A query string for filtering alert feedback results. For more details, see [Query filters](https://developers.google.com/workspace/admin/alertcenter/guides/query-filters) and [Supported query filter fields](https://developers.google.com/workspace/admin/alertcenter/reference/filter-fields#alerts.feedback.list).",
-                  "location": "query",
-                  "type": "string"
-                },
-                "customerId": {
-                  "location": "query",
-                  "description": "Optional. The unique identifier of the Google Workspace account of the customer the alert is associated with. The `customer_id` must have the initial \"C\" stripped (for example, `046psxkn`). Inferred from the caller identity if not provided. [Find your customer ID](https://support.google.com/cloudidentity/answer/10070793).",
-                  "type": "string"
-                },
-                "alertId": {
-                  "type": "string",
-                  "description": "Required. The alert identifier. The \"-\" wildcard could be used to represent all alerts.",
-                  "required": true,
-                  "location": "path"
-                }
-              },
-              "flatPath": "v1beta1/alerts/{alertId}/feedback",
-              "path": "v1beta1/alerts/{alertId}/feedback",
-              "scopes": [
-                "https://www.googleapis.com/auth/apps.alerts"
-              ],
-              "parameterOrder": [
-                "alertId"
-              ],
-              "httpMethod": "GET",
-              "response": {
-                "$ref": "ListAlertFeedbackResponse"
-              }
-            },
-            "create": {
-              "response": {
-                "$ref": "AlertFeedback"
-              },
-              "id": "alertcenter.alerts.feedback.create",
-              "httpMethod": "POST",
-              "path": "v1beta1/alerts/{alertId}/feedback",
-              "description": "Creates new feedback for an alert. Attempting to create a feedback for a non-existent alert returns `NOT_FOUND` error. Attempting to create a feedback for an alert that is marked for deletion returns `FAILED_PRECONDITION' error.",
-              "scopes": [
-                "https://www.googleapis.com/auth/apps.alerts"
-              ],
-              "request": {
-                "$ref": "AlertFeedback"
-              },
-              "flatPath": "v1beta1/alerts/{alertId}/feedback",
-              "parameters": {
-                "customerId": {
-                  "description": "Optional. The unique identifier of the Google Workspace account of the customer the alert is associated with. The `customer_id` must have the initial \"C\" stripped (for example, `046psxkn`). Inferred from the caller identity if not provided. [Find your customer ID](https://support.google.com/cloudidentity/answer/10070793).",
-                  "type": "string",
-                  "location": "query"
-                },
-                "alertId": {
-                  "location": "path",
-                  "type": "string",
-                  "description": "Required. The identifier of the alert this feedback belongs to.",
-                  "required": true
-                }
-              },
-              "parameterOrder": [
-                "alertId"
-              ]
-            }
           }
-        }
-      }
-    },
-    "v1beta1": {
-      "methods": {
-        "getSettings": {
-          "flatPath": "v1beta1/settings",
-          "path": "v1beta1/settings",
-          "id": "alertcenter.getSettings",
-          "parameters": {
-            "customerId": {
-              "type": "string",
-              "description": "Optional. The unique identifier of the Google Workspace account of the customer the alert settings are associated with. The `customer_id` must/ have the initial \"C\" stripped (for example, `046psxkn`). Inferred from the caller identity if not provided. [Find your customer ID](https://support.google.com/cloudidentity/answer/10070793).",
-              "location": "query"
-            }
-          },
-          "description": "Returns customer-level settings.",
-          "parameterOrder": [],
-          "scopes": [
-            "https://www.googleapis.com/auth/apps.alerts"
-          ],
-          "response": {
-            "$ref": "Settings"
-          },
-          "httpMethod": "GET"
         },
-        "updateSettings": {
-          "parameterOrder": [],
-          "parameters": {
-            "customerId": {
-              "type": "string",
-              "location": "query",
-              "description": "Optional. The unique identifier of the Google Workspace account of the customer the alert settings are associated with. The `customer_id` must have the initial \"C\" stripped (for example, `046psxkn`). Inferred from the caller identity if not provided. [Find your customer ID](https://support.google.com/cloudidentity/answer/10070793)."
-            }
-          },
-          "scopes": [
-            "https://www.googleapis.com/auth/apps.alerts"
-          ],
-          "path": "v1beta1/settings",
-          "response": {
-            "$ref": "Settings"
-          },
-          "request": {
-            "$ref": "Settings"
-          },
-          "httpMethod": "PATCH",
-          "description": "Updates the customer-level settings.",
-          "flatPath": "v1beta1/settings",
-          "id": "alertcenter.updateSettings"
+        "md5HashMessageBody": {
+          "type": "string",
+          "description": "The hash of the message body text."
+        },
+        "subjectText": {
+          "description": "The email subject text (only available for reported emails).",
+          "type": "string"
+        },
+        "md5HashSubject": {
+          "type": "string",
+          "description": "The MD5 Hash of email's subject (only available for reported emails)."
         }
-      }
+      },
+      "id": "GmailMessageInfo"
     }
   },
-  "icons": {
-    "x16": "http://www.google.com/images/icons/product/search-16.gif",
-    "x32": "http://www.google.com/images/icons/product/search-32.gif"
-  },
-  "name": "alertcenter",
   "auth": {
     "oauth2": {
       "scopes": {
@@ -2654,5 +2652,7 @@
         }
       }
     }
-  }
+  },
+  "fullyEncodeReservedExpansion": true,
+  "rootUrl": "https://alertcenter.googleapis.com/"
 }
