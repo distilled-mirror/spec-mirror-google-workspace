@@ -1,451 +1,443 @@
 {
-  "discoveryVersion": "v1",
-  "title": "Apps Script API",
-  "id": "script:v1",
-  "rootUrl": "https://script.googleapis.com/",
-  "mtlsRootUrl": "https://script.mtls.googleapis.com/",
-  "batchPath": "batch",
-  "icons": {
-    "x16": "http://www.google.com/images/icons/product/search-16.gif",
-    "x32": "http://www.google.com/images/icons/product/search-32.gif"
-  },
-  "ownerDomain": "google.com",
-  "ownerName": "Google",
-  "documentationLink": "https://developers.google.com/apps-script/api/",
+  "canonicalName": "Script",
   "resources": {
     "projects": {
-      "resources": {
-        "deployments": {
-          "methods": {
-            "list": {
-              "id": "script.projects.deployments.list",
-              "parameters": {
-                "pageToken": {
-                  "description": "The token for continuing a previous list request on the next page. This should be set to the value of `nextPageToken` from a previous response.",
-                  "type": "string",
-                  "location": "query"
-                },
-                "scriptId": {
-                  "description": "The script project's Drive ID.",
-                  "type": "string",
-                  "location": "path",
-                  "required": true
-                },
-                "pageSize": {
-                  "type": "integer",
-                  "location": "query",
-                  "format": "int32",
-                  "description": "The maximum number of deployments on each returned page. Defaults to 50."
-                }
-              },
-              "description": "Lists the deployments of an Apps Script project.",
-              "path": "v1/projects/{scriptId}/deployments",
-              "flatPath": "v1/projects/{scriptId}/deployments",
-              "parameterOrder": [
-                "scriptId"
-              ],
-              "scopes": [
-                "https://www.googleapis.com/auth/script.deployments",
-                "https://www.googleapis.com/auth/script.deployments.readonly"
-              ],
-              "httpMethod": "GET",
-              "response": {
-                "$ref": "ListDeploymentsResponse"
-              }
+      "methods": {
+        "getContent": {
+          "flatPath": "v1/projects/{scriptId}/content",
+          "id": "script.projects.getContent",
+          "httpMethod": "GET",
+          "path": "v1/projects/{scriptId}/content",
+          "scopes": [
+            "https://www.googleapis.com/auth/script.projects",
+            "https://www.googleapis.com/auth/script.projects.readonly"
+          ],
+          "parameters": {
+            "scriptId": {
+              "type": "string",
+              "location": "path",
+              "description": "The script project's Drive ID.",
+              "required": true
             },
-            "delete": {
-              "description": "Deletes a deployment of an Apps Script project.",
-              "id": "script.projects.deployments.delete",
-              "scopes": [
-                "https://www.googleapis.com/auth/script.deployments"
-              ],
-              "httpMethod": "DELETE",
-              "parameterOrder": [
-                "scriptId",
-                "deploymentId"
-              ],
-              "flatPath": "v1/projects/{scriptId}/deployments/{deploymentId}",
-              "parameters": {
-                "scriptId": {
-                  "location": "path",
-                  "required": true,
-                  "type": "string",
-                  "description": "The script project's Drive ID."
-                },
-                "deploymentId": {
-                  "location": "path",
-                  "required": true,
-                  "type": "string",
-                  "description": "The deployment ID to be undeployed."
-                }
-              },
-              "response": {
-                "$ref": "Empty"
-              },
-              "path": "v1/projects/{scriptId}/deployments/{deploymentId}"
+            "versionNumber": {
+              "type": "integer",
+              "format": "int32",
+              "location": "query",
+              "description": "The version number of the project to retrieve. If not provided, the project's HEAD version is returned."
+            }
+          },
+          "response": {
+            "$ref": "Content"
+          },
+          "parameterOrder": [
+            "scriptId"
+          ],
+          "description": "Gets the content of the script project, including the code source and metadata for each script file."
+        },
+        "getMetrics": {
+          "scopes": [
+            "https://www.googleapis.com/auth/script.metrics"
+          ],
+          "path": "v1/projects/{scriptId}/metrics",
+          "flatPath": "v1/projects/{scriptId}/metrics",
+          "description": "Get metrics data for scripts, such as number of executions and active users.",
+          "parameters": {
+            "scriptId": {
+              "required": true,
+              "description": "Required field indicating the script to get metrics for.",
+              "type": "string",
+              "location": "path"
             },
-            "update": {
-              "description": "Updates a deployment of an Apps Script project.",
-              "parameters": {
-                "scriptId": {
-                  "location": "path",
-                  "required": true,
-                  "description": "The script project's Drive ID.",
-                  "type": "string"
-                },
-                "deploymentId": {
-                  "type": "string",
-                  "description": "The deployment ID for this deployment.",
-                  "location": "path",
-                  "required": true
-                }
-              },
-              "flatPath": "v1/projects/{scriptId}/deployments/{deploymentId}",
-              "path": "v1/projects/{scriptId}/deployments/{deploymentId}",
-              "request": {
-                "$ref": "UpdateDeploymentRequest"
-              },
-              "response": {
-                "$ref": "Deployment"
-              },
-              "parameterOrder": [
-                "scriptId",
-                "deploymentId"
+            "metricsGranularity": {
+              "description": "Required field indicating what granularity of metrics are returned.",
+              "location": "query",
+              "type": "string",
+              "enumDescriptions": [
+                "Default metric granularity used to query no metrics.",
+                "Represents weekly metrics.",
+                "Represents daily metrics over a period of 7 days."
               ],
-              "httpMethod": "PUT",
-              "scopes": [
-                "https://www.googleapis.com/auth/script.deployments"
-              ],
-              "id": "script.projects.deployments.update"
-            },
-            "get": {
-              "httpMethod": "GET",
-              "response": {
-                "$ref": "Deployment"
-              },
-              "scopes": [
-                "https://www.googleapis.com/auth/script.deployments",
-                "https://www.googleapis.com/auth/script.deployments.readonly"
-              ],
-              "flatPath": "v1/projects/{scriptId}/deployments/{deploymentId}",
-              "parameters": {
-                "scriptId": {
-                  "location": "path",
-                  "required": true,
-                  "type": "string",
-                  "description": "The script project's Drive ID."
-                },
-                "deploymentId": {
-                  "description": "The deployment ID.",
-                  "type": "string",
-                  "location": "path",
-                  "required": true
-                }
-              },
-              "id": "script.projects.deployments.get",
-              "description": "Gets a deployment of an Apps Script project.",
-              "path": "v1/projects/{scriptId}/deployments/{deploymentId}",
-              "parameterOrder": [
-                "scriptId",
-                "deploymentId"
+              "enum": [
+                "UNSPECIFIED_GRANULARITY",
+                "WEEKLY",
+                "DAILY"
               ]
             },
-            "create": {
-              "parameterOrder": [
-                "scriptId"
-              ],
-              "id": "script.projects.deployments.create",
-              "scopes": [
-                "https://www.googleapis.com/auth/script.deployments"
-              ],
-              "flatPath": "v1/projects/{scriptId}/deployments",
-              "path": "v1/projects/{scriptId}/deployments",
-              "parameters": {
-                "scriptId": {
-                  "description": "The script project's Drive ID.",
-                  "location": "path",
-                  "required": true,
-                  "type": "string"
-                }
-              },
-              "response": {
-                "$ref": "Deployment"
-              },
-              "request": {
-                "$ref": "DeploymentConfig"
-              },
-              "httpMethod": "POST",
-              "description": "Creates a deployment of an Apps Script project."
+            "metricsFilter.deploymentId": {
+              "description": "Optional field indicating a specific deployment to retrieve metrics from.",
+              "type": "string",
+              "location": "query"
             }
+          },
+          "parameterOrder": [
+            "scriptId"
+          ],
+          "httpMethod": "GET",
+          "id": "script.projects.getMetrics",
+          "response": {
+            "$ref": "Metrics"
           }
         },
+        "updateContent": {
+          "httpMethod": "PUT",
+          "description": "Updates the content of the specified script project. This content is stored as the HEAD version, and is used when the script is executed as a trigger, in the script editor, in add-on preview mode, or as a web app or Apps Script API in development mode. This clears all the existing files in the project.",
+          "parameterOrder": [
+            "scriptId"
+          ],
+          "id": "script.projects.updateContent",
+          "flatPath": "v1/projects/{scriptId}/content",
+          "request": {
+            "$ref": "Content"
+          },
+          "path": "v1/projects/{scriptId}/content",
+          "scopes": [
+            "https://www.googleapis.com/auth/script.projects"
+          ],
+          "parameters": {
+            "scriptId": {
+              "required": true,
+              "description": "The script project's Drive ID.",
+              "location": "path",
+              "type": "string"
+            }
+          },
+          "response": {
+            "$ref": "Content"
+          }
+        },
+        "get": {
+          "httpMethod": "GET",
+          "flatPath": "v1/projects/{scriptId}",
+          "path": "v1/projects/{scriptId}",
+          "response": {
+            "$ref": "Project"
+          },
+          "parameters": {
+            "scriptId": {
+              "location": "path",
+              "description": "The script project's Drive ID.",
+              "required": true,
+              "type": "string"
+            }
+          },
+          "id": "script.projects.get",
+          "parameterOrder": [
+            "scriptId"
+          ],
+          "scopes": [
+            "https://www.googleapis.com/auth/script.projects",
+            "https://www.googleapis.com/auth/script.projects.readonly"
+          ],
+          "description": "Gets a script project's metadata."
+        },
+        "create": {
+          "parameters": {},
+          "path": "v1/projects",
+          "response": {
+            "$ref": "Project"
+          },
+          "description": "Creates a new, empty script project with no script files and a base manifest file.",
+          "parameterOrder": [],
+          "request": {
+            "$ref": "CreateProjectRequest"
+          },
+          "id": "script.projects.create",
+          "httpMethod": "POST",
+          "flatPath": "v1/projects",
+          "scopes": [
+            "https://www.googleapis.com/auth/script.projects"
+          ]
+        }
+      },
+      "resources": {
         "versions": {
           "methods": {
             "create": {
+              "id": "script.projects.versions.create",
+              "parameters": {
+                "scriptId": {
+                  "location": "path",
+                  "description": "The script project's Drive ID.",
+                  "required": true,
+                  "type": "string"
+                }
+              },
+              "parameterOrder": [
+                "scriptId"
+              ],
+              "path": "v1/projects/{scriptId}/versions",
+              "response": {
+                "$ref": "Version"
+              },
               "scopes": [
                 "https://www.googleapis.com/auth/script.projects"
               ],
               "request": {
                 "$ref": "Version"
               },
-              "id": "script.projects.versions.create",
-              "description": "Creates a new immutable version using the current code, with a unique version number.",
               "httpMethod": "POST",
+              "flatPath": "v1/projects/{scriptId}/versions",
+              "description": "Creates a new immutable version using the current code, with a unique version number."
+            },
+            "get": {
               "response": {
                 "$ref": "Version"
               },
-              "parameters": {
-                "scriptId": {
-                  "location": "path",
-                  "required": true,
-                  "description": "The script project's Drive ID.",
-                  "type": "string"
-                }
-              },
-              "path": "v1/projects/{scriptId}/versions",
-              "flatPath": "v1/projects/{scriptId}/versions",
-              "parameterOrder": [
-                "scriptId"
-              ]
-            },
-            "get": {
-              "httpMethod": "GET",
-              "description": "Gets a version of a script project.",
-              "path": "v1/projects/{scriptId}/versions/{versionNumber}",
-              "scopes": [
-                "https://www.googleapis.com/auth/script.projects",
-                "https://www.googleapis.com/auth/script.projects.readonly"
-              ],
-              "flatPath": "v1/projects/{scriptId}/versions/{versionNumber}",
               "parameterOrder": [
                 "scriptId",
                 "versionNumber"
               ],
+              "httpMethod": "GET",
+              "path": "v1/projects/{scriptId}/versions/{versionNumber}",
               "id": "script.projects.versions.get",
+              "scopes": [
+                "https://www.googleapis.com/auth/script.projects",
+                "https://www.googleapis.com/auth/script.projects.readonly"
+              ],
               "parameters": {
                 "scriptId": {
-                  "type": "string",
-                  "location": "path",
                   "required": true,
-                  "description": "The script project's Drive ID."
+                  "type": "string",
+                  "description": "The script project's Drive ID.",
+                  "location": "path"
                 },
                 "versionNumber": {
-                  "location": "path",
                   "required": true,
-                  "type": "integer",
                   "description": "The version number.",
-                  "format": "int32"
+                  "location": "path",
+                  "format": "int32",
+                  "type": "integer"
                 }
               },
-              "response": {
-                "$ref": "Version"
-              }
+              "description": "Gets a version of a script project.",
+              "flatPath": "v1/projects/{scriptId}/versions/{versionNumber}"
             },
             "list": {
-              "parameters": {
-                "scriptId": {
-                  "type": "string",
-                  "location": "path",
-                  "required": true,
-                  "description": "The script project's Drive ID."
-                },
-                "pageToken": {
-                  "type": "string",
-                  "description": "The token for continuing a previous list request on the next page. This should be set to the value of `nextPageToken` from a previous response.",
-                  "location": "query"
-                },
-                "pageSize": {
-                  "format": "int32",
-                  "location": "query",
-                  "type": "integer",
-                  "description": "The maximum number of versions on each returned page. Defaults to 50."
-                }
+              "response": {
+                "$ref": "ListVersionsResponse"
               },
               "httpMethod": "GET",
-              "flatPath": "v1/projects/{scriptId}/versions",
+              "id": "script.projects.versions.list",
               "scopes": [
                 "https://www.googleapis.com/auth/script.projects",
                 "https://www.googleapis.com/auth/script.projects.readonly"
               ],
               "path": "v1/projects/{scriptId}/versions",
-              "id": "script.projects.versions.list",
               "description": "List the versions of a script project.",
-              "response": {
-                "$ref": "ListVersionsResponse"
+              "parameters": {
+                "pageToken": {
+                  "description": "The token for continuing a previous list request on the next page. This should be set to the value of `nextPageToken` from a previous response.",
+                  "type": "string",
+                  "location": "query"
+                },
+                "scriptId": {
+                  "required": true,
+                  "type": "string",
+                  "location": "path",
+                  "description": "The script project's Drive ID."
+                },
+                "pageSize": {
+                  "description": "The maximum number of versions on each returned page. Defaults to 50.",
+                  "type": "integer",
+                  "location": "query",
+                  "format": "int32"
+                }
               },
+              "flatPath": "v1/projects/{scriptId}/versions",
               "parameterOrder": [
                 "scriptId"
               ]
             }
           }
-        }
-      },
-      "methods": {
-        "get": {
-          "id": "script.projects.get",
-          "flatPath": "v1/projects/{scriptId}",
-          "scopes": [
-            "https://www.googleapis.com/auth/script.projects",
-            "https://www.googleapis.com/auth/script.projects.readonly"
-          ],
-          "response": {
-            "$ref": "Project"
-          },
-          "httpMethod": "GET",
-          "description": "Gets a script project's metadata.",
-          "path": "v1/projects/{scriptId}",
-          "parameterOrder": [
-            "scriptId"
-          ],
-          "parameters": {
-            "scriptId": {
-              "description": "The script project's Drive ID.",
-              "type": "string",
-              "location": "path",
-              "required": true
-            }
-          }
         },
-        "getMetrics": {
-          "parameterOrder": [
-            "scriptId"
-          ],
-          "scopes": [
-            "https://www.googleapis.com/auth/script.metrics"
-          ],
-          "parameters": {
-            "metricsGranularity": {
-              "location": "query",
-              "description": "Required field indicating what granularity of metrics are returned.",
-              "type": "string",
-              "enum": [
-                "UNSPECIFIED_GRANULARITY",
-                "WEEKLY",
-                "DAILY"
+        "deployments": {
+          "methods": {
+            "update": {
+              "scopes": [
+                "https://www.googleapis.com/auth/script.deployments"
               ],
-              "enumDescriptions": [
-                "Default metric granularity used to query no metrics.",
-                "Represents weekly metrics.",
-                "Represents daily metrics over a period of 7 days."
+              "description": "Updates a deployment of an Apps Script project.",
+              "flatPath": "v1/projects/{scriptId}/deployments/{deploymentId}",
+              "parameterOrder": [
+                "scriptId",
+                "deploymentId"
+              ],
+              "id": "script.projects.deployments.update",
+              "parameters": {
+                "scriptId": {
+                  "required": true,
+                  "description": "The script project's Drive ID.",
+                  "type": "string",
+                  "location": "path"
+                },
+                "deploymentId": {
+                  "type": "string",
+                  "required": true,
+                  "description": "The deployment ID for this deployment.",
+                  "location": "path"
+                }
+              },
+              "path": "v1/projects/{scriptId}/deployments/{deploymentId}",
+              "response": {
+                "$ref": "Deployment"
+              },
+              "request": {
+                "$ref": "UpdateDeploymentRequest"
+              },
+              "httpMethod": "PUT"
+            },
+            "create": {
+              "id": "script.projects.deployments.create",
+              "request": {
+                "$ref": "DeploymentConfig"
+              },
+              "httpMethod": "POST",
+              "flatPath": "v1/projects/{scriptId}/deployments",
+              "path": "v1/projects/{scriptId}/deployments",
+              "parameters": {
+                "scriptId": {
+                  "required": true,
+                  "description": "The script project's Drive ID.",
+                  "location": "path",
+                  "type": "string"
+                }
+              },
+              "description": "Creates a deployment of an Apps Script project.",
+              "scopes": [
+                "https://www.googleapis.com/auth/script.deployments"
+              ],
+              "parameterOrder": [
+                "scriptId"
+              ],
+              "response": {
+                "$ref": "Deployment"
+              }
+            },
+            "delete": {
+              "flatPath": "v1/projects/{scriptId}/deployments/{deploymentId}",
+              "description": "Deletes a deployment of an Apps Script project.",
+              "parameterOrder": [
+                "scriptId",
+                "deploymentId"
+              ],
+              "parameters": {
+                "deploymentId": {
+                  "required": true,
+                  "description": "The deployment ID to be undeployed.",
+                  "location": "path",
+                  "type": "string"
+                },
+                "scriptId": {
+                  "description": "The script project's Drive ID.",
+                  "type": "string",
+                  "location": "path",
+                  "required": true
+                }
+              },
+              "path": "v1/projects/{scriptId}/deployments/{deploymentId}",
+              "id": "script.projects.deployments.delete",
+              "response": {
+                "$ref": "Empty"
+              },
+              "scopes": [
+                "https://www.googleapis.com/auth/script.deployments"
+              ],
+              "httpMethod": "DELETE"
+            },
+            "list": {
+              "httpMethod": "GET",
+              "id": "script.projects.deployments.list",
+              "description": "Lists the deployments of an Apps Script project.",
+              "flatPath": "v1/projects/{scriptId}/deployments",
+              "response": {
+                "$ref": "ListDeploymentsResponse"
+              },
+              "parameters": {
+                "scriptId": {
+                  "location": "path",
+                  "type": "string",
+                  "description": "The script project's Drive ID.",
+                  "required": true
+                },
+                "pageSize": {
+                  "description": "The maximum number of deployments on each returned page. Defaults to 50.",
+                  "location": "query",
+                  "format": "int32",
+                  "type": "integer"
+                },
+                "pageToken": {
+                  "location": "query",
+                  "type": "string",
+                  "description": "The token for continuing a previous list request on the next page. This should be set to the value of `nextPageToken` from a previous response."
+                }
+              },
+              "scopes": [
+                "https://www.googleapis.com/auth/script.deployments",
+                "https://www.googleapis.com/auth/script.deployments.readonly"
+              ],
+              "parameterOrder": [
+                "scriptId"
+              ],
+              "path": "v1/projects/{scriptId}/deployments"
+            },
+            "get": {
+              "flatPath": "v1/projects/{scriptId}/deployments/{deploymentId}",
+              "httpMethod": "GET",
+              "description": "Gets a deployment of an Apps Script project.",
+              "path": "v1/projects/{scriptId}/deployments/{deploymentId}",
+              "id": "script.projects.deployments.get",
+              "parameters": {
+                "deploymentId": {
+                  "type": "string",
+                  "required": true,
+                  "description": "The deployment ID.",
+                  "location": "path"
+                },
+                "scriptId": {
+                  "location": "path",
+                  "type": "string",
+                  "description": "The script project's Drive ID.",
+                  "required": true
+                }
+              },
+              "parameterOrder": [
+                "scriptId",
+                "deploymentId"
+              ],
+              "response": {
+                "$ref": "Deployment"
+              },
+              "scopes": [
+                "https://www.googleapis.com/auth/script.deployments",
+                "https://www.googleapis.com/auth/script.deployments.readonly"
               ]
-            },
-            "metricsFilter.deploymentId": {
-              "location": "query",
-              "description": "Optional field indicating a specific deployment to retrieve metrics from.",
-              "type": "string"
-            },
-            "scriptId": {
-              "type": "string",
-              "location": "path",
-              "required": true,
-              "description": "Required field indicating the script to get metrics for."
-            }
-          },
-          "path": "v1/projects/{scriptId}/metrics",
-          "httpMethod": "GET",
-          "response": {
-            "$ref": "Metrics"
-          },
-          "id": "script.projects.getMetrics",
-          "flatPath": "v1/projects/{scriptId}/metrics",
-          "description": "Get metrics data for scripts, such as number of executions and active users."
-        },
-        "updateContent": {
-          "parameterOrder": [
-            "scriptId"
-          ],
-          "httpMethod": "PUT",
-          "scopes": [
-            "https://www.googleapis.com/auth/script.projects"
-          ],
-          "request": {
-            "$ref": "Content"
-          },
-          "path": "v1/projects/{scriptId}/content",
-          "response": {
-            "$ref": "Content"
-          },
-          "id": "script.projects.updateContent",
-          "flatPath": "v1/projects/{scriptId}/content",
-          "description": "Updates the content of the specified script project. This content is stored as the HEAD version, and is used when the script is executed as a trigger, in the script editor, in add-on preview mode, or as a web app or Apps Script API in development mode. This clears all the existing files in the project.",
-          "parameters": {
-            "scriptId": {
-              "type": "string",
-              "description": "The script project's Drive ID.",
-              "location": "path",
-              "required": true
             }
           }
-        },
-        "create": {
-          "flatPath": "v1/projects",
-          "parameterOrder": [],
-          "id": "script.projects.create",
-          "request": {
-            "$ref": "CreateProjectRequest"
-          },
-          "response": {
-            "$ref": "Project"
-          },
-          "scopes": [
-            "https://www.googleapis.com/auth/script.projects"
-          ],
-          "httpMethod": "POST",
-          "path": "v1/projects",
-          "description": "Creates a new, empty script project with no script files and a base manifest file.",
-          "parameters": {}
-        },
-        "getContent": {
-          "parameters": {
-            "scriptId": {
-              "description": "The script project's Drive ID.",
-              "location": "path",
-              "required": true,
-              "type": "string"
-            },
-            "versionNumber": {
-              "description": "The version number of the project to retrieve. If not provided, the project's HEAD version is returned.",
-              "type": "integer",
-              "location": "query",
-              "format": "int32"
-            }
-          },
-          "path": "v1/projects/{scriptId}/content",
-          "scopes": [
-            "https://www.googleapis.com/auth/script.projects",
-            "https://www.googleapis.com/auth/script.projects.readonly"
-          ],
-          "description": "Gets the content of the script project, including the code source and metadata for each script file.",
-          "httpMethod": "GET",
-          "response": {
-            "$ref": "Content"
-          },
-          "parameterOrder": [
-            "scriptId"
-          ],
-          "id": "script.projects.getContent",
-          "flatPath": "v1/projects/{scriptId}/content"
         }
       }
     },
     "scripts": {
       "methods": {
         "run": {
-          "request": {
-            "$ref": "ExecutionRequest"
+          "response": {
+            "$ref": "Operation"
+          },
+          "parameters": {
+            "scriptId": {
+              "location": "path",
+              "type": "string",
+              "required": true,
+              "description": "The script ID of the script to be executed. Find the script ID on the **Project settings** page under \"IDs.\" As multiple executable APIs can be deployed in new IDE for same script, this field should be populated with DeploymentID generated while deploying in new IDE instead of script ID."
+            }
           },
           "description": "",
           "parameterOrder": [
             "scriptId"
           ],
-          "parameters": {
-            "scriptId": {
-              "type": "string",
-              "location": "path",
-              "required": true,
-              "description": "The script ID of the script to be executed. Find the script ID on the **Project settings** page under \"IDs.\" As multiple executable APIs can be deployed in new IDE for same script, this field should be populated with DeploymentID generated while deploying in new IDE instead of script ID."
-            }
+          "request": {
+            "$ref": "ExecutionRequest"
           },
+          "httpMethod": "POST",
           "scopes": [
             "https://mail.google.com/",
             "https://www.google.com/calendar/feeds",
@@ -460,32 +452,44 @@
             "https://www.googleapis.com/auth/spreadsheets",
             "https://www.googleapis.com/auth/userinfo.email"
           ],
-          "response": {
-            "$ref": "Operation"
-          },
-          "flatPath": "v1/scripts/{scriptId}:run",
-          "httpMethod": "POST",
           "id": "script.scripts.run",
-          "path": "v1/scripts/{scriptId}:run"
+          "path": "v1/scripts/{scriptId}:run",
+          "flatPath": "v1/scripts/{scriptId}:run"
         }
       }
     },
     "processes": {
       "methods": {
-        "list": {
-          "scopes": [
-            "https://www.googleapis.com/auth/script.processes"
-          ],
-          "httpMethod": "GET",
-          "path": "v1/processes",
-          "flatPath": "v1/processes",
-          "description": "List information about processes made by or on behalf of a user, such as process type and current status.",
+        "listScriptProcesses": {
+          "path": "v1/processes:listScriptProcesses",
+          "id": "script.processes.listScriptProcesses",
+          "response": {
+            "$ref": "ListScriptProcessesResponse"
+          },
+          "description": "List information about a script's executed processes, such as process type and current status.",
           "parameterOrder": [],
-          "id": "script.processes.list",
           "parameters": {
-            "userProcessFilter.types": {
-              "location": "query",
+            "scriptProcessFilter.userAccessLevels": {
+              "type": "string",
+              "enumDescriptions": [
+                "User access level unspecified",
+                "The user has no access.",
+                "The user has read-only access.",
+                "The user has write access.",
+                "The user is an owner."
+              ],
               "repeated": true,
+              "enum": [
+                "USER_ACCESS_LEVEL_UNSPECIFIED",
+                "NONE",
+                "READ",
+                "WRITE",
+                "OWNER"
+              ],
+              "location": "query",
+              "description": "Optional field used to limit returned processes to those having one of the specified user access levels."
+            },
+            "scriptProcessFilter.types": {
               "enumDescriptions": [
                 "Unspecified type.",
                 "The process was started from an add-on entry point.",
@@ -499,6 +503,9 @@
                 "The process was started as a task in a batch job."
               ],
               "type": "string",
+              "repeated": true,
+              "description": "Optional field used to limit returned processes to those having one of the specified process types.",
+              "location": "query",
               "enum": [
                 "PROCESS_TYPE_UNSPECIFIED",
                 "ADD_ON",
@@ -510,28 +517,160 @@
                 "SIMPLE_TRIGGER",
                 "MENU",
                 "BATCH_TASK"
+              ]
+            },
+            "scriptId": {
+              "location": "query",
+              "description": "The script ID of the project whose processes are listed.",
+              "type": "string"
+            },
+            "pageToken": {
+              "description": "The token for continuing a previous list request on the next page. This should be set to the value of `nextPageToken` from a previous response.",
+              "location": "query",
+              "type": "string"
+            },
+            "pageSize": {
+              "type": "integer",
+              "location": "query",
+              "description": "The maximum number of returned processes per page of results. Defaults to 50.",
+              "format": "int32"
+            },
+            "scriptProcessFilter.statuses": {
+              "location": "query",
+              "type": "string",
+              "enumDescriptions": [
+                "Unspecified status.",
+                "The process is currently running.",
+                "The process has paused.",
+                "The process has completed.",
+                "The process was cancelled.",
+                "The process failed.",
+                "The process timed out.",
+                "Process status unknown.",
+                "The process is delayed, waiting for quota.",
+                "AppsScript executions are disabled by Admin."
               ],
-              "description": "Optional field used to limit returned processes to those having one of the specified process types."
+              "description": "Optional field used to limit returned processes to those having one of the specified process statuses.",
+              "repeated": true,
+              "enum": [
+                "PROCESS_STATUS_UNSPECIFIED",
+                "RUNNING",
+                "PAUSED",
+                "COMPLETED",
+                "CANCELED",
+                "FAILED",
+                "TIMED_OUT",
+                "UNKNOWN",
+                "DELAYED",
+                "EXECUTION_DISABLED"
+              ]
+            },
+            "scriptProcessFilter.deploymentId": {
+              "description": "Optional field used to limit returned processes to those originating from projects with a specific deployment ID.",
+              "type": "string",
+              "location": "query"
+            },
+            "scriptProcessFilter.functionName": {
+              "description": "Optional field used to limit returned processes to those originating from a script function with the given function name.",
+              "type": "string",
+              "location": "query"
+            },
+            "scriptProcessFilter.endTime": {
+              "location": "query",
+              "description": "Optional field used to limit returned processes to those that completed on or before the given timestamp.",
+              "type": "string",
+              "format": "google-datetime"
+            },
+            "scriptProcessFilter.startTime": {
+              "description": "Optional field used to limit returned processes to those that were started on or after the given timestamp.",
+              "format": "google-datetime",
+              "location": "query",
+              "type": "string"
+            }
+          },
+          "flatPath": "v1/processes:listScriptProcesses",
+          "httpMethod": "GET",
+          "scopes": [
+            "https://www.googleapis.com/auth/script.processes"
+          ]
+        },
+        "list": {
+          "description": "List information about processes made by or on behalf of a user, such as process type and current status.",
+          "httpMethod": "GET",
+          "flatPath": "v1/processes",
+          "parameterOrder": [],
+          "id": "script.processes.list",
+          "path": "v1/processes",
+          "parameters": {
+            "userProcessFilter.endTime": {
+              "type": "string",
+              "location": "query",
+              "description": "Optional field used to limit returned processes to those that completed on or before the given timestamp.",
+              "format": "google-datetime"
+            },
+            "userProcessFilter.startTime": {
+              "description": "Optional field used to limit returned processes to those that were started on or after the given timestamp.",
+              "location": "query",
+              "type": "string",
+              "format": "google-datetime"
+            },
+            "userProcessFilter.statuses": {
+              "description": "Optional field used to limit returned processes to those having one of the specified process statuses.",
+              "type": "string",
+              "repeated": true,
+              "location": "query",
+              "enum": [
+                "PROCESS_STATUS_UNSPECIFIED",
+                "RUNNING",
+                "PAUSED",
+                "COMPLETED",
+                "CANCELED",
+                "FAILED",
+                "TIMED_OUT",
+                "UNKNOWN",
+                "DELAYED",
+                "EXECUTION_DISABLED"
+              ],
+              "enumDescriptions": [
+                "Unspecified status.",
+                "The process is currently running.",
+                "The process has paused.",
+                "The process has completed.",
+                "The process was cancelled.",
+                "The process failed.",
+                "The process timed out.",
+                "Process status unknown.",
+                "The process is delayed, waiting for quota.",
+                "AppsScript executions are disabled by Admin."
+              ]
             },
             "userProcessFilter.projectName": {
               "description": "Optional field used to limit returned processes to those originating from projects with project names containing a specific string.",
               "location": "query",
               "type": "string"
             },
-            "pageSize": {
-              "description": "The maximum number of returned processes per page of results. Defaults to 50.",
-              "type": "integer",
-              "format": "int32",
-              "location": "query"
-            },
-            "userProcessFilter.startTime": {
+            "pageToken": {
               "location": "query",
-              "description": "Optional field used to limit returned processes to those that were started on or after the given timestamp.",
               "type": "string",
-              "format": "google-datetime"
+              "description": "The token for continuing a previous list request on the next page. This should be set to the value of `nextPageToken` from a previous response."
             },
-            "userProcessFilter.deploymentId": {
-              "description": "Optional field used to limit returned processes to those originating from projects with a specific deployment ID.",
+            "userProcessFilter.userAccessLevels": {
+              "enumDescriptions": [
+                "User access level unspecified",
+                "The user has no access.",
+                "The user has read-only access.",
+                "The user has write access.",
+                "The user is an owner."
+              ],
+              "enum": [
+                "USER_ACCESS_LEVEL_UNSPECIFIED",
+                "NONE",
+                "READ",
+                "WRITE",
+                "OWNER"
+              ],
+              "repeated": true,
+              "description": "Optional field used to limit returned processes to those having one of the specified user access levels.",
               "location": "query",
               "type": "string"
             },
@@ -540,157 +679,25 @@
               "description": "Optional field used to limit returned processes to those originating from projects with a specific script ID.",
               "location": "query"
             },
-            "userProcessFilter.userAccessLevels": {
-              "description": "Optional field used to limit returned processes to those having one of the specified user access levels.",
-              "type": "string",
-              "enum": [
-                "USER_ACCESS_LEVEL_UNSPECIFIED",
-                "NONE",
-                "READ",
-                "WRITE",
-                "OWNER"
-              ],
+            "userProcessFilter.deploymentId": {
               "location": "query",
-              "repeated": true,
-              "enumDescriptions": [
-                "User access level unspecified",
-                "The user has no access.",
-                "The user has read-only access.",
-                "The user has write access.",
-                "The user is an owner."
-              ]
-            },
-            "pageToken": {
-              "location": "query",
-              "type": "string",
-              "description": "The token for continuing a previous list request on the next page. This should be set to the value of `nextPageToken` from a previous response."
-            },
-            "userProcessFilter.functionName": {
-              "type": "string",
-              "location": "query",
-              "description": "Optional field used to limit returned processes to those originating from a script function with the given function name."
-            },
-            "userProcessFilter.endTime": {
-              "type": "string",
-              "location": "query",
-              "description": "Optional field used to limit returned processes to those that completed on or before the given timestamp.",
-              "format": "google-datetime"
-            },
-            "userProcessFilter.statuses": {
-              "description": "Optional field used to limit returned processes to those having one of the specified process statuses.",
-              "enumDescriptions": [
-                "Unspecified status.",
-                "The process is currently running.",
-                "The process has paused.",
-                "The process has completed.",
-                "The process was cancelled.",
-                "The process failed.",
-                "The process timed out.",
-                "Process status unknown.",
-                "The process is delayed, waiting for quota.",
-                "AppsScript executions are disabled by Admin."
-              ],
-              "location": "query",
-              "type": "string",
-              "enum": [
-                "PROCESS_STATUS_UNSPECIFIED",
-                "RUNNING",
-                "PAUSED",
-                "COMPLETED",
-                "CANCELED",
-                "FAILED",
-                "TIMED_OUT",
-                "UNKNOWN",
-                "DELAYED",
-                "EXECUTION_DISABLED"
-              ],
-              "repeated": true
-            }
-          },
-          "response": {
-            "$ref": "ListUserProcessesResponse"
-          }
-        },
-        "listScriptProcesses": {
-          "httpMethod": "GET",
-          "description": "List information about a script's executed processes, such as process type and current status.",
-          "flatPath": "v1/processes:listScriptProcesses",
-          "response": {
-            "$ref": "ListScriptProcessesResponse"
-          },
-          "path": "v1/processes:listScriptProcesses",
-          "scopes": [
-            "https://www.googleapis.com/auth/script.processes"
-          ],
-          "parameters": {
-            "scriptId": {
-              "location": "query",
-              "type": "string",
-              "description": "The script ID of the project whose processes are listed."
-            },
-            "pageToken": {
-              "description": "The token for continuing a previous list request on the next page. This should be set to the value of `nextPageToken` from a previous response.",
-              "type": "string",
-              "location": "query"
-            },
-            "scriptProcessFilter.endTime": {
-              "description": "Optional field used to limit returned processes to those that completed on or before the given timestamp.",
-              "location": "query",
-              "format": "google-datetime",
+              "description": "Optional field used to limit returned processes to those originating from projects with a specific deployment ID.",
               "type": "string"
             },
-            "scriptProcessFilter.statuses": {
-              "enumDescriptions": [
-                "Unspecified status.",
-                "The process is currently running.",
-                "The process has paused.",
-                "The process has completed.",
-                "The process was cancelled.",
-                "The process failed.",
-                "The process timed out.",
-                "Process status unknown.",
-                "The process is delayed, waiting for quota.",
-                "AppsScript executions are disabled by Admin."
-              ],
-              "repeated": true,
-              "description": "Optional field used to limit returned processes to those having one of the specified process statuses.",
+            "pageSize": {
+              "format": "int32",
+              "type": "integer",
+              "location": "query",
+              "description": "The maximum number of returned processes per page of results. Defaults to 50."
+            },
+            "userProcessFilter.functionName": {
               "location": "query",
               "type": "string",
-              "enum": [
-                "PROCESS_STATUS_UNSPECIFIED",
-                "RUNNING",
-                "PAUSED",
-                "COMPLETED",
-                "CANCELED",
-                "FAILED",
-                "TIMED_OUT",
-                "UNKNOWN",
-                "DELAYED",
-                "EXECUTION_DISABLED"
-              ]
+              "description": "Optional field used to limit returned processes to those originating from a script function with the given function name."
             },
-            "scriptProcessFilter.userAccessLevels": {
-              "location": "query",
+            "userProcessFilter.types": {
               "type": "string",
-              "enum": [
-                "USER_ACCESS_LEVEL_UNSPECIFIED",
-                "NONE",
-                "READ",
-                "WRITE",
-                "OWNER"
-              ],
-              "repeated": true,
-              "enumDescriptions": [
-                "User access level unspecified",
-                "The user has no access.",
-                "The user has read-only access.",
-                "The user has write access.",
-                "The user is an owner."
-              ],
-              "description": "Optional field used to limit returned processes to those having one of the specified user access levels."
-            },
-            "scriptProcessFilter.types": {
-              "description": "Optional field used to limit returned processes to those having one of the specified process types.",
+              "location": "query",
               "enumDescriptions": [
                 "Unspecified type.",
                 "The process was started from an add-on entry point.",
@@ -703,7 +710,6 @@
                 "The process was started from a G Suite menu item.",
                 "The process was started as a task in a batch job."
               ],
-              "type": "string",
               "enum": [
                 "PROCESS_TYPE_UNSPECIFIED",
                 "ADD_ON",
@@ -716,212 +722,561 @@
                 "MENU",
                 "BATCH_TASK"
               ],
-              "location": "query",
+              "description": "Optional field used to limit returned processes to those having one of the specified process types.",
               "repeated": true
-            },
-            "scriptProcessFilter.functionName": {
-              "location": "query",
-              "description": "Optional field used to limit returned processes to those originating from a script function with the given function name.",
-              "type": "string"
-            },
-            "scriptProcessFilter.startTime": {
-              "description": "Optional field used to limit returned processes to those that were started on or after the given timestamp.",
-              "location": "query",
-              "type": "string",
-              "format": "google-datetime"
-            },
-            "scriptProcessFilter.deploymentId": {
-              "description": "Optional field used to limit returned processes to those originating from projects with a specific deployment ID.",
-              "type": "string",
-              "location": "query"
-            },
-            "pageSize": {
-              "location": "query",
-              "description": "The maximum number of returned processes per page of results. Defaults to 50.",
-              "format": "int32",
-              "type": "integer"
             }
           },
-          "id": "script.processes.listScriptProcesses",
-          "parameterOrder": []
+          "scopes": [
+            "https://www.googleapis.com/auth/script.processes"
+          ],
+          "response": {
+            "$ref": "ListUserProcessesResponse"
+          }
         }
       }
     }
   },
-  "protocol": "rest",
-  "baseUrl": "https://script.googleapis.com/",
+  "mtlsRootUrl": "https://script.mtls.googleapis.com/",
+  "revision": "20261106",
+  "discoveryVersion": "v1",
+  "documentationLink": "https://developers.google.com/apps-script/api/",
+  "fullyEncodeReservedExpansion": true,
   "description": "Manages and executes Google Apps Script projects. ",
   "auth": {
     "oauth2": {
       "scopes": {
-        "https://www.googleapis.com/auth/forms.currentonly": {
-          "description": "View and manage forms that this application has been installed in"
-        },
-        "https://mail.google.com/": {
-          "description": "Read, compose, send, and permanently delete all your email from Gmail"
-        },
-        "https://www.googleapis.com/auth/documents": {
-          "description": "See, edit, create, and delete all your Google Docs documents"
-        },
-        "https://www.google.com/m8/feeds": {
-          "description": "See, edit, download, and permanently delete your contacts"
-        },
-        "https://www.google.com/calendar/feeds": {
-          "description": "See, edit, share, and permanently delete all the calendars you can access using Google Calendar"
-        },
-        "https://www.googleapis.com/auth/script.deployments.readonly": {
-          "description": "View Google Apps Script deployments"
-        },
-        "https://www.googleapis.com/auth/admin.directory.group": {
-          "description": "View and manage the provisioning of groups on your domain"
-        },
         "https://www.googleapis.com/auth/userinfo.email": {
           "description": "See your primary Google Account email address"
-        },
-        "https://www.googleapis.com/auth/script.projects": {
-          "description": "Create and update Google Apps Script projects"
-        },
-        "https://www.googleapis.com/auth/drive": {
-          "description": "See, edit, create, and delete all of your Google Drive files"
         },
         "https://www.googleapis.com/auth/admin.directory.user": {
           "description": "View and manage the provisioning of users on your domain"
         },
-        "https://www.googleapis.com/auth/script.processes": {
-          "description": "View Google Apps Script processes"
+        "https://www.googleapis.com/auth/script.deployments": {
+          "description": "Create and update Google Apps Script deployments"
+        },
+        "https://www.googleapis.com/auth/groups": {
+          "description": "View and manage your Google Groups"
         },
         "https://www.googleapis.com/auth/script.metrics": {
           "description": "View Google Apps Script project's metrics"
         },
-        "https://www.googleapis.com/auth/script.deployments": {
-          "description": "Create and update Google Apps Script deployments"
+        "https://www.googleapis.com/auth/forms.currentonly": {
+          "description": "View and manage forms that this application has been installed in"
+        },
+        "https://www.googleapis.com/auth/script.processes": {
+          "description": "View Google Apps Script processes"
         },
         "https://www.googleapis.com/auth/forms": {
           "description": "View and manage your forms in Google Drive"
         },
+        "https://www.googleapis.com/auth/admin.directory.group": {
+          "description": "View and manage the provisioning of groups on your domain"
+        },
+        "https://www.google.com/m8/feeds": {
+          "description": "See, edit, download, and permanently delete your contacts"
+        },
         "https://www.googleapis.com/auth/script.projects.readonly": {
           "description": "View Google Apps Script projects"
+        },
+        "https://www.googleapis.com/auth/drive": {
+          "description": "See, edit, create, and delete all of your Google Drive files"
         },
         "https://www.googleapis.com/auth/spreadsheets": {
           "description": "See, edit, create, and delete all your Google Sheets spreadsheets"
         },
-        "https://www.googleapis.com/auth/groups": {
-          "description": "View and manage your Google Groups"
+        "https://www.googleapis.com/auth/documents": {
+          "description": "See, edit, create, and delete all your Google Docs documents"
+        },
+        "https://mail.google.com/": {
+          "description": "Read, compose, send, and permanently delete all your email from Gmail"
+        },
+        "https://www.googleapis.com/auth/script.deployments.readonly": {
+          "description": "View Google Apps Script deployments"
+        },
+        "https://www.googleapis.com/auth/script.projects": {
+          "description": "Create and update Google Apps Script projects"
+        },
+        "https://www.google.com/calendar/feeds": {
+          "description": "See, edit, share, and permanently delete all the calendars you can access using Google Calendar"
         }
       }
     }
   },
+  "ownerName": "Google",
+  "icons": {
+    "x16": "http://www.google.com/images/icons/product/search-16.gif",
+    "x32": "http://www.google.com/images/icons/product/search-32.gif"
+  },
+  "version": "v1",
+  "rootUrl": "https://script.googleapis.com/",
+  "baseUrl": "https://script.googleapis.com/",
+  "ownerDomain": "google.com",
+  "batchPath": "batch",
   "parameters": {
-    "callback": {
-      "description": "JSONP",
-      "location": "query",
-      "type": "string"
+    "upload_protocol": {
+      "description": "Upload protocol for media (e.g. \"raw\", \"multipart\").",
+      "type": "string",
+      "location": "query"
     },
     "uploadType": {
+      "type": "string",
       "location": "query",
-      "description": "Legacy upload protocol for media (e.g. \"media\", \"multipart\").",
-      "type": "string"
+      "description": "Legacy upload protocol for media (e.g. \"media\", \"multipart\")."
+    },
+    "quotaUser": {
+      "type": "string",
+      "description": "Available to use for quota purposes for server-side applications. Can be any arbitrary string assigned to a user, but should not exceed 40 characters.",
+      "location": "query"
     },
     "$.xgafv": {
-      "enumDescriptions": [
-        "v1 error format",
-        "v2 error format"
-      ],
       "type": "string",
       "enum": [
         "1",
         "2"
       ],
-      "location": "query",
-      "description": "V1 error format."
-    },
-    "oauth_token": {
-      "location": "query",
-      "description": "OAuth 2.0 token for the current user.",
-      "type": "string"
-    },
-    "quotaUser": {
-      "description": "Available to use for quota purposes for server-side applications. Can be any arbitrary string assigned to a user, but should not exceed 40 characters.",
-      "location": "query",
-      "type": "string"
+      "enumDescriptions": [
+        "v1 error format",
+        "v2 error format"
+      ],
+      "description": "V1 error format.",
+      "location": "query"
     },
     "alt": {
-      "location": "query",
       "type": "string",
-      "enum": [
-        "json",
-        "media",
-        "proto"
-      ],
       "enumDescriptions": [
         "Responses with Content-Type of application/json",
         "Media download with context-dependent Content-Type",
         "Responses with Content-Type of application/x-protobuf"
       ],
-      "default": "json",
-      "description": "Data format for response."
+      "enum": [
+        "json",
+        "media",
+        "proto"
+      ],
+      "location": "query",
+      "description": "Data format for response.",
+      "default": "json"
+    },
+    "oauth_token": {
+      "description": "OAuth 2.0 token for the current user.",
+      "location": "query",
+      "type": "string"
     },
     "key": {
-      "type": "string",
       "location": "query",
+      "type": "string",
       "description": "API key. Your API key identifies your project and provides you with API access, quota, and reports. Required unless you provide an OAuth 2.0 token."
+    },
+    "access_token": {
+      "location": "query",
+      "description": "OAuth access token.",
+      "type": "string"
     },
     "prettyPrint": {
       "default": "true",
+      "location": "query",
       "type": "boolean",
-      "description": "Returns response with indentations and line breaks.",
-      "location": "query"
+      "description": "Returns response with indentations and line breaks."
     },
-    "upload_protocol": {
-      "type": "string",
-      "description": "Upload protocol for media (e.g. \"raw\", \"multipart\").",
-      "location": "query"
-    },
-    "access_token": {
-      "description": "OAuth access token.",
+    "callback": {
+      "description": "JSONP",
       "type": "string",
       "location": "query"
     },
     "fields": {
       "type": "string",
-      "location": "query",
-      "description": "Selector specifying which fields to include in a partial response."
+      "description": "Selector specifying which fields to include in a partial response.",
+      "location": "query"
     }
   },
-  "version": "v1",
+  "protocol": "rest",
   "servicePath": "",
-  "revision": "20261026",
+  "title": "Apps Script API",
+  "name": "script",
   "schemas": {
-    "ExecutionRequest": {
-      "description": "A request to run the function in a script. The script is identified by the specified `script_id`. Executing a function on a script returns results based on the implementation of the script.",
-      "id": "ExecutionRequest",
+    "ListUserProcessesResponse": {
+      "description": "Response with the list of Process resources.",
+      "id": "ListUserProcessesResponse",
+      "type": "object",
       "properties": {
-        "devMode": {
-          "description": "If `true` and the user is an owner of the script, the script runs at the most recently saved version rather than the version deployed for use with the Apps Script API. Optional; default is `false`.",
-          "type": "boolean"
-        },
-        "parameters": {
+        "processes": {
+          "type": "array",
           "items": {
-            "type": "any"
+            "$ref": "GoogleAppsScriptTypeProcess"
           },
-          "description": "The parameters to be passed to the function being executed. The object type for each parameter should match the expected type in Apps Script. Parameters cannot be Apps Script-specific object types (such as a `Document` or a `Calendar`); they can only be primitive types such as `string`, `number`, `array`, `object`, or `boolean`. Optional.",
-          "type": "array"
+          "description": "List of processes matching request parameters."
         },
-        "sessionState": {
-          "description": "*Deprecated*. For use with Android add-ons only. An ID that represents the user's current session in the Android app for Google Docs or Sheets, included as extra data in the [Intent](https://developer.android.com/guide/components/intents-filters.html) that launches the add-on. When an Android add-on is run with a session state, it gains the privileges of a [bound](https://developers.google.com/apps-script/guides/bound) script—that is, it can access information like the user's current cursor position (in Docs) or selected cell (in Sheets). To retrieve the state, call `Intent.getStringExtra(\"com.google.android.apps.docs.addons.SessionState\")`. Optional.",
-          "type": "string"
-        },
-        "function": {
-          "description": "The name of the function to execute in the given script. The name does not include parentheses or parameters. It can reference a function in an included library such as `Library.libFunction1`.",
+        "nextPageToken": {
+          "description": "Token for the next page of results. If empty, there are no more pages remaining.",
           "type": "string"
         }
+      }
+    },
+    "GoogleAppsScriptTypeFunction": {
+      "type": "object",
+      "description": "Represents a function in a script project.",
+      "properties": {
+        "name": {
+          "description": "The function name in the script project.",
+          "type": "string"
+        },
+        "parameters": {
+          "description": "The ordered list of parameter names of the function in the script project.",
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
       },
+      "id": "GoogleAppsScriptTypeFunction"
+    },
+    "GoogleAppsScriptTypeWebAppEntryPoint": {
+      "description": "A web application entry point.",
+      "type": "object",
+      "id": "GoogleAppsScriptTypeWebAppEntryPoint",
+      "properties": {
+        "entryPointConfig": {
+          "$ref": "GoogleAppsScriptTypeWebAppConfig",
+          "description": "The entry point's configuration."
+        },
+        "url": {
+          "description": "The URL for the web application.",
+          "type": "string"
+        }
+      }
+    },
+    "Operation": {
+      "description": "A representation of an execution of an Apps Script function started with run. The execution response does not arrive until the function finishes executing. The maximum execution runtime is listed in the [Apps Script quotas guide](/apps-script/guides/services/quotas#current_limitations). After execution has started, it can have one of four outcomes: - If the script function returns successfully, the response field contains an ExecutionResponse object with the function's return value in the object's `result` field. - If the script function (or Apps Script itself) throws an exception, the error field contains a Status object. The `Status` object's `details` field contains an array with a single ExecutionError object that provides information about the nature of the error. - If the execution has not yet completed, the done field is `false` and the neither the `response` nor `error` fields are present. - If the `run` call itself fails (for example, because of a malformed request or an authorization error), the method returns an HTTP response code in the 4XX range with a different format for the response body. Client libraries automatically convert a 4XX response into an exception class. ",
+      "properties": {
+        "done": {
+          "description": "This field indicates whether the script execution has completed. A completed execution has a populated `response` field containing the ExecutionResponse from function that was executed.",
+          "type": "boolean"
+        },
+        "error": {
+          "$ref": "Status",
+          "description": "If a `run` call succeeds but the script function (or Apps Script itself) throws an exception, this field contains a Status object. The `Status` object's `details` field contains an array with a single ExecutionError object that provides information about the nature of the error."
+        },
+        "response": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "any",
+            "description": "Properties of the object. Contains field @type with type URL."
+          },
+          "description": "If the script function returns successfully, this field contains an ExecutionResponse object with the function's return value."
+        }
+      },
+      "id": "Operation",
       "type": "object"
+    },
+    "ListDeploymentsResponse": {
+      "properties": {
+        "nextPageToken": {
+          "description": "The token that can be used in the next call to get the next page of results.",
+          "type": "string"
+        },
+        "deployments": {
+          "items": {
+            "$ref": "Deployment"
+          },
+          "description": "The list of deployments.",
+          "type": "array"
+        }
+      },
+      "type": "object",
+      "id": "ListDeploymentsResponse",
+      "description": "Response with the list of deployments for the specified Apps Script project."
+    },
+    "Deployment": {
+      "id": "Deployment",
+      "properties": {
+        "deploymentId": {
+          "description": "The deployment ID for this deployment.",
+          "type": "string"
+        },
+        "deploymentConfig": {
+          "$ref": "DeploymentConfig",
+          "description": "The deployment configuration."
+        },
+        "entryPoints": {
+          "items": {
+            "$ref": "EntryPoint"
+          },
+          "description": "The deployment's entry points.",
+          "type": "array"
+        },
+        "updateTime": {
+          "type": "string",
+          "description": "Last modified date time stamp.",
+          "format": "google-datetime"
+        }
+      },
+      "description": "Representation of a single script deployment.",
+      "type": "object"
+    },
+    "ExecutionError": {
+      "type": "object",
+      "id": "ExecutionError",
+      "description": "An object that provides information about the nature of an error resulting from an attempted execution of a script function using the Apps Script API. If a run call succeeds but the script function (or Apps Script itself) throws an exception, the response body's error field contains a Status object. The `Status` object's `details` field contains an array with a single one of these `ExecutionError` objects.",
+      "properties": {
+        "errorType": {
+          "type": "string",
+          "description": "The error type, for example `TypeError` or `ReferenceError`. If the error type is unavailable, this field is not included."
+        },
+        "errorMessage": {
+          "type": "string",
+          "description": "The error message thrown by Apps Script, usually localized into the user's language."
+        },
+        "scriptStackTraceElements": {
+          "type": "array",
+          "items": {
+            "$ref": "ScriptStackTraceElement"
+          },
+          "description": "An array of objects that provide a stack trace through the script to show where the execution failed, with the deepest call first."
+        }
+      }
+    },
+    "DeploymentConfig": {
+      "id": "DeploymentConfig",
+      "type": "object",
+      "description": "Metadata the defines how a deployment is configured.",
+      "properties": {
+        "scriptId": {
+          "description": "The script project's Drive ID.",
+          "type": "string"
+        },
+        "versionNumber": {
+          "type": "integer",
+          "description": "The version number on which this deployment is based.",
+          "format": "int32"
+        },
+        "manifestFileName": {
+          "type": "string",
+          "description": "The manifest file name for this deployment."
+        },
+        "description": {
+          "description": "The description for this deployment.",
+          "type": "string"
+        }
+      }
+    },
+    "Status": {
+      "properties": {
+        "message": {
+          "description": "A developer-facing error message, which is in English. Any user-facing error message is localized and sent in the details field, or localized by the client.",
+          "type": "string"
+        },
+        "code": {
+          "format": "int32",
+          "description": "The status code. For this API, this value either: - 10, indicating a `SCRIPT_TIMEOUT` error, - 3, indicating an `INVALID_ARGUMENT` error, or - 1, indicating a `CANCELLED` execution. ",
+          "type": "integer"
+        },
+        "details": {
+          "items": {
+            "additionalProperties": {
+              "type": "any",
+              "description": "Properties of the object. Contains field @type with type URL."
+            },
+            "type": "object"
+          },
+          "description": "An array that contains a single ExecutionError object that provides information about the nature of the error.",
+          "type": "array"
+        }
+      },
+      "id": "Status",
+      "type": "object",
+      "description": "If a `run` call succeeds but the script function (or Apps Script itself) throws an exception, the response body's error field contains this `Status` object."
+    },
+    "Project": {
+      "type": "object",
+      "properties": {
+        "updateTime": {
+          "type": "string",
+          "format": "google-datetime",
+          "description": "When the script was last updated."
+        },
+        "createTime": {
+          "format": "google-datetime",
+          "type": "string",
+          "description": "When the script was created."
+        },
+        "title": {
+          "type": "string",
+          "description": "The title for the project."
+        },
+        "parentId": {
+          "description": "The parent's Drive ID that the script will be attached to. This is usually the ID of a Google Document or Google Sheet. This field is optional, and if not set, a stand-alone script will be created.",
+          "type": "string"
+        },
+        "creator": {
+          "$ref": "GoogleAppsScriptTypeUser",
+          "description": "User who originally created the script."
+        },
+        "lastModifyUser": {
+          "description": "User who last modified the script.",
+          "$ref": "GoogleAppsScriptTypeUser"
+        },
+        "scriptId": {
+          "type": "string",
+          "description": "The script project's Drive ID."
+        }
+      },
+      "id": "Project",
+      "description": "The script project resource."
+    },
+    "GoogleAppsScriptTypeWebAppConfig": {
+      "id": "GoogleAppsScriptTypeWebAppConfig",
+      "properties": {
+        "access": {
+          "description": "Who has permission to run the web app.",
+          "type": "string",
+          "enum": [
+            "UNKNOWN_ACCESS",
+            "MYSELF",
+            "DOMAIN",
+            "ANYONE",
+            "ANYONE_ANONYMOUS"
+          ],
+          "enumDescriptions": [
+            "Default value, should not be used.",
+            "Only the user who deployed the web app or executable can access it. Note that this is not necessarily the owner of the script project.",
+            "Only users in the same domain as the user who deployed the web app or executable can access it.",
+            "Any logged in user can access the web app or executable.",
+            "Any user, logged in or not, can access the web app or executable."
+          ]
+        },
+        "executeAs": {
+          "enumDescriptions": [
+            "Default value, should not be used.",
+            "The script runs as the user accessing the web app.",
+            "The script runs as the user who deployed the web app. Note that this is not necessarily the owner of the script project."
+          ],
+          "type": "string",
+          "enum": [
+            "UNKNOWN_EXECUTE_AS",
+            "USER_ACCESSING",
+            "USER_DEPLOYING"
+          ],
+          "description": "Who to execute the web app as."
+        }
+      },
+      "description": "Web app entry point configuration.",
+      "type": "object"
+    },
+    "GoogleAppsScriptTypeAddOnEntryPoint": {
+      "id": "GoogleAppsScriptTypeAddOnEntryPoint",
+      "type": "object",
+      "description": "An add-on entry point.",
+      "properties": {
+        "description": {
+          "description": "The add-on's optional description.",
+          "type": "string"
+        },
+        "title": {
+          "description": "The add-on's required title.",
+          "type": "string"
+        },
+        "reportIssueUrl": {
+          "type": "string",
+          "description": "The add-on's optional report issue URL."
+        },
+        "postInstallTipUrl": {
+          "description": "The add-on's required post install tip URL.",
+          "type": "string"
+        },
+        "addOnType": {
+          "type": "string",
+          "enumDescriptions": [
+            "Default value, unknown add-on type.",
+            "Add-on type for Gmail.",
+            "Add-on type for Data Studio."
+          ],
+          "enum": [
+            "UNKNOWN_ADDON_TYPE",
+            "GMAIL",
+            "DATA_STUDIO"
+          ],
+          "description": "The add-on's required list of supported container types."
+        },
+        "helpUrl": {
+          "description": "The add-on's optional help URL.",
+          "type": "string"
+        }
+      }
+    },
+    "GoogleAppsScriptTypeUser": {
+      "id": "GoogleAppsScriptTypeUser",
+      "properties": {
+        "photoUrl": {
+          "description": "The user's photo.",
+          "type": "string"
+        },
+        "domain": {
+          "description": "The user's domain.",
+          "type": "string"
+        },
+        "name": {
+          "type": "string",
+          "description": "The user's display name."
+        },
+        "email": {
+          "type": "string",
+          "description": "The user's identifying email address."
+        }
+      },
+      "description": "A simple user profile resource.",
+      "type": "object"
+    },
+    "Empty": {
+      "properties": {},
+      "type": "object",
+      "id": "Empty",
+      "description": "A generic empty message that you can re-use to avoid defining duplicated empty messages in your APIs. A typical example is to use it as the request or the response type of an API method. For instance: service Foo { rpc Bar(google.protobuf.Empty) returns (google.protobuf.Empty); }"
+    },
+    "EntryPoint": {
+      "type": "object",
+      "properties": {
+        "entryPointType": {
+          "description": "The type of the entry point.",
+          "type": "string",
+          "enum": [
+            "ENTRY_POINT_TYPE_UNSPECIFIED",
+            "WEB_APP",
+            "EXECUTION_API",
+            "ADD_ON"
+          ],
+          "enumDescriptions": [
+            "An unspecified entry point.",
+            "A web application entry point.",
+            "An API executable entry point.",
+            "An Add-On entry point."
+          ]
+        },
+        "addOn": {
+          "$ref": "GoogleAppsScriptTypeAddOnEntryPoint",
+          "description": "Add-on properties."
+        },
+        "webApp": {
+          "$ref": "GoogleAppsScriptTypeWebAppEntryPoint",
+          "description": "An entry point specification for web apps."
+        },
+        "executionApi": {
+          "description": "An entry point specification for Apps Script API execution calls.",
+          "$ref": "GoogleAppsScriptTypeExecutionApiEntryPoint"
+        }
+      },
+      "id": "EntryPoint",
+      "description": "A configuration that defines how a deployment is accessed externally."
     },
     "GoogleAppsScriptTypeProcess": {
       "id": "GoogleAppsScriptTypeProcess",
       "type": "object",
+      "description": "Representation of a single script process execution that was started from the script editor, a trigger, an application, or using the Apps Script API. This is distinct from the `Operation` resource, which only represents executions started via the Apps Script API.",
       "properties": {
+        "startTime": {
+          "description": "Time the execution started.",
+          "type": "string",
+          "format": "google-datetime"
+        },
         "runtimeVersion": {
           "description": "Which version of maestro to use to execute the script.",
           "enumDescriptions": [
@@ -936,21 +1291,29 @@
             "V8"
           ]
         },
-        "projectName": {
-          "description": "Name of the script being executed.",
-          "type": "string"
-        },
-        "duration": {
+        "userAccessLevel": {
+          "description": "The executing users access level to the script.",
           "type": "string",
-          "format": "google-duration",
-          "description": "Duration the execution spent executing."
+          "enum": [
+            "USER_ACCESS_LEVEL_UNSPECIFIED",
+            "NONE",
+            "READ",
+            "WRITE",
+            "OWNER"
+          ],
+          "enumDescriptions": [
+            "User access level unspecified",
+            "The user has no access.",
+            "The user has read-only access.",
+            "The user has write access.",
+            "The user is an owner."
+          ]
         },
-        "functionName": {
-          "description": "Name of the function the started the execution.",
-          "type": "string"
+        "projectName": {
+          "type": "string",
+          "description": "Name of the script being executed."
         },
         "processStatus": {
-          "description": "The executions status.",
           "enumDescriptions": [
             "Unspecified status.",
             "The process is currently running.",
@@ -963,6 +1326,7 @@
             "The process is delayed, waiting for quota.",
             "AppsScript executions are disabled by Admin."
           ],
+          "description": "The executions status.",
           "type": "string",
           "enum": [
             "PROCESS_STATUS_UNSPECIFIED",
@@ -977,25 +1341,17 @@
             "EXECUTION_DISABLED"
           ]
         },
-        "userAccessLevel": {
-          "enumDescriptions": [
-            "User access level unspecified",
-            "The user has no access.",
-            "The user has read-only access.",
-            "The user has write access.",
-            "The user is an owner."
-          ],
-          "description": "The executing users access level to the script.",
+        "duration": {
           "type": "string",
-          "enum": [
-            "USER_ACCESS_LEVEL_UNSPECIFIED",
-            "NONE",
-            "READ",
-            "WRITE",
-            "OWNER"
-          ]
+          "description": "Duration the execution spent executing.",
+          "format": "google-duration"
+        },
+        "functionName": {
+          "type": "string",
+          "description": "Name of the function the started the execution."
         },
         "processType": {
+          "description": "The executions type.",
           "enumDescriptions": [
             "Unspecified type.",
             "The process was started from an add-on entry point.",
@@ -1020,18 +1376,89 @@
             "SIMPLE_TRIGGER",
             "MENU",
             "BATCH_TASK"
-          ],
-          "description": "The executions type."
+          ]
+        }
+      }
+    },
+    "ExecutionRequest": {
+      "id": "ExecutionRequest",
+      "description": "A request to run the function in a script. The script is identified by the specified `script_id`. Executing a function on a script returns results based on the implementation of the script.",
+      "properties": {
+        "sessionState": {
+          "description": "*Deprecated*. For use with Android add-ons only. An ID that represents the user's current session in the Android app for Google Docs or Sheets, included as extra data in the [Intent](https://developer.android.com/guide/components/intents-filters.html) that launches the add-on. When an Android add-on is run with a session state, it gains the privileges of a [bound](https://developers.google.com/apps-script/guides/bound) script—that is, it can access information like the user's current cursor position (in Docs) or selected cell (in Sheets). To retrieve the state, call `Intent.getStringExtra(\"com.google.android.apps.docs.addons.SessionState\")`. Optional.",
+          "type": "string"
+        },
+        "devMode": {
+          "description": "If `true` and the user is an owner of the script, the script runs at the most recently saved version rather than the version deployed for use with the Apps Script API. Optional; default is `false`.",
+          "type": "boolean"
+        },
+        "parameters": {
+          "description": "The parameters to be passed to the function being executed. The object type for each parameter should match the expected type in Apps Script. Parameters cannot be Apps Script-specific object types (such as a `Document` or a `Calendar`); they can only be primitive types such as `string`, `number`, `array`, `object`, or `boolean`. Optional.",
+          "type": "array",
+          "items": {
+            "type": "any"
+          }
+        },
+        "function": {
+          "description": "The name of the function to execute in the given script. The name does not include parentheses or parameters. It can reference a function in an included library such as `Library.libFunction1`.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "MetricsValue": {
+      "type": "object",
+      "properties": {
+        "endTime": {
+          "description": "Required field indicating the end time of the interval.",
+          "type": "string",
+          "format": "google-datetime"
+        },
+        "value": {
+          "format": "uint64",
+          "description": "Indicates the number of executions counted.",
+          "type": "string"
         },
         "startTime": {
           "type": "string",
-          "description": "Time the execution started.",
-          "format": "google-datetime"
+          "format": "google-datetime",
+          "description": "Required field indicating the start time of the interval."
         }
       },
-      "description": "Representation of a single script process execution that was started from the script editor, a trigger, an application, or using the Apps Script API. This is distinct from the `Operation` resource, which only represents executions started via the Apps Script API."
+      "id": "MetricsValue",
+      "description": "Metrics value that holds number of executions counted."
+    },
+    "GoogleAppsScriptTypeExecutionApiEntryPoint": {
+      "properties": {
+        "entryPointConfig": {
+          "$ref": "GoogleAppsScriptTypeExecutionApiConfig",
+          "description": "The entry point's configuration."
+        }
+      },
+      "description": "An API executable entry point.",
+      "type": "object",
+      "id": "GoogleAppsScriptTypeExecutionApiEntryPoint"
+    },
+    "ListVersionsResponse": {
+      "properties": {
+        "nextPageToken": {
+          "description": "The token use to fetch the next page of records. if not exist in the response, that means no more versions to list.",
+          "type": "string"
+        },
+        "versions": {
+          "items": {
+            "$ref": "Version"
+          },
+          "type": "array",
+          "description": "The list of versions."
+        }
+      },
+      "type": "object",
+      "description": "Response with the list of the versions for the specified script project.",
+      "id": "ListVersionsResponse"
     },
     "Content": {
+      "id": "Content",
       "description": "The Content resource.",
       "properties": {
         "files": {
@@ -1046,289 +1473,64 @@
           "type": "string"
         }
       },
-      "id": "Content",
       "type": "object"
     },
-    "GoogleAppsScriptTypeAddOnEntryPoint": {
+    "ExecutionResponse": {
       "properties": {
-        "description": {
-          "description": "The add-on's optional description.",
-          "type": "string"
-        },
-        "helpUrl": {
-          "description": "The add-on's optional help URL.",
-          "type": "string"
-        },
-        "title": {
-          "type": "string",
-          "description": "The add-on's required title."
-        },
-        "addOnType": {
-          "type": "string",
-          "enum": [
-            "UNKNOWN_ADDON_TYPE",
-            "GMAIL",
-            "DATA_STUDIO"
-          ],
-          "enumDescriptions": [
-            "Default value, unknown add-on type.",
-            "Add-on type for Gmail.",
-            "Add-on type for Data Studio."
-          ],
-          "description": "The add-on's required list of supported container types."
-        },
-        "postInstallTipUrl": {
-          "description": "The add-on's required post install tip URL.",
-          "type": "string"
-        },
-        "reportIssueUrl": {
-          "type": "string",
-          "description": "The add-on's optional report issue URL."
+        "result": {
+          "type": "any",
+          "description": "The return value of the script function. The type matches the object type returned in Apps Script. Functions called using the Apps Script API cannot return Apps Script-specific objects (such as a `Document` or a `Calendar`); they can only return primitive types such as a `string`, `number`, `array`, `object`, or `boolean`."
         }
       },
-      "type": "object",
-      "id": "GoogleAppsScriptTypeAddOnEntryPoint",
-      "description": "An add-on entry point."
-    },
-    "DeploymentConfig": {
-      "type": "object",
-      "id": "DeploymentConfig",
-      "description": "Metadata the defines how a deployment is configured.",
-      "properties": {
-        "description": {
-          "type": "string",
-          "description": "The description for this deployment."
-        },
-        "manifestFileName": {
-          "type": "string",
-          "description": "The manifest file name for this deployment."
-        },
-        "versionNumber": {
-          "description": "The version number on which this deployment is based.",
-          "type": "integer",
-          "format": "int32"
-        },
-        "scriptId": {
-          "type": "string",
-          "description": "The script project's Drive ID."
-        }
-      }
-    },
-    "Version": {
-      "id": "Version",
-      "type": "object",
-      "properties": {
-        "scriptId": {
-          "description": "The script project's Drive ID.",
-          "type": "string"
-        },
-        "description": {
-          "description": "The description for this version.",
-          "type": "string"
-        },
-        "createTime": {
-          "format": "google-datetime",
-          "type": "string",
-          "description": "When the version was created."
-        },
-        "versionNumber": {
-          "format": "int32",
-          "description": "The incremental ID that is created by Apps Script when a version is created. This is system assigned number and is immutable once created.",
-          "type": "integer"
-        }
-      },
-      "description": "A resource representing a script project version. A version is a \"snapshot\" of a script project and is similar to a read-only branched release. When creating deployments, the version to use must be specified."
-    },
-    "Deployment": {
-      "description": "Representation of a single script deployment.",
-      "properties": {
-        "deploymentConfig": {
-          "description": "The deployment configuration.",
-          "$ref": "DeploymentConfig"
-        },
-        "updateTime": {
-          "description": "Last modified date time stamp.",
-          "format": "google-datetime",
-          "type": "string"
-        },
-        "deploymentId": {
-          "type": "string",
-          "description": "The deployment ID for this deployment."
-        },
-        "entryPoints": {
-          "type": "array",
-          "description": "The deployment's entry points.",
-          "items": {
-            "$ref": "EntryPoint"
-          }
-        }
-      },
-      "id": "Deployment",
+      "id": "ExecutionResponse",
+      "description": "An object that provides the return value of a function executed using the Apps Script API. If the script function returns successfully, the response body's response field contains this `ExecutionResponse` object.",
       "type": "object"
     },
-    "GoogleAppsScriptTypeUser": {
-      "description": "A simple user profile resource.",
+    "ListScriptProcessesResponse": {
+      "id": "ListScriptProcessesResponse",
       "properties": {
-        "domain": {
-          "type": "string",
-          "description": "The user's domain."
-        },
-        "photoUrl": {
-          "description": "The user's photo.",
-          "type": "string"
-        },
-        "name": {
-          "description": "The user's display name.",
-          "type": "string"
-        },
-        "email": {
-          "description": "The user's identifying email address.",
-          "type": "string"
-        }
-      },
-      "type": "object",
-      "id": "GoogleAppsScriptTypeUser"
-    },
-    "ListVersionsResponse": {
-      "type": "object",
-      "properties": {
-        "versions": {
-          "type": "array",
-          "description": "The list of versions.",
+        "processes": {
           "items": {
-            "$ref": "Version"
-          }
+            "$ref": "GoogleAppsScriptTypeProcess"
+          },
+          "type": "array",
+          "description": "List of processes matching request parameters."
         },
         "nextPageToken": {
-          "type": "string",
-          "description": "The token use to fetch the next page of records. if not exist in the response, that means no more versions to list."
-        }
-      },
-      "description": "Response with the list of the versions for the specified script project.",
-      "id": "ListVersionsResponse"
-    },
-    "ExecutionError": {
-      "properties": {
-        "errorMessage": {
-          "type": "string",
-          "description": "The error message thrown by Apps Script, usually localized into the user's language."
-        },
-        "errorType": {
-          "type": "string",
-          "description": "The error type, for example `TypeError` or `ReferenceError`. If the error type is unavailable, this field is not included."
-        },
-        "scriptStackTraceElements": {
-          "items": {
-            "$ref": "ScriptStackTraceElement"
-          },
-          "type": "array",
-          "description": "An array of objects that provide a stack trace through the script to show where the execution failed, with the deepest call first."
-        }
-      },
-      "id": "ExecutionError",
-      "type": "object",
-      "description": "An object that provides information about the nature of an error resulting from an attempted execution of a script function using the Apps Script API. If a run call succeeds but the script function (or Apps Script itself) throws an exception, the response body's error field contains a Status object. The `Status` object's `details` field contains an array with a single one of these `ExecutionError` objects."
-    },
-    "GoogleAppsScriptTypeExecutionApiConfig": {
-      "description": "API executable entry point configuration.",
-      "type": "object",
-      "properties": {
-        "access": {
-          "type": "string",
-          "enum": [
-            "UNKNOWN_ACCESS",
-            "MYSELF",
-            "DOMAIN",
-            "ANYONE",
-            "ANYONE_ANONYMOUS"
-          ],
-          "description": "Who has permission to run the API executable.",
-          "enumDescriptions": [
-            "Default value, should not be used.",
-            "Only the user who deployed the web app or executable can access it. Note that this is not necessarily the owner of the script project.",
-            "Only users in the same domain as the user who deployed the web app or executable can access it.",
-            "Any logged in user can access the web app or executable.",
-            "Any user, logged in or not, can access the web app or executable."
-          ]
-        }
-      },
-      "id": "GoogleAppsScriptTypeExecutionApiConfig"
-    },
-    "GoogleAppsScriptTypeFunctionSet": {
-      "id": "GoogleAppsScriptTypeFunctionSet",
-      "properties": {
-        "values": {
-          "description": "A list of functions composing the set.",
-          "type": "array",
-          "items": {
-            "$ref": "GoogleAppsScriptTypeFunction"
-          }
+          "description": "Token for the next page of results. If empty, there are no more pages remaining.",
+          "type": "string"
         }
       },
       "type": "object",
-      "description": "A set of functions. No duplicates are permitted."
-    },
-    "UpdateDeploymentRequest": {
-      "properties": {
-        "deploymentConfig": {
-          "description": "The deployment configuration.",
-          "$ref": "DeploymentConfig"
-        }
-      },
-      "description": "Request with deployment information to update an existing deployment.",
-      "type": "object",
-      "id": "UpdateDeploymentRequest"
-    },
-    "Operation": {
-      "properties": {
-        "error": {
-          "description": "If a `run` call succeeds but the script function (or Apps Script itself) throws an exception, this field contains a Status object. The `Status` object's `details` field contains an array with a single ExecutionError object that provides information about the nature of the error.",
-          "$ref": "Status"
-        },
-        "response": {
-          "additionalProperties": {
-            "description": "Properties of the object. Contains field @type with type URL.",
-            "type": "any"
-          },
-          "type": "object",
-          "description": "If the script function returns successfully, this field contains an ExecutionResponse object with the function's return value."
-        },
-        "done": {
-          "type": "boolean",
-          "description": "This field indicates whether the script execution has completed. A completed execution has a populated `response` field containing the ExecutionResponse from function that was executed."
-        }
-      },
-      "id": "Operation",
-      "type": "object",
-      "description": "A representation of an execution of an Apps Script function started with run. The execution response does not arrive until the function finishes executing. The maximum execution runtime is listed in the [Apps Script quotas guide](/apps-script/guides/services/quotas#current_limitations). After execution has started, it can have one of four outcomes: - If the script function returns successfully, the response field contains an ExecutionResponse object with the function's return value in the object's `result` field. - If the script function (or Apps Script itself) throws an exception, the error field contains a Status object. The `Status` object's `details` field contains an array with a single ExecutionError object that provides information about the nature of the error. - If the execution has not yet completed, the done field is `false` and the neither the `response` nor `error` fields are present. - If the `run` call itself fails (for example, because of a malformed request or an authorization error), the method returns an HTTP response code in the 4XX range with a different format for the response body. Client libraries automatically convert a 4XX response into an exception class. "
+      "description": "Response with the list of Process resources."
     },
     "File": {
-      "description": "An individual file within a script project. A file is a third-party source code created by one or more developers. It can be a server-side JS code, HTML, or a configuration file. Each script project can contain multiple files.",
-      "id": "File",
       "type": "object",
       "properties": {
-        "createTime": {
-          "description": "Creation date timestamp.",
-          "format": "google-datetime",
+        "functionSet": {
+          "description": "The defined set of functions in the script file, if any.",
+          "$ref": "GoogleAppsScriptTypeFunctionSet"
+        },
+        "name": {
+          "description": "The name of the file. The file extension is not part of the file name, which can be identified from the type field.",
           "type": "string"
         },
-        "updateTime": {
-          "format": "google-datetime",
-          "description": "Last modified date timestamp.",
-          "type": "string"
+        "lastModifyUser": {
+          "$ref": "GoogleAppsScriptTypeUser",
+          "description": "The user who modified the file most recently. The details visible in this object are controlled by the profile visibility settings of the last modifying user."
         },
         "source": {
-          "type": "string",
-          "description": "The file content."
+          "description": "The file content.",
+          "type": "string"
         },
         "type": {
-          "description": "The type of the file.",
           "enumDescriptions": [
             "Undetermined file type; never actually used.",
             "An Apps Script server-side code file.",
             "A file containing client-side HTML.",
             "A file in JSON format. This type is only used for the script project's manifest. The manifest file content must match the structure of a valid [ScriptManifest](/apps-script/concepts/manifests)"
           ],
+          "description": "The type of the file.",
           "type": "string",
           "enum": [
             "ENUM_TYPE_UNSPECIFIED",
@@ -1337,304 +1539,133 @@
             "JSON"
           ]
         },
-        "functionSet": {
-          "description": "The defined set of functions in the script file, if any.",
-          "$ref": "GoogleAppsScriptTypeFunctionSet"
-        },
-        "lastModifyUser": {
-          "$ref": "GoogleAppsScriptTypeUser",
-          "description": "The user who modified the file most recently. The details visible in this object are controlled by the profile visibility settings of the last modifying user."
-        },
-        "name": {
-          "description": "The name of the file. The file extension is not part of the file name, which can be identified from the type field.",
-          "type": "string"
-        }
-      }
-    },
-    "ExecutionResponse": {
-      "description": "An object that provides the return value of a function executed using the Apps Script API. If the script function returns successfully, the response body's response field contains this `ExecutionResponse` object.",
-      "properties": {
-        "result": {
-          "type": "any",
-          "description": "The return value of the script function. The type matches the object type returned in Apps Script. Functions called using the Apps Script API cannot return Apps Script-specific objects (such as a `Document` or a `Calendar`); they can only return primitive types such as a `string`, `number`, `array`, `object`, or `boolean`."
-        }
-      },
-      "id": "ExecutionResponse",
-      "type": "object"
-    },
-    "ListDeploymentsResponse": {
-      "type": "object",
-      "id": "ListDeploymentsResponse",
-      "properties": {
-        "deployments": {
-          "items": {
-            "$ref": "Deployment"
-          },
-          "description": "The list of deployments.",
-          "type": "array"
-        },
-        "nextPageToken": {
-          "type": "string",
-          "description": "The token that can be used in the next call to get the next page of results."
-        }
-      },
-      "description": "Response with the list of deployments for the specified Apps Script project."
-    },
-    "MetricsValue": {
-      "description": "Metrics value that holds number of executions counted.",
-      "properties": {
-        "startTime": {
-          "type": "string",
-          "format": "google-datetime",
-          "description": "Required field indicating the start time of the interval."
-        },
-        "endTime": {
-          "format": "google-datetime",
-          "type": "string",
-          "description": "Required field indicating the end time of the interval."
-        },
-        "value": {
-          "format": "uint64",
-          "type": "string",
-          "description": "Indicates the number of executions counted."
-        }
-      },
-      "id": "MetricsValue",
-      "type": "object"
-    },
-    "GoogleAppsScriptTypeExecutionApiEntryPoint": {
-      "description": "An API executable entry point.",
-      "id": "GoogleAppsScriptTypeExecutionApiEntryPoint",
-      "type": "object",
-      "properties": {
-        "entryPointConfig": {
-          "description": "The entry point's configuration.",
-          "$ref": "GoogleAppsScriptTypeExecutionApiConfig"
-        }
-      }
-    },
-    "ListScriptProcessesResponse": {
-      "type": "object",
-      "description": "Response with the list of Process resources.",
-      "id": "ListScriptProcessesResponse",
-      "properties": {
-        "nextPageToken": {
-          "type": "string",
-          "description": "Token for the next page of results. If empty, there are no more pages remaining."
-        },
-        "processes": {
-          "type": "array",
-          "description": "List of processes matching request parameters.",
-          "items": {
-            "$ref": "GoogleAppsScriptTypeProcess"
-          }
-        }
-      }
-    },
-    "GoogleAppsScriptTypeFunction": {
-      "properties": {
-        "parameters": {
-          "type": "array",
-          "description": "The ordered list of parameter names of the function in the script project.",
-          "items": {
-            "type": "string"
-          }
-        },
-        "name": {
-          "type": "string",
-          "description": "The function name in the script project."
-        }
-      },
-      "description": "Represents a function in a script project.",
-      "id": "GoogleAppsScriptTypeFunction",
-      "type": "object"
-    },
-    "GoogleAppsScriptTypeWebAppEntryPoint": {
-      "id": "GoogleAppsScriptTypeWebAppEntryPoint",
-      "description": "A web application entry point.",
-      "properties": {
-        "entryPointConfig": {
-          "$ref": "GoogleAppsScriptTypeWebAppConfig",
-          "description": "The entry point's configuration."
-        },
-        "url": {
-          "type": "string",
-          "description": "The URL for the web application."
-        }
-      },
-      "type": "object"
-    },
-    "Empty": {
-      "id": "Empty",
-      "type": "object",
-      "properties": {},
-      "description": "A generic empty message that you can re-use to avoid defining duplicated empty messages in your APIs. A typical example is to use it as the request or the response type of an API method. For instance: service Foo { rpc Bar(google.protobuf.Empty) returns (google.protobuf.Empty); }"
-    },
-    "EntryPoint": {
-      "description": "A configuration that defines how a deployment is accessed externally.",
-      "id": "EntryPoint",
-      "properties": {
-        "entryPointType": {
-          "type": "string",
-          "enum": [
-            "ENTRY_POINT_TYPE_UNSPECIFIED",
-            "WEB_APP",
-            "EXECUTION_API",
-            "ADD_ON"
-          ],
-          "description": "The type of the entry point.",
-          "enumDescriptions": [
-            "An unspecified entry point.",
-            "A web application entry point.",
-            "An API executable entry point.",
-            "An Add-On entry point."
-          ]
-        },
-        "addOn": {
-          "$ref": "GoogleAppsScriptTypeAddOnEntryPoint",
-          "description": "Add-on properties."
-        },
-        "webApp": {
-          "$ref": "GoogleAppsScriptTypeWebAppEntryPoint",
-          "description": "An entry point specification for web apps."
-        },
-        "executionApi": {
-          "$ref": "GoogleAppsScriptTypeExecutionApiEntryPoint",
-          "description": "An entry point specification for Apps Script API execution calls."
-        }
-      },
-      "type": "object"
-    },
-    "Status": {
-      "properties": {
-        "code": {
-          "format": "int32",
-          "description": "The status code. For this API, this value either: - 10, indicating a `SCRIPT_TIMEOUT` error, - 3, indicating an `INVALID_ARGUMENT` error, or - 1, indicating a `CANCELLED` execution. ",
-          "type": "integer"
-        },
-        "message": {
-          "description": "A developer-facing error message, which is in English. Any user-facing error message is localized and sent in the details field, or localized by the client.",
-          "type": "string"
-        },
-        "details": {
-          "type": "array",
-          "description": "An array that contains a single ExecutionError object that provides information about the nature of the error.",
-          "items": {
-            "type": "object",
-            "additionalProperties": {
-              "type": "any",
-              "description": "Properties of the object. Contains field @type with type URL."
-            }
-          }
-        }
-      },
-      "description": "If a `run` call succeeds but the script function (or Apps Script itself) throws an exception, the response body's error field contains this `Status` object.",
-      "id": "Status",
-      "type": "object"
-    },
-    "Project": {
-      "type": "object",
-      "description": "The script project resource.",
-      "properties": {
         "createTime": {
-          "type": "string",
           "format": "google-datetime",
-          "description": "When the script was created."
+          "type": "string",
+          "description": "Creation date timestamp."
         },
         "updateTime": {
-          "format": "google-datetime",
           "type": "string",
-          "description": "When the script was last updated."
+          "description": "Last modified date timestamp.",
+          "format": "google-datetime"
+        }
+      },
+      "id": "File",
+      "description": "An individual file within a script project. A file is a third-party source code created by one or more developers. It can be a server-side JS code, HTML, or a configuration file. Each script project can contain multiple files."
+    },
+    "GoogleAppsScriptTypeFunctionSet": {
+      "id": "GoogleAppsScriptTypeFunctionSet",
+      "type": "object",
+      "description": "A set of functions. No duplicates are permitted.",
+      "properties": {
+        "values": {
+          "type": "array",
+          "description": "A list of functions composing the set.",
+          "items": {
+            "$ref": "GoogleAppsScriptTypeFunction"
+          }
+        }
+      }
+    },
+    "ScriptStackTraceElement": {
+      "type": "object",
+      "properties": {
+        "function": {
+          "description": "The name of the function that failed.",
+          "type": "string"
         },
-        "title": {
-          "type": "string",
-          "description": "The title for the project."
-        },
-        "creator": {
-          "description": "User who originally created the script.",
-          "$ref": "GoogleAppsScriptTypeUser"
-        },
-        "lastModifyUser": {
-          "description": "User who last modified the script.",
-          "$ref": "GoogleAppsScriptTypeUser"
-        },
+        "lineNumber": {
+          "format": "int32",
+          "description": "The line number where the script failed.",
+          "type": "integer"
+        }
+      },
+      "description": "A stack trace through the script that shows where the execution failed.",
+      "id": "ScriptStackTraceElement"
+    },
+    "Version": {
+      "properties": {
         "scriptId": {
           "description": "The script project's Drive ID.",
           "type": "string"
         },
+        "versionNumber": {
+          "description": "The incremental ID that is created by Apps Script when a version is created. This is system assigned number and is immutable once created.",
+          "type": "integer",
+          "format": "int32"
+        },
+        "createTime": {
+          "format": "google-datetime",
+          "description": "When the version was created.",
+          "type": "string"
+        },
+        "description": {
+          "type": "string",
+          "description": "The description for this version."
+        }
+      },
+      "description": "A resource representing a script project version. A version is a \"snapshot\" of a script project and is similar to a read-only branched release. When creating deployments, the version to use must be specified.",
+      "type": "object",
+      "id": "Version"
+    },
+    "CreateProjectRequest": {
+      "description": "Request to create a script project.",
+      "id": "CreateProjectRequest",
+      "properties": {
+        "title": {
+          "type": "string",
+          "description": "The title for the project."
+        },
         "parentId": {
-          "description": "The parent's Drive ID that the script will be attached to. This is usually the ID of a Google Document or Google Sheet. This field is optional, and if not set, a stand-alone script will be created.",
+          "description": "The Drive ID of a parent file that the created script project is bound to. This is usually the ID of a Google Doc, Google Sheet, Google Form, or Google Slides file. If not set, a standalone script project is created.",
           "type": "string"
         }
       },
-      "id": "Project"
+      "type": "object"
+    },
+    "UpdateDeploymentRequest": {
+      "description": "Request with deployment information to update an existing deployment.",
+      "id": "UpdateDeploymentRequest",
+      "properties": {
+        "deploymentConfig": {
+          "$ref": "DeploymentConfig",
+          "description": "The deployment configuration."
+        }
+      },
+      "type": "object"
     },
     "Metrics": {
       "properties": {
-        "failedExecutions": {
-          "type": "array",
-          "description": "Number of failed executions.",
-          "items": {
-            "$ref": "MetricsValue"
-          }
-        },
-        "activeUsers": {
-          "description": "Number of active users.",
-          "type": "array",
-          "items": {
-            "$ref": "MetricsValue"
-          }
-        },
         "totalExecutions": {
           "type": "array",
-          "description": "Number of total executions.",
           "items": {
             "$ref": "MetricsValue"
-          }
-        }
-      },
-      "type": "object",
-      "description": "Resource containing usage stats for a given script, based on the supplied filter and mask present in the request.",
-      "id": "Metrics"
-    },
-    "ScriptStackTraceElement": {
-      "description": "A stack trace through the script that shows where the execution failed.",
-      "properties": {
-        "lineNumber": {
-          "format": "int32",
-          "type": "integer",
-          "description": "The line number where the script failed."
+          },
+          "description": "Number of total executions."
         },
-        "function": {
-          "description": "The name of the function that failed.",
-          "type": "string"
-        }
-      },
-      "id": "ScriptStackTraceElement",
-      "type": "object"
-    },
-    "ListUserProcessesResponse": {
-      "type": "object",
-      "id": "ListUserProcessesResponse",
-      "properties": {
-        "nextPageToken": {
-          "type": "string",
-          "description": "Token for the next page of results. If empty, there are no more pages remaining."
-        },
-        "processes": {
-          "description": "List of processes matching request parameters.",
+        "activeUsers": {
           "type": "array",
           "items": {
-            "$ref": "GoogleAppsScriptTypeProcess"
-          }
+            "$ref": "MetricsValue"
+          },
+          "description": "Number of active users."
+        },
+        "failedExecutions": {
+          "items": {
+            "$ref": "MetricsValue"
+          },
+          "description": "Number of failed executions.",
+          "type": "array"
         }
       },
-      "description": "Response with the list of Process resources."
+      "type": "object",
+      "id": "Metrics",
+      "description": "Resource containing usage stats for a given script, based on the supplied filter and mask present in the request."
     },
-    "GoogleAppsScriptTypeWebAppConfig": {
-      "id": "GoogleAppsScriptTypeWebAppConfig",
+    "GoogleAppsScriptTypeExecutionApiConfig": {
       "properties": {
         "access": {
+          "description": "Who has permission to run the API executable.",
           "type": "string",
           "enum": [
             "UNKNOWN_ACCESS",
@@ -1643,7 +1674,6 @@
             "ANYONE",
             "ANYONE_ANONYMOUS"
           ],
-          "description": "Who has permission to run the web app.",
           "enumDescriptions": [
             "Default value, should not be used.",
             "Only the user who deployed the web app or executable can access it. Note that this is not necessarily the owner of the script project.",
@@ -1651,44 +1681,14 @@
             "Any logged in user can access the web app or executable.",
             "Any user, logged in or not, can access the web app or executable."
           ]
-        },
-        "executeAs": {
-          "type": "string",
-          "enum": [
-            "UNKNOWN_EXECUTE_AS",
-            "USER_ACCESSING",
-            "USER_DEPLOYING"
-          ],
-          "enumDescriptions": [
-            "Default value, should not be used.",
-            "The script runs as the user accessing the web app.",
-            "The script runs as the user who deployed the web app. Note that this is not necessarily the owner of the script project."
-          ],
-          "description": "Who to execute the web app as."
         }
       },
-      "description": "Web app entry point configuration.",
+      "id": "GoogleAppsScriptTypeExecutionApiConfig",
+      "description": "API executable entry point configuration.",
       "type": "object"
-    },
-    "CreateProjectRequest": {
-      "type": "object",
-      "description": "Request to create a script project.",
-      "properties": {
-        "title": {
-          "description": "The title for the project.",
-          "type": "string"
-        },
-        "parentId": {
-          "description": "The Drive ID of a parent file that the created script project is bound to. This is usually the ID of a Google Doc, Google Sheet, Google Form, or Google Slides file. If not set, a standalone script project is created.",
-          "type": "string"
-        }
-      },
-      "id": "CreateProjectRequest"
     }
   },
-  "kind": "discovery#restDescription",
-  "canonicalName": "Script",
-  "name": "script",
+  "id": "script:v1",
   "basePath": "",
-  "fullyEncodeReservedExpansion": true
+  "kind": "discovery#restDescription"
 }
